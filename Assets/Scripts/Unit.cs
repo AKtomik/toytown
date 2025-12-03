@@ -20,6 +20,14 @@ public class UnitTask {
 		this.happynessPerDay = happynessPerDay;
 	}
 
+    public void UpdateRepercution(Unit unit, double delta)
+	{
+		double factor = delta / 60;
+		unit.energyScore += this.energyPerDay * factor;
+		unit.saturationScore += this.saturationPerDay * factor;
+		unit.happynessScore += this.happynessPerDay * factor;
+	}
+
     public static UnitTask WANDERING = new(-.2, -.2, 0);
     public static UnitTask WORKING = new(-.5, -.5, 0);
     public static UnitTask LEARNING = new(-.5, -.3, 0);
@@ -35,7 +43,7 @@ public class Unit : MonoBehaviour
     public double energyScore = 1;
     public double happynessScore = .5;
     public UnitJob actualJob = UnitJob.NOTHING;
-    public UnitJob actualTask = UnitJob.NOTHING;
+    public UnitTask actualTask = UnitTask.WANDERING;
         
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -46,6 +54,6 @@ public class Unit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        this.actualTask.UpdateRepercution(this, Time.deltaTime);
     }
 }
