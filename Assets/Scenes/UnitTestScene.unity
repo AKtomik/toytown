@@ -373,7 +373,7 @@ GameObject:
   - component: {fileID: 1467407841}
   - component: {fileID: 1467407846}
   m_Layer: 0
-  m_Name: CapsuleCharacter
+  m_Name: CapsuleUnit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -512,6 +512,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83761d1968927a040a3964808780512a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  saturationScore: 1
+  energyScore: 1
+  happynessScore: 0.5
+  actualJob: 0
 --- !u!1 &1551330329
 GameObject:
   m_ObjectHideFlags: 0
