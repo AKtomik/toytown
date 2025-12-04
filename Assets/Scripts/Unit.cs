@@ -27,8 +27,31 @@ namespace ToyTown
 		DONE,
 	};
 
-	public static class ActionFunctionBuilder
+	public static class ActionStartBuilder
+	{	
+		public static void Default(Unit unit)
+		{
+			unit.actionSystemDaysAmount = 0;
+			unit.actionSystemDaysRemain = 0;
+		}
+
+		public static Action<Unit> StartTimer(double timerDayAmount)
+		{
+			return (Unit unit) =>
+			{
+				unit.actionSystemDaysAmount = timerDayAmount;
+				unit.actionSystemDaysRemain = timerDayAmount;
+			};
+		}
+	};
+
+	public static class ActionUpdateBuilder
 	{
+		public static ActionUpdateReturn Default(Unit unit, float delta)
+		{
+			return ActionUpdateReturn.CONTINUE;
+		}
+
 		public static Func<Unit, float, ActionUpdateReturn> ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
 		{
 			return (Unit unit, float delta) =>
@@ -58,26 +81,26 @@ namespace ToyTown
 
 	public class Action
 	{
-		public Func<Unit> Start;
+		public Action<Unit> Start;
 		public Func<Unit, float, ActionUpdateReturn> Update;
 		
-		public Action(Func<Unit> start = null, Func<Unit, float, ActionUpdateReturn> update = null)
+		public Action(Action<Unit> start = null, Func<Unit, float, ActionUpdateReturn> update = null)
 		{
-			Start = start;
-			Update = update;
+			Start = start ?? ActionStartBuilder.Default;
+			Update = update ?? ActionUpdateBuilder.Default;
 		}
 		
 		public static Dictionary<UnitAction, Action> Dictionnary = new()
 		{
 			// action order
-			{UnitAction.WANDERING, new Action(update: ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))},
-			{UnitAction.WORKING, new Action(update: ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))},
-			{UnitAction.LEARNING, new Action(update: ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
+			{UnitAction.WANDERING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))},
+			{UnitAction.WORKING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))},
+			{UnitAction.LEARNING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
 			// action system
-			{UnitAction.EATING, new Action(update: ActionFunctionBuilder.ScoreAddByAction(saturationByAction: .5))},
-			{UnitAction.SLEEPING, new Action(update: ActionFunctionBuilder.ScoreAddByAction(energyByAction: 1))},
+			{UnitAction.EATING, new Action(update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5))},
+			{UnitAction.SLEEPING, new Action(update: ActionUpdateBuilder.ScoreAddByAction(energyByAction: 1))},
 			// between action
-			{UnitAction.WALKING, new Action(update: ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
+			{UnitAction.WALKING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
 		};
 	}
 
