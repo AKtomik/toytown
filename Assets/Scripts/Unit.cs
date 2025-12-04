@@ -39,9 +39,9 @@ namespace ToyTown
 		{
 			public static Dictionary<UnitAction, Func<Unit, float, int?>> ActionDoingDictionnary = new()
 			{
-				{UnitAction.WANDERING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2)},
-				{UnitAction.WORKING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2)},
-				{UnitAction.LEARNING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2)},
+				{UnitAction.WANDERING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1)},
+				{UnitAction.WORKING, ActionBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1)},
+				{UnitAction.LEARNING, ActionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)},
 			};
 
 			public double saturationScore = 1;
