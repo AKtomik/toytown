@@ -17,11 +17,19 @@ namespace ToyTown
 			WANDERING,
 			WORKING,
 			LEARNING,
+			EATING,
+			SLEEPING,
+			WALKING,
+		};
+
+		public enum ActionReturn {
+			CONTINUE,
+			DONE,
 		};
 
 		public static class ActionBuilder
 		{
-			public static Func<Unit, float, int?> ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
+			public static Func<Unit, float, ActionReturn> ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
 			{
 				return (Unit unit, float delta) =>
 				{
@@ -29,7 +37,21 @@ namespace ToyTown
 					unit.saturationScore += saturationByDay * factor;
 					unit.happynessScore += happynessByDay * factor;
 					unit.energyScore += energyByDay * factor;
-					return 0;
+					return ActionReturn.CONTINUE;
+				};
+			}
+			
+			public static Func<Unit, float, ActionReturn> ScoreAddByAction(double saturationByAction = 0, double energyByAction = 0, double happynessByAction = 0)
+			{
+				return (Unit unit, float delta) =>
+				{
+					if (unit.actionSystemDaysRemain <= 0) return ActionReturn.DONE;
+					double factor = delta * unit.actionSystemDaysAmount / Settings.DayLengthInSecond;
+					unit.saturationScore += saturationByAction * factor;
+					unit.happynessScore += happynessByAction * factor;
+					unit.energyScore += energyByAction * factor;
+					unit.actionSystemDaysRemain -= delta / Settings.DayLengthInSecond;
+					return ActionReturn.CONTINUE;
 				};
 			}
 		};
@@ -37,19 +59,35 @@ namespace ToyTown
 
 		public class Unit : MonoBehaviour
 		{
-			public static Dictionary<UnitAction, Func<Unit, float, int?>> ActionDoingDictionnary = new()
+			public static Dictionary<UnitAction, Func<Unit, float, ActionReturn>> ActionDoingDictionnary = new()
 			{
+				// action order
 				{UnitAction.WANDERING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1)},
 				{UnitAction.WORKING, ActionBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1)},
 				{UnitAction.LEARNING, ActionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)},
+				// action system
+				{UnitAction.EATING, ActionBuilder.ScoreAddByAction(saturationByAction: .5)},
+				{UnitAction.SLEEPING, ActionBuilder.ScoreAddByAction(energyByAction: 1)},
+				// between action
+				{UnitAction.WALKING, ActionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)},
 			};
 
 			public double saturationScore = 1;
 			public double energyScore = 1;
 			public double happynessScore = .5;
-			public UnitAction actualAction = UnitAction.WANDERING;
+			public UnitAction actionOrder = UnitAction.WANDERING;
+			public UnitAction? actionSystem = null;
+			public double actionSystemDaysAmount = .0;
+			public double actionSystemDaysRemain = .0;
 			public UnitJob actualJob = UnitJob.NOTHING;
+			public UnitJob? learningJob = null;
+
+			// Switching actual action
+			void SwtichAction()
+			{
 				
+			}
+
 			// Start is called once before the first execution of Update after the MonoBehaviour is created
 			void Start()
 			{
@@ -59,7 +97,7 @@ namespace ToyTown
 			// Update is called once per frame
 			void Update()
 			{
-				ActionDoingDictionnary[this.actualAction](this, Time.deltaTime);
+				ActionDoingDictionnary[this.actionOrder](this, Time.deltaTime);
 			}
 		}
 }
