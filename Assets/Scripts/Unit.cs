@@ -22,14 +22,14 @@ namespace ToyTown
 			WALKING,
 		};
 
-		public enum ActionReturn {
+		public enum ActionUpdateReturn {
 			CONTINUE,
 			DONE,
 		};
 
 		public static class ActionFunctionBuilder
 		{
-			public static Func<Unit, float, ActionReturn> ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
+			public static Func<Unit, float, ActionUpdateReturn> ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
 			{
 				return (Unit unit, float delta) =>
 				{
@@ -37,38 +37,47 @@ namespace ToyTown
 					unit.saturationScore += saturationByDay * factor;
 					unit.happynessScore += happynessByDay * factor;
 					unit.energyScore += energyByDay * factor;
-					return ActionReturn.CONTINUE;
+					return ActionUpdateReturn.CONTINUE;
 				};
 			}
 			
-			public static Func<Unit, float, ActionReturn> ScoreAddByAction(double saturationByAction = 0, double energyByAction = 0, double happynessByAction = 0)
+			public static Func<Unit, float, ActionUpdateReturn> ScoreAddByAction(double saturationByAction = 0, double energyByAction = 0, double happynessByAction = 0)
 			{
 				return (Unit unit, float delta) =>
 				{
-					if (unit.actionSystemDaysRemain <= 0) return ActionReturn.DONE;
+					if (unit.actionSystemDaysRemain <= 0) return ActionUpdateReturn.DONE;
 					double factor = delta * unit.actionSystemDaysAmount / Settings.DayLengthInSecond;
 					unit.saturationScore += saturationByAction * factor;
 					unit.happynessScore += happynessByAction * factor;
 					unit.energyScore += energyByAction * factor;
 					unit.actionSystemDaysRemain -= delta / Settings.DayLengthInSecond;
-					return ActionReturn.CONTINUE;
+					return ActionUpdateReturn.CONTINUE;
 				};
 			}
 		};
 	
-		public static class Action
+		public class Action
 		{
-			public static Dictionary<UnitAction, Func<Unit, float, ActionReturn>> Dictionnary = new()
+			public Func<Unit> Start;
+			public Func<Unit, float, ActionUpdateReturn> Update;
+			
+			public Action(Func<Unit> start = null, Func<Unit, float, ActionUpdateReturn> update = null)
+			{
+				Start = start;
+				Update = update;
+			}
+			
+			public static Dictionary<UnitAction, Action> Dictionnary = new()
 			{
 				// action order
-				{UnitAction.WANDERING, ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1)},
-				{UnitAction.WORKING, ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1)},
-				{UnitAction.LEARNING, ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)},
+				{UnitAction.WANDERING, new Action(update: ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))},
+				{UnitAction.WORKING, new Action(update: ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))},
+				{UnitAction.LEARNING, new Action(update: ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
 				// action system
-				{UnitAction.EATING, ActionFunctionBuilder.ScoreAddByAction(saturationByAction: .5)},
-				{UnitAction.SLEEPING, ActionFunctionBuilder.ScoreAddByAction(energyByAction: 1)},
+				{UnitAction.EATING, new Action(update: ActionFunctionBuilder.ScoreAddByAction(saturationByAction: .5))},
+				{UnitAction.SLEEPING, new Action(update: ActionFunctionBuilder.ScoreAddByAction(energyByAction: 1))},
 				// between action
-				{UnitAction.WALKING, ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)},
+				{UnitAction.WALKING, new Action(update: ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
 			};
 		}
 
@@ -98,11 +107,10 @@ namespace ToyTown
 			{
 				
 			}
-
 			// Update is called once per frame
 			void Update()
 			{
-				Action.Dictionnary[this.actionOrder](this, Time.deltaTime);
+				Action.Dictionnary[this.actionOrder].Update(this, Time.deltaTime);
 			}
 		}
 }
