@@ -22,6 +22,18 @@ namespace ToyTown
 		WALKING,
 	};
 
+	public enum UnitActionPlayer {
+		WANDERING = UnitAction.WANDERING,
+		WORKING = UnitAction.WORKING,
+		LEARNING = UnitAction.LEARNING,
+	};
+
+	public enum UnitActionSystem {
+		EATING = UnitAction.EATING,
+		SLEEPING = UnitAction.SLEEPING,
+		WALKING = UnitAction.WALKING,
+	};
+
 	public enum ActionUpdateReturn {
 		CONTINUE,
 		DONE,
@@ -112,15 +124,21 @@ namespace ToyTown
 		public double saturationScore = 1;
 		public double energyScore = 1;
 		public double happynessScore = .5;
-		public UnitAction actionOrder = UnitAction.WANDERING;
-		public UnitAction? actionSystem = null;
+		public UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
+		public UnitActionSystem? actionSystem = null;
 		public double actionSystemDaysAmount = .0;
 		public double actionSystemDaysRemain = .0;
 		public UnitJob actualJob = UnitJob.NOTHING;
 		public UnitJob? learningJob = null;
 
 		// Switching actual action
-		void SwtichAction()
+
+		void SwtichActionSystem()
+		{
+			
+		}
+		
+		void SwtichActionPlayer()
 		{
 			
 		}
@@ -133,7 +151,7 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
-			Action.Dictionnary[this.actionOrder].Update(this, Time.deltaTime);
+			Action.Dictionnary[(UnitAction)this.actionPlayer].Update(this, Time.deltaTime);
 		}
 	}
 }
