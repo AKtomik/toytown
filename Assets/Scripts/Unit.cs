@@ -143,6 +143,14 @@ namespace ToyTown
 			
 		}
 
+		UnitAction GetActualAction()
+		{
+			if (actionSystem != null)
+				return (UnitAction)actionSystem;
+			else
+				return (UnitAction)actionPlayer;
+		}
+
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
