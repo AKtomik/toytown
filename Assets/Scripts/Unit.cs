@@ -25,9 +25,10 @@ namespace ToyTown
 			{
 				return (Unit unit, float delta) =>
 				{
-								unit.saturationScore = saturationByDay;
-								unit.happynessScore = happynessByDay;
-								unit.energyScore = energyByDay;
+					double factor = delta / Settings.DayLengthInSecond;
+					unit.saturationScore += saturationByDay * factor;
+					unit.happynessScore += happynessByDay * factor;
+					unit.energyScore += energyByDay * factor;
 					return 0;
 				};
 			}
