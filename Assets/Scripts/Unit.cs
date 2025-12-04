@@ -133,14 +133,22 @@ namespace ToyTown
 
 		// Switching actual action
 
-		void SwtichActionSystem()
+		void SwtichSystemAction(UnitActionSystem action)
 		{
-			
+			Action.Dictionnary[(UnitAction)action].Start(this);
+			actionSystem = action;
 		}
 		
-		void SwtichActionPlayer()
+		void EndSystemAction()
 		{
-			
+			actionSystem = null;
+		}
+		
+		void SwtichPlayerAction(UnitActionPlayer action)
+		{
+			EndSystemAction();//!
+			Action.Dictionnary[(UnitAction)action].Start(this);
+			actionPlayer = action;
 		}
 
 		UnitAction GetActualAction()
