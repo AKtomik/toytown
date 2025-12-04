@@ -27,7 +27,7 @@ namespace ToyTown
 			DONE,
 		};
 
-		public static class ActionBuilder
+		public static class ActionFunctionBuilder
 		{
 			public static Func<Unit, float, ActionReturn> ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
 			{
@@ -55,22 +55,27 @@ namespace ToyTown
 				};
 			}
 		};
+	
+		public static class Action
+		{
+			public static Dictionary<UnitAction, Func<Unit, float, ActionReturn>> Dictionnary = new()
+			{
+				// action order
+				{UnitAction.WANDERING, ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1)},
+				{UnitAction.WORKING, ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1)},
+				{UnitAction.LEARNING, ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)},
+				// action system
+				{UnitAction.EATING, ActionFunctionBuilder.ScoreAddByAction(saturationByAction: .5)},
+				{UnitAction.SLEEPING, ActionFunctionBuilder.ScoreAddByAction(energyByAction: 1)},
+				// between action
+				{UnitAction.WALKING, ActionFunctionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)},
+			};
+		}
+
 
 
 		public class Unit : MonoBehaviour
 		{
-			public static Dictionary<UnitAction, Func<Unit, float, ActionReturn>> ActionDoingDictionnary = new()
-			{
-				// action order
-				{UnitAction.WANDERING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1)},
-				{UnitAction.WORKING, ActionBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1)},
-				{UnitAction.LEARNING, ActionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)},
-				// action system
-				{UnitAction.EATING, ActionBuilder.ScoreAddByAction(saturationByAction: .5)},
-				{UnitAction.SLEEPING, ActionBuilder.ScoreAddByAction(energyByAction: 1)},
-				// between action
-				{UnitAction.WALKING, ActionBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)},
-			};
 
 			public double saturationScore = 1;
 			public double energyScore = 1;
@@ -97,7 +102,7 @@ namespace ToyTown
 			// Update is called once per frame
 			void Update()
 			{
-				ActionDoingDictionnary[this.actionOrder](this, Time.deltaTime);
+				Action.Dictionnary[this.actionOrder](this, Time.deltaTime);
 			}
 		}
 }
