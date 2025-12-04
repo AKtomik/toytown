@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-
+    [SerializeField]
     private bool isBuildable;
 
     /*
@@ -19,9 +19,25 @@ public class Tile : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnMouseDown()
     {
-        
+        if(typeRessources == 1)
+        {
+            Debug.Log("plain");
+        }
+        else if (typeRessources == 2)
+        {
+            Debug.Log("rock");
+        }
+        else if (typeRessources == 3)
+        {
+            Debug.Log("food");
+        }
+        else if (typeRessources == 4)
+        {
+            Debug.Log("wood");
+        }
     }
+
+
 }
