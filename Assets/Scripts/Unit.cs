@@ -33,13 +33,13 @@ namespace ToyTown
     	}
     };
 
-    public Dictionary<UnitAction, Func<Unit, float, int?>> ActionDoingDictionnary = new()
-    {
+    //public Dictionary<UnitAction, Func<Unit, float, int?>> ActionDoingDictionnary = new()
+    //{
     	
-    	{UnitAction.WANDERING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2)},
-    	{UnitAction.WORKING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2)},
-    	{UnitAction.LEARNING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2)},
-    };
+    //	{UnitAction.WANDERING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2)},
+    //	{UnitAction.WORKING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2)},
+    //	{UnitAction.LEARNING, ActionBuilder.ScoreAddByDay(saturationByDay: -.2)},
+    //};
 
     public class Unit : MonoBehaviour
     {
@@ -58,7 +58,7 @@ namespace ToyTown
     	// Update is called once per frame
     	void Update()
     	{
-    		this.actualTask.UpdateRepercution(this, Time.deltaTime);
+    		//this.actualTask.UpdateRepercution(this, Time.deltaTime);
     	}
     }
 }
