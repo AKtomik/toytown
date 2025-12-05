@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using System.Linq;
 //using System.;
 
 namespace ToyTown
@@ -12,7 +13,7 @@ namespace ToyTown
 		MINER,
 		BUILDER,
 	};
-
+	
 	public enum UnitAction {
 		WANDERING,
 		WORKING,
@@ -162,11 +163,20 @@ namespace ToyTown
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
-			
+			Debug.Log($"UnitAction.WANDERING:{(int)UnitAction.WANDERING} UnitActionPlayer.WANDERING:{(int)UnitActionPlayer.WANDERING} {UnitAction.WANDERING==(UnitAction)(int)UnitActionPlayer.WANDERING}");
+			Debug.Log($"UnitAction.WANDERING:{(int)UnitAction.WANDERING} UnitActionPlayer.LEARNING:{(int)UnitActionPlayer.LEARNING} {UnitAction.WANDERING==(UnitAction)(int)UnitActionPlayer.LEARNING}");
+			Debug.Log($"UnitAction.WALKING:{(int)UnitAction.WALKING} UnitActionSystem.WALKING:{(int)UnitActionSystem.WALKING} {UnitAction.WALKING==(UnitAction)(int)UnitActionSystem.WALKING}");
+			Debug.Log($"UnitAction.WALKING:{(int)UnitAction.WALKING} UnitActionSystem.EATING:{(int)UnitActionSystem.EATING} {UnitAction.WALKING==(UnitAction)(int)UnitActionSystem.EATING}");
+			if (!Action.Dictionnary.Keys.Contains((UnitAction)this.actionPlayer))
+			{
+				Debug.LogError($"actionPlayer is not a correct UnitAction! Please choose a value for {this}.actionPlayer. (this.actionPlayer = {this.actionPlayer})");
+				this.actionPlayer = UnitActionPlayer.WANDERING;
+			}
 		}
 		// Update is called once per frame
 		void Update()
 		{
+			Debug.Log($"(UnitAction)this.actionPlayer {(UnitAction)this.actionPlayer} {(int)this.actionPlayer} {(UnitAction)this.actionPlayer}");
 			Action.Dictionnary[(UnitAction)this.actionPlayer].Update(this, Time.deltaTime);
 		}
 	}
