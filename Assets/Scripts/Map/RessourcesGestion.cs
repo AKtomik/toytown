@@ -1,52 +1,42 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RessourcesGestion : MonoBehaviour
 {
-    public static TextMeshPro woodText;
+    [SerializeField] private TMP_Text woodText;
     public static int woodQuantity;
 
-    public static TextMeshPro rockText;
+    [SerializeField] private TMP_Text rockText;
     public static int rockQuantity;
 
-    public static TextMeshPro foodText;
+    [SerializeField] private TMP_Text foodText;
     public static int foodQuantity;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private static RessourcesGestion instance;
+
+    private void Awake()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        instance = this;
+        foodText.text = "0";
+        woodText.text = "0";
+        rockText.text = "0";
     }
 
     public static void AddRock()
     {
-        rockQuantity += 1;
-        Debug.Log(rockQuantity);
-        rockText.text += rockQuantity.ToString();       
-
+        rockQuantity++;
+        instance.rockText.text = rockQuantity.ToString();
     }
 
     public static void AddFood()
     {
-        foodQuantity += 1;
-        Debug.Log(foodQuantity);
-        foodText.text += foodQuantity.ToString();
-
-
+        foodQuantity++;
+        instance.foodText.text = foodQuantity.ToString();
     }
 
     public static void AddWood()
     {
-        woodQuantity += 1;
-        Debug.Log(woodQuantity);
-        woodText.text += woodQuantity.ToString();
-
+        woodQuantity++;
+        instance.woodText.text = woodQuantity.ToString();
     }
 }
