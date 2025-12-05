@@ -65,6 +65,15 @@ namespace ToyTown
 			return ActionUpdateReturn.CONTINUE;
 		}
 
+		public static Func<Unit, float, ActionUpdateReturn> Merge(Func<Unit, float, ActionUpdateReturn> Action1, Func<Unit, float, ActionUpdateReturn> Action2)
+		{
+			return (Unit unit, float delta) =>
+			{
+				Action1(unit, delta);
+				return Action2(unit, delta);
+			};
+		}
+
 		public static Func<Unit, float, ActionUpdateReturn> ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
 		{
 			return (Unit unit, float delta) =>
@@ -125,10 +134,12 @@ namespace ToyTown
 		public double saturationScore = 1;
 		public double energyScore = 1;
 		public double happynessScore = .5;
+		
 		public UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
 		public UnitActionSystem? actionSystem = null;
 		public double actionSystemDaysAmount = .0;
 		public double actionSystemDaysRemain = .0;
+
 		public UnitJob actualJob = UnitJob.NOTHING;
 		public UnitJob? learningJob = null;
 
@@ -160,6 +171,23 @@ namespace ToyTown
 				return (UnitAction)actionPlayer;
 		}
 
+		public bool IsHungry()
+		{
+			return saturationScore < Settings.UnitLetdownPoint;
+		}
+		
+		public bool IsTired()
+		{
+			return energyScore < Settings.UnitLetdownPoint;
+		}
+		
+		public double speed
+		{
+			get {
+				return Settings.UnitBaseSpeed * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1);
+			}
+		}
+
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
@@ -172,7 +200,7 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
-			Action.Dictionnary[(UnitAction)this.actionPlayer].Update(this, Time.deltaTime);
+			Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime);
 		}
 	}
 }
