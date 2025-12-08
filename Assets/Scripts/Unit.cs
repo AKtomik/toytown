@@ -257,6 +257,11 @@ namespace ToyTown
 		{
 			return energyScore < Settings.UnitLetdownPoint;
 		}
+
+		public bool IsWalking()
+		{
+			return walkingObjective != null && Vector3.Distance((Vector3)walkingObjective, transform.position) > Settings.WalkingNearObjectiveDistance;
+		}
 		
 		public double speed
 		{
@@ -281,7 +286,7 @@ namespace ToyTown
 		void Update()
 		{
 			// if walking
-			if (walkingObjective != null && Vector3.Distance((Vector3)walkingObjective, transform.position) < Settings.WalkingNearObjectiveDistance)
+			if (IsWalking())
 			{
 				rb.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(speed * Settings.WalkingSpeed * Time.deltaTime)));
 				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime);
