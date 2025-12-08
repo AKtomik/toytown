@@ -70,6 +70,15 @@ namespace ToyTown
 		// jobs functions
 		public static Dictionary<UnitJob, ActionStartFunction> JobsDictionnary = new()
 		{
+			{ UnitJob.FARMER, unit => {
+				
+			} },
+			{ UnitJob.LUMBERJACK, unit => {
+				
+			} },
+			{ UnitJob.MINER, unit => {
+				
+			} },
 			{ UnitJob.BUILDER, unit => {
 				
 			} }
@@ -125,6 +134,15 @@ namespace ToyTown
 		// jobs functions
 		public static Dictionary<UnitJob, ActionUpdateFunction> JobsDictionnary = new()
 		{
+			{ UnitJob.FARMER, (unit, delta) => {
+				return ActionUpdateReturn.CONTINUE;
+			} },
+			{ UnitJob.LUMBERJACK, (unit, delta) => {
+				return ActionUpdateReturn.CONTINUE;
+			} },
+			{ UnitJob.MINER, (unit, delta) => {
+				return ActionUpdateReturn.CONTINUE;
+			} },
 			{ UnitJob.BUILDER, (unit, delta) => {
 				return ActionUpdateReturn.CONTINUE;
 			} }
@@ -246,6 +264,11 @@ namespace ToyTown
 			Action.Dictionnary[(UnitAction)action].Start(this);
 			actionPlayer = action;
 		}
+		
+		public void SwtichJob(UnitJob job)
+		{
+			actualJob = job;
+		}
 
 		public UnitJob GetActualJob()
 		{
@@ -292,7 +315,8 @@ namespace ToyTown
 				this.actionPlayer = UnitActionPlayer.WANDERING;
 			}
 			// ! test
-			SwtichPlayerAction(UnitActionPlayer.LEARNING);
+			SwtichJob(UnitJob.MINER);
+			SwtichPlayerAction(UnitActionPlayer.WORKING);
 		}
 		// Update is called once per frame
 		void Update()
