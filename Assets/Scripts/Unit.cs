@@ -122,8 +122,8 @@ namespace ToyTown
 			{UnitAction.WORKING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))},
 			{UnitAction.LEARNING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
 			// action system
-			{UnitAction.EATING, new Action(update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5))},
-			{UnitAction.SLEEPING, new Action(update: ActionUpdateBuilder.ScoreAddByAction(energyByAction: 1))},
+			{UnitAction.EATING, new Action(update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5), start: ActionStartBuilder.StartTimer(timerDayAmount: .05))},
+			{UnitAction.SLEEPING, new Action(update: ActionUpdateBuilder.ScoreAddByAction(energyByAction: 1), start: ActionStartBuilder.StartTimer(timerDayAmount: .5))},
 			// between action
 			{UnitAction.WALKING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
 		};
@@ -213,7 +213,7 @@ namespace ToyTown
 					actionSystem = null;
 				} else
 				{
-					actionPlayer = UnitActionPlayer.WANDERING;
+					SwtichPlayerAction(UnitActionPlayer.WANDERING);
 				}
 			}
 
@@ -222,11 +222,11 @@ namespace ToyTown
 			{
 				if (IsHungry())
 				{
-					actionSystem = UnitActionSystem.EATING;
+					SwtichSystemAction(UnitActionSystem.EATING);
 				}
 				else if (IsTired())
 				{
-					actionSystem = UnitActionSystem.SLEEPING;
+					SwtichSystemAction(UnitActionSystem.SLEEPING);
 				}
 			}
 		}
