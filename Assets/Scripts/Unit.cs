@@ -52,6 +52,11 @@ namespace ToyTown
 			unit.actionSystemDaysRemain = 0;
 		}
 		
+		public static void Learn(Unit unit)
+		{
+			
+		}
+
 		public static void Job(Unit unit)
 		{
 			JobsDictionnary[unit.GetActualJob()](unit);
@@ -66,6 +71,15 @@ namespace ToyTown
 		};
 
 		// functions builder
+		public static ActionStartFunction Merge(ActionStartFunction Action1, ActionStartFunction Action2)
+		{
+			return (unit) =>
+			{
+				Action1(unit);
+				Action2(unit);
+			};
+		}
+
 		public static ActionStartFunction StartTimer(double timerDayAmount)
 		{
 			return unit =>
@@ -156,14 +170,30 @@ namespace ToyTown
 		public static Dictionary<UnitAction, Action> Dictionnary = new()
 		{
 			// action order
-			{UnitAction.WANDERING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))},
-			{UnitAction.WORKING, new Action(update: ActionUpdateBuilder.Merge(ActionUpdateBuilder.Job, ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1)), start: ActionStartBuilder.Job)},
-			{UnitAction.LEARNING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
+			{UnitAction.WANDERING, new Action(
+				update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1)
+				)},
+			{UnitAction.WORKING, new Action(
+				start: ActionStartBuilder.Job,
+				update: ActionUpdateBuilder.Merge(ActionUpdateBuilder.Job, ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))
+				)},
+			{UnitAction.LEARNING, new Action(
+				start: ActionStartBuilder.Merge(ActionStartBuilder.Learn, ActionStartBuilder.GoingToPlace(Place.SCHOOL)),
+				update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)
+				)},
 			// action system
-			{UnitAction.EATING, new Action(update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5), start: ActionStartBuilder.StartTimer(timerDayAmount: .05))},
-			{UnitAction.SLEEPING, new Action(update: ActionUpdateBuilder.ScoreAddByAction(energyByAction: 1), start: ActionStartBuilder.StartTimer(timerDayAmount: .5))},
+			{UnitAction.EATING, new Action(
+				start: ActionStartBuilder.StartTimer(timerDayAmount: .05),
+				update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5)
+				)},
+			{UnitAction.SLEEPING, new Action(
+				start: ActionStartBuilder.StartTimer(timerDayAmount: .5),
+				update: ActionUpdateBuilder.ScoreAddByAction(energyByAction: 1)
+				)},
 			// between action
-			{UnitAction.WALKING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
+			{UnitAction.WALKING, new Action(
+				update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)
+				)},
 		};
 	}
 
