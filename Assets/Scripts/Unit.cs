@@ -45,15 +45,30 @@ namespace ToyTown
 
 	public static class ActionStartBuilder
 	{	
+		// raw functions
 		public static void Default(Unit unit)
 		{
 			unit.actionSystemDaysAmount = 0;
 			unit.actionSystemDaysRemain = 0;
 		}
+		
+		public static void Job(Unit unit)
+		{
+			JobsDictionnary[unit.GetActualJob()](unit);
+		}
 
+		// jobs functions
+		public static Dictionary<UnitJob, ActionStartFunction> JobsDictionnary = new()
+		{
+			{ UnitJob.BUILDER, unit => {
+				
+			} }
+		};
+
+		// functions builder
 		public static ActionStartFunction StartTimer(double timerDayAmount)
 		{
-			return (Unit unit) =>
+			return unit =>
 			{
 				unit.actionSystemDaysAmount = timerDayAmount;
 				unit.actionSystemDaysRemain = timerDayAmount;
@@ -63,11 +78,26 @@ namespace ToyTown
 
 	public static class ActionUpdateBuilder
 	{
+		// raw functions
 		public static ActionUpdateReturn Default(Unit unit, float delta)
 		{
 			return ActionUpdateReturn.CONTINUE;
 		}
 
+		public static ActionUpdateReturn Job(Unit unit, float delta)
+		{
+			return JobsDictionnary[unit.GetActualJob()](unit, delta);
+		}
+
+		// jobs functions
+		public static Dictionary<UnitJob, ActionUpdateFunction> JobsDictionnary = new()
+		{
+			{ UnitJob.BUILDER, (unit, delta) => {
+				return ActionUpdateReturn.CONTINUE;
+			} }
+		};
+
+		// functions builder
 		public static ActionUpdateFunction Merge(ActionUpdateFunction Action1, ActionUpdateFunction Action2)
 		{
 			return (Unit unit, float delta) =>
@@ -79,7 +109,7 @@ namespace ToyTown
 
 		public static ActionUpdateFunction ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
 		{
-			return (Unit unit, float delta) =>
+			return (unit, delta) =>
 			{
 				double factor = delta / Settings.DayLengthInSecond;
 				unit.saturationScore += saturationByDay * factor;
@@ -91,7 +121,7 @@ namespace ToyTown
 		
 		public static ActionUpdateFunction ScoreAddByAction(double saturationByAction = 0, double energyByAction = 0, double happynessByAction = 0)
 		{
-			return (Unit unit, float delta) =>
+			return (unit, delta) =>
 			{
 				if (unit.actionSystemDaysRemain <= 0) return ActionUpdateReturn.DONE;
 				double factor = delta * unit.actionSystemDaysAmount / Settings.DayLengthInSecond;
@@ -119,7 +149,7 @@ namespace ToyTown
 		{
 			// action order
 			{UnitAction.WANDERING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))},
-			{UnitAction.WORKING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))},
+			{UnitAction.WORKING, new Action(update: ActionUpdateBuilder.Merge(ActionUpdateBuilder.Job, ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1)), start: ActionStartBuilder.Job)},
 			{UnitAction.LEARNING, new Action(update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0))},
 			// action system
 			{UnitAction.EATING, new Action(update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5), start: ActionStartBuilder.StartTimer(timerDayAmount: .05))},
@@ -132,7 +162,7 @@ namespace ToyTown
 	[RequireComponent(typeof(Rigidbody))]
 	public class Unit : MonoBehaviour
 	{
-		private Rigidbody rigidbody;
+		private readonly Rigidbody rb;
 
 		public double saturationScore = 1;
 		public double energyScore = 1;
@@ -167,6 +197,11 @@ namespace ToyTown
 			actionPlayer = action;
 		}
 
+		public UnitJob GetActualJob()
+		{
+			return actualJob;
+		}
+
 		public UnitAction GetActualAction()
 		{
 			if (actionSystem != null)
@@ -195,7 +230,7 @@ namespace ToyTown
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
-			rigidbody = GetComponent<Rigidbody>();
+			//rigidbody = GetComponent<Rigidbody>();
 			if (!Action.Dictionnary.Keys.Contains((UnitAction)this.actionPlayer))
 			{
 				Debug.LogError($"actionPlayer is not a correct UnitAction! Please choose a value for {this}.actionPlayer. (this.actionPlayer = {this.actionPlayer})");
@@ -205,24 +240,30 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
+			// if walking
 			if (walkingObjective != null && Vector3.Distance((Vector3)walkingObjective, transform.position) < Settings.WalkingNearObjectiveDistance)
 			{
-				rigidbody.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(speed * Settings.WalkingSpeed)));
+				rb.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(speed * Settings.WalkingSpeed * Time.deltaTime)));
+				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime);
 			}
-
-			ActionUpdateReturn actionFeedback = Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime);
-
-			// if action done
-			if (actionFeedback == ActionUpdateReturn.DONE)
+			else
 			{
-				if (actionSystem != null)
+				ActionUpdateReturn actionFeedback = Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime);
+
+				// if action done
+				if (actionFeedback == ActionUpdateReturn.DONE)
 				{
-					actionSystem = null;
-				} else
-				{
-					SwtichPlayerAction(UnitActionPlayer.WANDERING);
+					if (actionSystem != null)
+					{
+						actionSystem = null;
+					} else
+					{
+						SwtichPlayerAction(UnitActionPlayer.WANDERING);
+					}
 				}
 			}
+
+
 
 			// if need something
 			if (actionSystem != null)
