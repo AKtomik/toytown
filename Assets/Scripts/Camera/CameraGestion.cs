@@ -2,40 +2,43 @@ using UnityEngine;
 
 public class CameraGestion : MonoBehaviour
 {
-
     public float scrollSpeed;
-    [SerializeField]
-    private float topBarrier;
-    [SerializeField]
-    private float botBarrier;
-    [SerializeField]
-    private float leftBarrier;
-    [SerializeField]
-    private float rightBarrier;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
+    [Header("Barrières d'écran (détection souris)")]
+    [SerializeField] private float topBarrier = 0.9f;
+    [SerializeField] private float botBarrier = 0.1f;
+    [SerializeField] private float leftBarrier = 0.1f;
+    [SerializeField] private float rightBarrier = 0.9f;
+
+    [Header("Limites de déplacement")]
+    public float minX = -20f;
+    public float maxX = 20f;
+    public float minZ = -20f;
+    public float maxZ = 20f;
+
     void Update()
     {
-        if(Input.mousePosition.y >= Screen.height * topBarrier)
-        {
-            transform.Translate(Vector3.forward * Time.deltaTime * scrollSpeed, Space.World);
-        }
+        Vector3 move = Vector3.zero;
+
+        if (Input.mousePosition.y >= Screen.height * topBarrier)
+            move += Vector3.forward;
+
         if (Input.mousePosition.y <= Screen.height * botBarrier)
-        {
-            transform.Translate(Vector3.back * Time.deltaTime * scrollSpeed, Space.World);
-        }
+            move += Vector3.back;
+
         if (Input.mousePosition.x >= Screen.width * rightBarrier)
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * scrollSpeed, Space.World);
-        }
+            move += Vector3.right;
+
         if (Input.mousePosition.x <= Screen.width * leftBarrier)
-        {
-            transform.Translate(Vector3.left * Time.deltaTime * scrollSpeed, Space.World);
-        }
+            move += Vector3.left;
+
+        // Applique le mouvement
+        transform.Translate(move * scrollSpeed * Time.deltaTime, Space.World);
+
+        // Clamp la position pour empêcher d'aller trop loin
+        Vector3 clampedPos = transform.position;
+        clampedPos.x = Mathf.Clamp(clampedPos.x, minX, maxX);
+        clampedPos.z = Mathf.Clamp(clampedPos.z, minZ, maxZ);
+        transform.position = clampedPos;
     }
 }
