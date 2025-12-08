@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace ToyTown
 {
+	using ActionStartFunction = Action<Unit>;
+	using ActionUpdateFunction = Func<Unit, float, ActionUpdateReturn>;
+
 	public enum UnitJob {
 		NOTHING,
 		FARMER,
@@ -48,7 +51,7 @@ namespace ToyTown
 			unit.actionSystemDaysRemain = 0;
 		}
 
-		public static Action<Unit> StartTimer(double timerDayAmount)
+		public static ActionStartFunction StartTimer(double timerDayAmount)
 		{
 			return (Unit unit) =>
 			{
@@ -65,7 +68,7 @@ namespace ToyTown
 			return ActionUpdateReturn.CONTINUE;
 		}
 
-		public static Func<Unit, float, ActionUpdateReturn> Merge(Func<Unit, float, ActionUpdateReturn> Action1, Func<Unit, float, ActionUpdateReturn> Action2)
+		public static ActionUpdateFunction Merge(ActionUpdateFunction Action1, ActionUpdateFunction Action2)
 		{
 			return (Unit unit, float delta) =>
 			{
@@ -74,7 +77,7 @@ namespace ToyTown
 			};
 		}
 
-		public static Func<Unit, float, ActionUpdateReturn> ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
+		public static ActionUpdateFunction ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
 		{
 			return (Unit unit, float delta) =>
 			{
@@ -86,7 +89,7 @@ namespace ToyTown
 			};
 		}
 		
-		public static Func<Unit, float, ActionUpdateReturn> ScoreAddByAction(double saturationByAction = 0, double energyByAction = 0, double happynessByAction = 0)
+		public static ActionUpdateFunction ScoreAddByAction(double saturationByAction = 0, double energyByAction = 0, double happynessByAction = 0)
 		{
 			return (Unit unit, float delta) =>
 			{
@@ -103,10 +106,10 @@ namespace ToyTown
 
 	public class Action
 	{
-		public Action<Unit> Start;
-		public Func<Unit, float, ActionUpdateReturn> Update;
+		public ActionStartFunction Start;
+		public ActionUpdateFunction Update;
 		
-		public Action(Action<Unit> start = null, Func<Unit, float, ActionUpdateReturn> update = null)
+		public Action(ActionStartFunction start = null, ActionUpdateFunction update = null)
 		{
 			Start = start ?? ActionStartBuilder.Default;
 			Update = update ?? ActionUpdateBuilder.Default;
