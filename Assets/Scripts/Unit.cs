@@ -176,11 +176,11 @@ namespace ToyTown
 			return (unit, delta) =>
 			{
 				if (unit.actionSystemDaysRemain <= 0) return ActionUpdateReturn.DONE;
-				double factor = delta * unit.actionSystemDaysAmount / Settings.DayLengthInSecond;
+				unit.actionSystemDaysRemain -= delta / Settings.DayLengthInSecond;
+				double factor = delta  / Settings.DayLengthInSecond / unit.actionSystemDaysAmount;
 				unit.saturationScore += saturationByAction * factor;
 				unit.happynessScore += happynessByAction * factor;
 				unit.energyScore += energyByAction * factor;
-				unit.actionSystemDaysRemain -= delta / Settings.DayLengthInSecond;
 				return ActionUpdateReturn.CONTINUE;
 			};
 		}
@@ -214,7 +214,7 @@ namespace ToyTown
 			// action system
 			{UnitAction.EATING, new Action(
 				start: ActionStartBuilder.Merge(ActionStartBuilder.StartTimer(timerDayAmount: .05), ActionStartBuilder.GoingToPlace(Place.CANTINE)),
-				update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5)
+				update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: 1)
 				)},
 			{UnitAction.SLEEPING, new Action(
 				start: ActionStartBuilder.Merge(ActionStartBuilder.StartTimer(timerDayAmount: .5), ActionStartBuilder.GoingToPlace(Place.HOUSE)),
@@ -325,11 +325,11 @@ namespace ToyTown
 			if (IsWalking())
 			{
 				rb.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(speed * Settings.WalkingSpeed * Time.deltaTime)));
-				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime);
+				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime * (float)speed);
 			}
 			else
 			{
-				ActionUpdateReturn actionFeedback = Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime);
+				ActionUpdateReturn actionFeedback = Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime * (float)speed);
 
 				// if action done
 				if (actionFeedback == ActionUpdateReturn.DONE)
@@ -348,14 +348,16 @@ namespace ToyTown
 
 
 			// if need something
-			if (actionSystem != null)
+			if (actionSystem == null)
 			{
 				if (IsHungry())
 				{
+					Debug.Log($"{this} is hungry and go eating");
 					SwtichSystemAction(UnitActionSystem.EATING);
 				}
 				else if (IsTired())
 				{
+					Debug.Log($"{this} is tired and go sleeping");
 					SwtichSystemAction(UnitActionSystem.SLEEPING);
 				}
 			}
