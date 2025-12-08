@@ -200,7 +200,32 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
-			Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime);
+			ActionUpdateReturn actionFeedback = Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime);
+
+			// if action done
+			if (actionFeedback == ActionUpdateReturn.DONE)
+			{
+				if (actionSystem != null)
+				{
+					actionSystem = null;
+				} else
+				{
+					actionPlayer = UnitActionPlayer.WANDERING;
+				}
+			}
+
+			// if need something
+			if (actionSystem != null)
+			{
+				if (IsHungry())
+				{
+					actionSystem = UnitActionSystem.EATING;
+				}
+				else if (IsTired())
+				{
+					actionSystem = UnitActionSystem.SLEEPING;
+				}
+			}
 		}
 	}
 }
