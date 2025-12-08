@@ -39,4 +39,22 @@ public class RessourcesGestion : MonoBehaviour
         woodQuantity++;
         instance.woodText.text = woodQuantity.ToString();
     }
+
+    public static void RemoveRock(int num)
+    {
+        rockQuantity -= num;
+        instance.rockText.text = rockQuantity.ToString();
+    }
+
+    public static void RemoveFood(int num)
+    {
+        foodQuantity -= num;
+        instance.foodText.text = foodQuantity.ToString();
+    }
+
+    public static void RemoveWood(int num)
+    {
+        woodQuantity -= num;
+        instance.woodText.text = woodQuantity.ToString();
+    }
 }

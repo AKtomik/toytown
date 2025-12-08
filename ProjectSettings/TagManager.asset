@@ -11,6 +11,8 @@ TagManager:
   - FoodTxt
   - WoodTxt
   - RockTxt
+  - House
+  - School
   layers:
   - Default
   - TransparentFX

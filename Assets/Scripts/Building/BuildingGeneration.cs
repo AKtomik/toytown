@@ -9,6 +9,21 @@ public class BuildingGeneration : MonoBehaviour
     [SerializeField] private Material BuildPreviewMat;
     [SerializeField] private Material BuildMat;
 
+    [SerializeField] private int RockForFarm;
+    [SerializeField] private int WoodForFarm;
+
+    [SerializeField] private int RockForHouse;
+    [SerializeField] private int WoodForHouse;
+
+    [SerializeField] private int RockForSchool;
+    [SerializeField] private int WoodForSchool;
+
+    [SerializeField] private int RockForMuseum;
+    [SerializeField] private int WoodForMuseum;
+
+    [SerializeField] private int RockForLibrary;
+    [SerializeField] private int WoodForLibrary;
+
     private int i = 0;
     private GameObject previewInstance;
 
@@ -48,17 +63,75 @@ public class BuildingGeneration : MonoBehaviour
 
     public void ValidateSpawn()
     {
-        if (previewInstance != null)
+        if (VerifRessources())
         {
-            List<Tile> tiles = TileManager.Instance.freeTiles;
+            Debug.Log("Bat construit");
+            if (previewInstance != null)
+            {
+                List<Tile> tiles = TileManager.Instance.freeTiles;
 
-            previewInstance.GetComponent<Renderer>().material = BuildMat;
+                previewInstance.GetComponent<Renderer>().material = BuildMat;
 
-            // On retire la tuile globale
-            TileManager.Instance.RemoveTile(tiles[i]);
+                TileManager.Instance.RemoveTile(tiles[i]);
 
-            previewInstance = null;
-            BuildButton.gameObject.SetActive(true);
+                previewInstance = null;
+                BuildButton.gameObject.SetActive(true);
+            }
         }
+        else
+        {
+            Debug.Log("pas assez de materiaux");
+        }
+
+    }
+
+    public bool VerifRessources()
+    {
+        if (BuildPreview.tag == "School")
+        {
+            if(RessourcesGestion.rockQuantity >= RockForSchool && RessourcesGestion.woodQuantity >= WoodForSchool)
+            {
+                RessourcesGestion.RemoveRock(RockForSchool);
+                RessourcesGestion.RemoveWood(WoodForSchool);
+                return true;
+            }
+        }
+        else if(BuildPreview.tag == "House")
+        {
+            if (RessourcesGestion.rockQuantity >= RockForHouse && RessourcesGestion.woodQuantity >= WoodForHouse)
+            {
+                RessourcesGestion.RemoveRock(RockForHouse);
+                RessourcesGestion.RemoveWood(WoodForHouse);
+                return true;
+            }
+        }
+        else if (BuildPreview.tag == "Farm")
+        {
+            if (RessourcesGestion.rockQuantity >= RockForFarm && RessourcesGestion.woodQuantity >= WoodForFarm)
+            {
+                RessourcesGestion.RemoveRock(RockForFarm);
+                RessourcesGestion.RemoveWood(WoodForFarm);
+                return true;
+            }
+        }
+        else if (BuildPreview.tag == "Library")
+        {
+            if (RessourcesGestion.rockQuantity >= RockForLibrary && RessourcesGestion.woodQuantity >= WoodForLibrary)
+            {
+                RessourcesGestion.RemoveRock(RockForLibrary);
+                RessourcesGestion.RemoveWood(WoodForLibrary);
+                return true;
+            }
+        }
+        else if (BuildPreview.tag == "Museum")
+        {
+            if (RessourcesGestion.rockQuantity >= RockForMuseum && RessourcesGestion.woodQuantity >= WoodForMuseum)
+            {
+                RessourcesGestion.RemoveRock(RockForMuseum);
+                RessourcesGestion.RemoveWood(WoodForMuseum);
+                return true;
+            }
+        }
+        return false;
     }
 }
