@@ -129,10 +129,10 @@ namespace ToyTown
 		};
 	}
 
-
-
+	[RequireComponent(typeof(Rigidbody))]
 	public class Unit : MonoBehaviour
 	{
+		private Rigidbody rigidbody;
 
 		public double saturationScore = 1;
 		public double energyScore = 1;
@@ -142,6 +142,7 @@ namespace ToyTown
 		public UnitActionSystem? actionSystem = null;
 		public double actionSystemDaysAmount = .0;
 		public double actionSystemDaysRemain = .0;
+		public Vector3? walkingObjective = null;
 
 		public UnitJob actualJob = UnitJob.NOTHING;
 		public UnitJob? learningJob = null;
@@ -194,6 +195,7 @@ namespace ToyTown
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
+			rigidbody = GetComponent<Rigidbody>();
 			if (!Action.Dictionnary.Keys.Contains((UnitAction)this.actionPlayer))
 			{
 				Debug.LogError($"actionPlayer is not a correct UnitAction! Please choose a value for {this}.actionPlayer. (this.actionPlayer = {this.actionPlayer})");
@@ -203,6 +205,11 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
+			if (walkingObjective != null && Vector3.Distance((Vector3)walkingObjective, transform.position) < Settings.WalkingNearObjectiveDistance)
+			{
+				rigidbody.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(speed * Settings.WalkingSpeed)));
+			}
+
 			ActionUpdateReturn actionFeedback = Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime);
 
 			// if action done
