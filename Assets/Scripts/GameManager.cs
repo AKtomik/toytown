@@ -3,20 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Search;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-	{
-		
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-		
-	}
-
+namespace ToyTown {
 	public enum Place
 	{
 		BUSH,
@@ -26,34 +13,56 @@ public class GameManager : MonoBehaviour
 		CANTINE,
 		HOUSE,
 	}
-		
-	public Dictionary<Place, List<Vector3>> PlacePlacing = new()
-	{
-		{Place.BUSH, new()},
-		{Place.WOOD, new()},
-		{Place.MINE, new()},
-		{Place.SCHOOL, new()},
-		{Place.CANTINE, new()},
-		{Place.HOUSE, new()},
-	};
 
-	public Vector3 GetNearestPlace(Place place, Vector3 pos)
+	public class GameManager : MonoBehaviour
 	{
-		if (PlacePlacing[place].Count == 0)
+		// Start is called once before the first execution of Update after the MonoBehaviour is created
+		void Start()
 		{
-			throw new Exception($"PlacePlacing list for {place} is empty but GetNearestPlace is called.");
+			
 		}
-		Vector3 nearestPos = PlacePlacing[place][0];
-		float nearestDistance = Vector3.Distance(PlacePlacing[place][0], pos);
-		foreach (Vector3 placePos in PlacePlacing[place])
+
+		// Update is called once per frame
+		void Update()
 		{
-			float distance = Vector3.Distance(placePos, pos);
-			if (distance < nearestDistance)
+			
+		}
+
+		[System.Serializable]
+		public struct PlacePositionList
+		{
+			public Place place;
+			public List<Vector3> positions;
+		}
+		
+		public Dictionary<Place, List<Vector3>> PlacePlacing = new()
+		{
+			{Place.BUSH, new()},
+			{Place.WOOD, new()},
+			{Place.MINE, new()},
+			{Place.SCHOOL, new()},
+			{Place.CANTINE, new()},
+			{Place.HOUSE, new()},
+		};
+
+		public Vector3 GetNearestPlace(Place place, Vector3 pos)
+		{
+			if (PlacePlacing[place].Count == 0)
 			{
-				nearestDistance = distance;
-				nearestPos = placePos;
+				throw new Exception($"PlacePlacing list for {place} is empty but GetNearestPlace is called.");
 			}
+			Vector3 nearestPos = PlacePlacing[place][0];
+			float nearestDistance = Vector3.Distance(PlacePlacing[place][0], pos);
+			foreach (Vector3 placePos in PlacePlacing[place])
+			{
+				float distance = Vector3.Distance(placePos, pos);
+				if (distance < nearestDistance)
+				{
+					nearestDistance = distance;
+					nearestPos = placePos;
+				}
+			}
+			return nearestPos;
 		}
-		return nearestPos;
 	}
 }
