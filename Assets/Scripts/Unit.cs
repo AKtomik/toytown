@@ -100,10 +100,11 @@ namespace ToyTown
 		// functions builder
 		public static ActionUpdateFunction Merge(ActionUpdateFunction Action1, ActionUpdateFunction Action2)
 		{
-			return (Unit unit, float delta) =>
+			return (unit, delta) =>
 			{
-				Action1(unit, delta);
-				return Action2(unit, delta);
+				ActionUpdateReturn r1 = Action1(unit, delta);
+				ActionUpdateReturn r2 = Action2(unit, delta);
+				return (r1 > r2) ? r1 : r2;
 			};
 		}
 
