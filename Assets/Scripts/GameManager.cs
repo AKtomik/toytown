@@ -6,12 +6,14 @@ using UnityEngine;
 namespace ToyTown {
 	public enum Place
 	{
-		BUSH,
-		WOOD,
-		MINE,
-		SCHOOL,
+		POINT = UnitJob.NOTHING,
+		BUSH = UnitJob.FARMER,
+		WOOD = UnitJob.LUMBERJACK,
+		MINE = UnitJob.MINER,
+		CONSTRUCTION = UnitJob.BUILDER,
 		CANTINE,
 		HOUSE,
+		SCHOOL,
 	}
 
 	public class GameManager : MonoBehaviour
@@ -37,6 +39,7 @@ namespace ToyTown {
 			{Place.SCHOOL, new()},
 			{Place.CANTINE, new()},
 			{Place.HOUSE, new()},
+			{Place.CONSTRUCTION, new()},
 		};
 
 		// Start is called once before the first execution of Update after the MonoBehaviour is created

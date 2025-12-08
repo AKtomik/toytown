@@ -61,6 +61,11 @@ namespace ToyTown
 		{
 			JobsDictionnary[unit.GetActualJob()](unit);
 		}
+		
+		public static void GoingToWork(Unit unit)
+		{
+			unit.walkingObjective = GameManager.Instance.GetNearestPlace((Place)unit.GetActualJob(), unit.transform.position);
+		}
 
 		// jobs functions
 		public static Dictionary<UnitJob, ActionStartFunction> JobsDictionnary = new()
@@ -88,6 +93,7 @@ namespace ToyTown
 				unit.actionSystemDaysRemain = timerDayAmount;
 			};
 		}
+
 		public static ActionStartFunction GoingToPlace(Place place)
 		{
 			return unit =>
@@ -105,6 +111,12 @@ namespace ToyTown
 			return ActionUpdateReturn.CONTINUE;
 		}
 
+		public static ActionUpdateReturn Wander(Unit unit, float delta)
+		{
+			// TODO : implement
+			return ActionUpdateReturn.CONTINUE;
+		}
+		
 		public static ActionUpdateReturn Job(Unit unit, float delta)
 		{
 			return JobsDictionnary[unit.GetActualJob()](unit, delta);
@@ -171,10 +183,10 @@ namespace ToyTown
 		{
 			// action order
 			{UnitAction.WANDERING, new Action(
-				update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1)
+				update: ActionUpdateBuilder.Merge(ActionUpdateBuilder.Wander, ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))
 				)},
 			{UnitAction.WORKING, new Action(
-				start: ActionStartBuilder.Job,
+				start: ActionStartBuilder.Merge(ActionStartBuilder.Job, ActionStartBuilder.GoingToWork),
 				update: ActionUpdateBuilder.Merge(ActionUpdateBuilder.Job, ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))
 				)},
 			{UnitAction.LEARNING, new Action(
@@ -183,11 +195,11 @@ namespace ToyTown
 				)},
 			// action system
 			{UnitAction.EATING, new Action(
-				start: ActionStartBuilder.StartTimer(timerDayAmount: .05),
+				start: ActionStartBuilder.Merge(ActionStartBuilder.StartTimer(timerDayAmount: .05), ActionStartBuilder.GoingToPlace(Place.CANTINE)),
 				update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5)
 				)},
 			{UnitAction.SLEEPING, new Action(
-				start: ActionStartBuilder.StartTimer(timerDayAmount: .5),
+				start: ActionStartBuilder.Merge(ActionStartBuilder.StartTimer(timerDayAmount: .5), ActionStartBuilder.GoingToPlace(Place.HOUSE)),
 				update: ActionUpdateBuilder.ScoreAddByAction(energyByAction: 1)
 				)},
 			// between action
@@ -301,6 +313,7 @@ namespace ToyTown
 					if (actionSystem != null)
 					{
 						actionSystem = null;
+						SwtichPlayerAction(actionPlayer);//!
 					} else
 					{
 						SwtichPlayerAction(UnitActionPlayer.WANDERING);
