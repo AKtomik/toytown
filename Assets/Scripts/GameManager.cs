@@ -16,7 +16,11 @@ namespace ToyTown {
 
 	public class GameManager : MonoBehaviour
 	{
+		public static GameManager Instance { get; private set; }
 
+		// this is here only for adding places with editor
+		// ! do NOT add places here with code
+		// use PlaceDictionary instead
 		[System.Serializable]
 		public struct PlacePositionList
 		{

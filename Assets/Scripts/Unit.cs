@@ -74,6 +74,13 @@ namespace ToyTown
 				unit.actionSystemDaysRemain = timerDayAmount;
 			};
 		}
+		public static ActionStartFunction GoingToPlace(Place place)
+		{
+			return unit =>
+			{
+				unit.walkingObjective = GameManager.Instance.GetNearestPlace(place, unit.transform.position);
+			};
+		}
 	};
 
 	public static class ActionUpdateBuilder
