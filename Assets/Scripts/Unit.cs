@@ -360,5 +360,28 @@ namespace ToyTown
 				}
 			}
 		}
+
+		void OnDrawGizmos()
+		{
+			float GizAlpha = IsWalking() ? .4f : .9f;
+			UnitAction action = GetActualAction();
+
+			if (action == UnitAction.WORKING)
+				Gizmos.color = new Color(0f, 0.75f, 0.0f, GizAlpha);
+			else if (action == UnitAction.EATING)
+				Gizmos.color = new Color(0.75f, 0.75f, 0.0f, GizAlpha);
+			else if (action == UnitAction.LEARNING)
+				Gizmos.color = new Color(0.0f, 0.75f, 0.75f, GizAlpha);
+			else if (action == UnitAction.SLEEPING)
+				Gizmos.color = new Color(0.0f, 0.0f, 0.75f, GizAlpha);
+			else if (action == UnitAction.WANDERING)
+				Gizmos.color = new Color(0.75f, 0.0f, 0.75f, GizAlpha);
+			else
+				Gizmos.color = new Color(0f, 0f, 0f, GizAlpha);
+
+			Vector3 centerPos = transform.position;
+			centerPos.y += 1;
+			Gizmos.DrawSphere(centerPos, .25f);
+		}
 	}
 }
