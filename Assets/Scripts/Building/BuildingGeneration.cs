@@ -4,74 +4,61 @@ using UnityEngine.UI;
 
 public class BuildingGeneration : MonoBehaviour
 {
-    [SerializeField] List<Tile> listPos = new List<Tile>();
-    [SerializeField] private GameObject SchoolPreview;
-    [SerializeField] private Button SchoolButton;
-    [SerializeField] private Material SchoolPreviewMat;
-    [SerializeField] private Material SchoolMat;
-
+    [SerializeField] private GameObject BuildPreview;
+    [SerializeField] private Button BuildButton;
+    [SerializeField] private Material BuildPreviewMat;
+    [SerializeField] private Material BuildMat;
 
     private int i = 0;
     private GameObject previewInstance;
 
-
-    public void Awake()
-    {
-        GameObject[] plains = GameObject.FindGameObjectsWithTag("Plain");
-
-        foreach (GameObject go in plains)
-        {
-            Tile tile = go.GetComponent<Tile>();
-             listPos.Add(tile);
-        }
-    }
     public void SpawnBuilding()
     {
+        List<Tile> tiles = TileManager.Instance.freeTiles;
+
+        if (tiles.Count == 0) return;
+
         if (previewInstance == null)
         {
-            Vector3 spawnPos = listPos[i].transform.position + new Vector3(0, 1f, 0);
-            previewInstance = Instantiate(SchoolPreview, spawnPos, Quaternion.identity);
+            Vector3 spawnPos = tiles[i].transform.position + new Vector3(0, 1f, 0);
+            previewInstance = Instantiate(BuildPreview, spawnPos, Quaternion.identity);
 
-            // On applique le matériau de preview
-            previewInstance.GetComponent<Renderer>().material = SchoolPreviewMat;
-
-            SchoolButton.gameObject.SetActive(false);
+            previewInstance.GetComponent<Renderer>().material = BuildPreviewMat;
+            BuildButton.gameObject.SetActive(false);
         }
     }
-
 
     public void NextPos()
     {
-        if (previewInstance == null) return;
-        if (i < listPos.Count - 1)
-        {
-            i++;
-            previewInstance.transform.position = listPos[i].transform.position + new Vector3(0, 1f, 0);
-        }
+        List<Tile> tiles = TileManager.Instance.freeTiles;
+        if (previewInstance == null || tiles.Count == 0) return;
+
+        i = (i + 1) % tiles.Count;
+        previewInstance.transform.position = tiles[i].transform.position + new Vector3(0, 1f, 0);
     }
 
     public void PrevPos()
     {
-        if (previewInstance == null) return;
-        if (i > 0)
-        {
-            i--;
-            previewInstance.transform.position = listPos[i].transform.position + new Vector3(0, 1f, 0);
-        }
+        List<Tile> tiles = TileManager.Instance.freeTiles;
+        if (previewInstance == null || tiles.Count == 0) return;
+
+        i = (i - 1 + tiles.Count) % tiles.Count;
+        previewInstance.transform.position = tiles[i].transform.position + new Vector3(0, 1f, 0);
     }
 
     public void ValidateSpawn()
     {
         if (previewInstance != null)
         {
-            // On remet le matériau original
-            previewInstance.GetComponent<Renderer>().material = SchoolMat;
+            List<Tile> tiles = TileManager.Instance.freeTiles;
 
-            // On "valide" le bâtiment et on supprime la référence de preview
+            previewInstance.GetComponent<Renderer>().material = BuildMat;
+
+            // On retire la tuile globale
+            TileManager.Instance.RemoveTile(tiles[i]);
+
             previewInstance = null;
-            listPos.Remove(listPos[i]);
-            SchoolButton.gameObject.SetActive(true);
-
+            BuildButton.gameObject.SetActive(true);
         }
     }
 }
