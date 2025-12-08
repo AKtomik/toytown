@@ -42,6 +42,7 @@ namespace ToyTown {
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
+			Instance = this;
 			foreach (var item in PlaceEditor)
 			{
 				PlaceDictionary[item.place].Add(item.gameObject);

@@ -200,7 +200,7 @@ namespace ToyTown
 	[RequireComponent(typeof(Rigidbody))]
 	public class Unit : MonoBehaviour
 	{
-		private readonly Rigidbody rb;
+		private Rigidbody rb;
 
 		public double saturationScore = 1;
 		public double energyScore = 1;
@@ -268,12 +268,14 @@ namespace ToyTown
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
-			//rigidbody = GetComponent<Rigidbody>();
+			rb = GetComponent<Rigidbody>();
 			if (!Action.Dictionnary.Keys.Contains((UnitAction)this.actionPlayer))
 			{
 				Debug.LogError($"actionPlayer is not a correct UnitAction! Please choose a value for {this}.actionPlayer. (this.actionPlayer = {this.actionPlayer})");
 				this.actionPlayer = UnitActionPlayer.WANDERING;
 			}
+			// ! test
+			SwtichPlayerAction(UnitActionPlayer.LEARNING);
 		}
 		// Update is called once per frame
 		void Update()
