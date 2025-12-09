@@ -54,7 +54,7 @@ namespace ToyTown
 		
 		public static void Learn(Unit unit)
 		{
-			
+			unit.learningRemainDay = Settings.UnitLearningTimeDay;
 		}
 
 		public static void Job(Unit unit)
@@ -123,6 +123,19 @@ namespace ToyTown
 		public static ActionUpdateReturn Wander(Unit unit, float delta)
 		{
 			// TODO : implement
+			return ActionUpdateReturn.CONTINUE;
+		}
+		
+		public static ActionUpdateReturn Learn(Unit unit, float delta)
+		{
+			unit.learningRemainDay -= delta / Settings.DayLengthInSecond;
+			if (unit.learningRemainDay <= 0)
+			{
+				unit.SwtichJob((UnitJob)unit.learningJob);
+				unit.learningJob = null;
+				unit.learningRemainDay = 0;
+				return ActionUpdateReturn.DONE;
+			}
 			return ActionUpdateReturn.CONTINUE;
 		}
 		
@@ -243,7 +256,16 @@ namespace ToyTown
 		public Vector3? walkingObjective = null;
 
 		public UnitJob actualJob = UnitJob.NOTHING;
+		
 		public UnitJob? learningJob = null;
+		public double learningRemainDay;
+		public double learningProgress
+		{
+			get
+			{
+				return 1 - (learningRemainDay / Settings.UnitLearningTimeDay);
+			}
+		}
 
 		// Switching actual action
 
@@ -263,6 +285,12 @@ namespace ToyTown
 			EndSystemAction();//!
 			Action.Dictionnary[(UnitAction)action].Start(this);
 			actionPlayer = action;
+		}
+		
+		public void StartLearning(UnitJob job)
+		{
+			learningJob = job;
+			SwtichPlayerAction(UnitActionPlayer.LEARNING);
 		}
 		
 		public void SwtichJob(UnitJob job)
