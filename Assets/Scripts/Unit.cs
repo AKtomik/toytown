@@ -43,6 +43,14 @@ namespace ToyTown
 		DONE,
 	};
 
+	public enum NeedState {
+		BEST = 1,//unused
+		FINE = 0,
+		NEEDED = -1,
+		DESPERATION = -2,
+		MORTAL = -3,
+	};
+
 	public class Action
 	{
 		public ActionStartFunction Start;
@@ -346,12 +354,12 @@ namespace ToyTown
 
 		public bool IsHungry()
 		{
-			return saturationScore < Settings.UnitLetdownPoint;
+			return saturationScore < Settings.UnitNeedPointNeeded;
 		}
 		
 		public bool IsTired()
 		{
-			return energyScore < Settings.UnitLetdownPoint;
+			return energyScore < Settings.UnitNeedPointNeeded;
 		}
 
 		public bool IsWalking()
