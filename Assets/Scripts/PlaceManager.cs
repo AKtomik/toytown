@@ -16,9 +16,9 @@ namespace ToyTown {
 		SCHOOL,
 	}
 
-	public class GameManager : MonoBehaviour
+	public class PlaceManager : MonoBehaviour
 	{
-		public static GameManager Instance { get; private set; }
+		public static PlaceManager Instance { get; private set; }
 
 		// this is here only for adding places with editor
 		// ! do NOT add places here with code

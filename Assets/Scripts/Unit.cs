@@ -114,7 +114,7 @@ namespace ToyTown
 			
 			public static void GoingToWork(Unit unit)
 			{
-				unit.walkingObjective = GameManager.Instance.GetNearestPlace((Place)unit.GetActualJob(), unit.transform.position);
+				unit.walkingObjective = PlaceManager.Instance.GetNearestPlace((Place)unit.GetActualJob(), unit.transform.position);
 			}
 
 			// jobs functions
@@ -173,7 +173,7 @@ namespace ToyTown
 			{
 				return unit =>
 				{
-					unit.walkingObjective = GameManager.Instance.GetNearestPlace(place, unit.transform.position);
+					unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
 				};
 			}
 		};
