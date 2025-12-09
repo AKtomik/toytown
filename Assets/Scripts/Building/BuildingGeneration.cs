@@ -110,8 +110,8 @@ public class BuildingGeneration : MonoBehaviour
 
     private bool VerifyResources()
     {
-        if (RessourcesGestion.rockQuantity >= currentBuilding.rockCost &&
-            RessourcesGestion.woodQuantity >= currentBuilding.woodCost)
+        if (RessourcesGestion.RockQuantity >= currentBuilding.rockCost &&
+            RessourcesGestion.WoodQuantity >= currentBuilding.woodCost)
         {
             RessourcesGestion.RemoveRock(currentBuilding.rockCost);
             RessourcesGestion.RemoveWood(currentBuilding.woodCost);

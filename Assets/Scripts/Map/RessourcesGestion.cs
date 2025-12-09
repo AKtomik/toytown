@@ -3,58 +3,74 @@ using UnityEngine;
 
 public class RessourcesGestion : MonoBehaviour
 {
+    public static RessourcesGestion Instance;
+
     [SerializeField] private TMP_Text woodText;
-    public static int woodQuantity;
-
     [SerializeField] private TMP_Text rockText;
-    public static int rockQuantity;
-
     [SerializeField] private TMP_Text foodText;
-    public static int foodQuantity;
 
-    private static RessourcesGestion instance;
+    [SerializeField] private int woodQuantity;
+    [SerializeField] private int rockQuantity;
+    [SerializeField] private int foodQuantity;
+
+    // Accès public en lecture
+    public static int WoodQuantity => Instance.woodQuantity;
+    public static int RockQuantity => Instance.rockQuantity;
+    public static int FoodQuantity => Instance.foodQuantity;
 
     private void Awake()
     {
-        instance = this;
-        foodText.text = "0";
-        woodText.text = "0";
-        rockText.text = "0";
+        if (Instance == null)
+            Instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        woodText.text = woodQuantity.ToString();
+        rockText.text = rockQuantity.ToString();
+        foodText.text = foodQuantity.ToString();
     }
 
     public static void AddRock()
     {
-        rockQuantity++;
-        instance.rockText.text = rockQuantity.ToString();
+        Instance.rockQuantity++;
+        Instance.rockText.text = Instance.rockQuantity.ToString();
     }
 
     public static void AddFood()
     {
-        foodQuantity++;
-        instance.foodText.text = foodQuantity.ToString();
+        Instance.foodQuantity++;
+        Instance.foodText.text = Instance.foodQuantity.ToString();
     }
 
     public static void AddWood()
     {
-        woodQuantity++;
-        instance.woodText.text = woodQuantity.ToString();
+        Instance.woodQuantity++;
+        Instance.woodText.text = Instance.woodQuantity.ToString();
     }
 
     public static void RemoveRock(int num)
     {
-        rockQuantity -= num;
-        instance.rockText.text = rockQuantity.ToString();
+        Instance.rockQuantity -= num;
+        Instance.rockText.text = Instance.rockQuantity.ToString();
     }
 
     public static void RemoveFood(int num)
     {
-        foodQuantity -= num;
-        instance.foodText.text = foodQuantity.ToString();
+        Instance.foodQuantity -= num;
+        Instance.foodText.text = Instance.foodQuantity.ToString();
     }
 
     public static void RemoveWood(int num)
     {
-        woodQuantity -= num;
-        instance.woodText.text = woodQuantity.ToString();
+        Instance.woodQuantity -= num;
+        Instance.woodText.text = Instance.woodQuantity.ToString();
     }
 }

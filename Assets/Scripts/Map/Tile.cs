@@ -19,7 +19,7 @@ public class Tile : MonoBehaviour
         
     }
 
-    private void OnMouseDown()
+    /*private void OnMouseDown()
     {
         if(typeRessources == 1)
         {
@@ -41,7 +41,7 @@ public class Tile : MonoBehaviour
             RessourcesGestion.AddWood();
             Debug.Log("wood");
         }
-    }
+    }*/
 
 
 }
