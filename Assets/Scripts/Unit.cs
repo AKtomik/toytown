@@ -43,162 +43,6 @@ namespace ToyTown
 		DONE,
 	};
 
-	public static class ActionStartBuilder
-	{	
-		// raw functions
-		public static void Default(Unit unit)
-		{
-			unit.actionSystemDaysAmount = 0;
-			unit.actionSystemDaysRemain = 0;
-		}
-		
-		public static void Learn(Unit unit)
-		{
-			unit.learningRemainDay = Settings.UnitLearningTimeDay;
-		}
-
-		public static void Job(Unit unit)
-		{
-			JobsDictionnary[unit.GetActualJob()](unit);
-		}
-		
-		public static void GoingToWork(Unit unit)
-		{
-			unit.walkingObjective = GameManager.Instance.GetNearestPlace((Place)unit.GetActualJob(), unit.transform.position);
-		}
-
-		// jobs functions
-		public static Dictionary<UnitJob, ActionStartFunction> JobsDictionnary = new()
-		{
-			{ UnitJob.FARMER, unit => {
-				
-			} },
-			{ UnitJob.LUMBERJACK, unit => {
-				
-			} },
-			{ UnitJob.MINER, unit => {
-				
-			} },
-			{ UnitJob.BUILDER, unit => {
-				
-			} }
-		};
-
-		// functions builder
-		public static ActionStartFunction Merge(ActionStartFunction Action1, ActionStartFunction Action2)
-		{
-			return (unit) =>
-			{
-				Action1(unit);
-				Action2(unit);
-			};
-		}
-
-		public static ActionStartFunction StartTimer(double timerDayAmount)
-		{
-			return unit =>
-			{
-				unit.actionSystemDaysAmount = timerDayAmount;
-				unit.actionSystemDaysRemain = timerDayAmount;
-			};
-		}
-
-		public static ActionStartFunction GoingToPlace(Place place)
-		{
-			return unit =>
-			{
-				unit.walkingObjective = GameManager.Instance.GetNearestPlace(place, unit.transform.position);
-			};
-		}
-	};
-
-	public static class ActionUpdateBuilder
-	{
-		// raw functions
-		public static ActionUpdateReturn Default(Unit unit, float delta)
-		{
-			return ActionUpdateReturn.CONTINUE;
-		}
-
-		public static ActionUpdateReturn Wander(Unit unit, float delta)
-		{
-			// TODO : implement
-			return ActionUpdateReturn.CONTINUE;
-		}
-		
-		public static ActionUpdateReturn Learn(Unit unit, float delta)
-		{
-			unit.learningRemainDay -= delta / Settings.DayLengthInSecond;
-			if (unit.learningRemainDay <= 0)
-			{
-				unit.SwtichJob((UnitJob)unit.learningJob);
-				unit.learningJob = null;
-				unit.learningRemainDay = 0;
-				return ActionUpdateReturn.DONE;
-			}
-			return ActionUpdateReturn.CONTINUE;
-		}
-		
-		public static ActionUpdateReturn Job(Unit unit, float delta)
-		{
-			return JobsDictionnary[unit.GetActualJob()](unit, delta);
-		}
-
-		// jobs functions
-		public static Dictionary<UnitJob, ActionUpdateFunction> JobsDictionnary = new()
-		{
-			{ UnitJob.FARMER, (unit, delta) => {
-				return ActionUpdateReturn.CONTINUE;
-			} },
-			{ UnitJob.LUMBERJACK, (unit, delta) => {
-				return ActionUpdateReturn.CONTINUE;
-			} },
-			{ UnitJob.MINER, (unit, delta) => {
-				return ActionUpdateReturn.CONTINUE;
-			} },
-			{ UnitJob.BUILDER, (unit, delta) => {
-				return ActionUpdateReturn.CONTINUE;
-			} }
-		};
-
-		// functions builder
-		public static ActionUpdateFunction Merge(ActionUpdateFunction Action1, ActionUpdateFunction Action2)
-		{
-			return (unit, delta) =>
-			{
-				ActionUpdateReturn r1 = Action1(unit, delta);
-				ActionUpdateReturn r2 = Action2(unit, delta);
-				return (r1 > r2) ? r1 : r2;
-			};
-		}
-
-		public static ActionUpdateFunction ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
-		{
-			return (unit, delta) =>
-			{
-				double factor = delta / Settings.DayLengthInSecond;
-				unit.saturationScore += saturationByDay * factor;
-				unit.happynessScore += happynessByDay * factor;
-				unit.energyScore += energyByDay * factor;
-				return ActionUpdateReturn.CONTINUE;
-			};
-		}
-		
-		public static ActionUpdateFunction ScoreAddByAction(double saturationByAction = 0, double energyByAction = 0, double happynessByAction = 0)
-		{
-			return (unit, delta) =>
-			{
-				if (unit.actionSystemDaysRemain <= 0) return ActionUpdateReturn.DONE;
-				unit.actionSystemDaysRemain -= delta / Settings.DayLengthInSecond;
-				double factor = delta  / Settings.DayLengthInSecond / unit.actionSystemDaysAmount;
-				unit.saturationScore += saturationByAction * factor;
-				unit.happynessScore += happynessByAction * factor;
-				unit.energyScore += energyByAction * factor;
-				return ActionUpdateReturn.CONTINUE;
-			};
-		}
-	};
-
 	public class Action
 	{
 		public ActionStartFunction Start;
@@ -206,36 +50,36 @@ namespace ToyTown
 		
 		public Action(ActionStartFunction start = null, ActionUpdateFunction update = null)
 		{
-			Start = start ?? ActionStartBuilder.Default;
-			Update = update ?? ActionUpdateBuilder.Default;
+			Start = start ?? Unit.ActionStartBuilder.Default;
+			Update = update ?? Unit.ActionUpdateBuilder.Default;
 		}
 		
 		public static Dictionary<UnitAction, Action> Dictionnary = new()
 		{
 			// action order
 			{UnitAction.WANDERING, new Action(
-				update: ActionUpdateBuilder.Merge(ActionUpdateBuilder.Wander, ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))
+				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Wander, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))
 				)},
 			{UnitAction.WORKING, new Action(
-				start: ActionStartBuilder.Merge(ActionStartBuilder.Job, ActionStartBuilder.GoingToWork),
-				update: ActionUpdateBuilder.Merge(ActionUpdateBuilder.Job, ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))
+				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.Job, Unit.ActionStartBuilder.GoingToWork),
+				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Job, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))
 				)},
 			{UnitAction.LEARNING, new Action(
-				start: ActionStartBuilder.Merge(ActionStartBuilder.Learn, ActionStartBuilder.GoingToPlace(Place.SCHOOL)),
-				update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)
+				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.Learn, Unit.ActionStartBuilder.GoingToPlace(Place.SCHOOL)),
+				update: Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)
 				)},
 			// action system
 			{UnitAction.EATING, new Action(
-				start: ActionStartBuilder.Merge(ActionStartBuilder.StartTimer(timerDayAmount: .05), ActionStartBuilder.GoingToPlace(Place.CANTINE)),
-				update: ActionUpdateBuilder.ScoreAddByAction(saturationByAction: 1)
+				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .05), Unit.ActionStartBuilder.GoingToPlace(Place.CANTINE)),
+				update: Unit.ActionUpdateBuilder.ScoreAddByAction(saturationByAction: 1)
 				)},
 			{UnitAction.SLEEPING, new Action(
-				start: ActionStartBuilder.Merge(ActionStartBuilder.StartTimer(timerDayAmount: .5), ActionStartBuilder.GoingToPlace(Place.HOUSE)),
-				update: ActionUpdateBuilder.ScoreAddByAction(energyByAction: 1)
+				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .5), Unit.ActionStartBuilder.GoingToPlace(Place.HOUSE)),
+				update: Unit.ActionUpdateBuilder.ScoreAddByAction(energyByAction: 1)
 				)},
 			// between action
 			{UnitAction.WALKING, new Action(
-				update: ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)
+				update: Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)
 				)},
 		};
 	}
@@ -243,22 +87,180 @@ namespace ToyTown
 	[RequireComponent(typeof(Rigidbody))]
 	public class Unit : MonoBehaviour
 	{
+
+		public static class ActionStartBuilder
+		{	
+			// raw functions
+			public static void Default(Unit unit)
+			{
+				unit.actionSystemDaysAmount = 0;
+				unit.actionSystemDaysRemain = 0;
+			}
+			
+			public static void Learn(Unit unit)
+			{
+				unit.learningRemainDay = Settings.UnitLearningTimeDay;
+			}
+
+			public static void Job(Unit unit)
+			{
+				JobsDictionnary[unit.GetActualJob()](unit);
+			}
+			
+			public static void GoingToWork(Unit unit)
+			{
+				unit.walkingObjective = GameManager.Instance.GetNearestPlace((Place)unit.GetActualJob(), unit.transform.position);
+			}
+
+			// jobs functions
+			public static Dictionary<UnitJob, ActionStartFunction> JobsDictionnary = new()
+			{
+				{ UnitJob.FARMER, unit => {
+					
+				} },
+				{ UnitJob.LUMBERJACK, unit => {
+					
+				} },
+				{ UnitJob.MINER, unit => {
+					
+				} },
+				{ UnitJob.BUILDER, unit => {
+					
+				} }
+			};
+
+			// functions builder
+			public static ActionStartFunction Merge(ActionStartFunction Action1, ActionStartFunction Action2)
+			{
+				return (unit) =>
+				{
+					Action1(unit);
+					Action2(unit);
+				};
+			}
+
+			public static ActionStartFunction StartTimer(double timerDayAmount)
+			{
+				return unit =>
+				{
+					unit.actionSystemDaysAmount = timerDayAmount;
+					unit.actionSystemDaysRemain = timerDayAmount;
+				};
+			}
+
+			public static ActionStartFunction GoingToPlace(Place place)
+			{
+				return unit =>
+				{
+					unit.walkingObjective = GameManager.Instance.GetNearestPlace(place, unit.transform.position);
+				};
+			}
+		};
+
+		public static class ActionUpdateBuilder
+		{
+			// raw functions
+			public static ActionUpdateReturn Default(Unit unit, float delta)
+			{
+				return ActionUpdateReturn.CONTINUE;
+			}
+
+			public static ActionUpdateReturn Wander(Unit unit, float delta)
+			{
+				// TODO : implement
+				return ActionUpdateReturn.CONTINUE;
+			}
+			
+			public static ActionUpdateReturn Learn(Unit unit, float delta)
+			{
+				unit.learningRemainDay -= delta / Settings.DayLengthInSecond;
+				if (unit.learningRemainDay <= 0)
+				{
+					unit.SwtichJob((UnitJob)unit.learningJob);
+					unit.learningJob = null;
+					unit.learningRemainDay = 0;
+					return ActionUpdateReturn.DONE;
+				}
+				return ActionUpdateReturn.CONTINUE;
+			}
+			
+			public static ActionUpdateReturn Job(Unit unit, float delta)
+			{
+				return JobsDictionnary[unit.GetActualJob()](unit, delta);
+			}
+
+			// jobs functions
+			public static Dictionary<UnitJob, ActionUpdateFunction> JobsDictionnary = new()
+			{
+				{ UnitJob.FARMER, (unit, delta) => {
+					return ActionUpdateReturn.CONTINUE;
+				} },
+				{ UnitJob.LUMBERJACK, (unit, delta) => {
+					return ActionUpdateReturn.CONTINUE;
+				} },
+				{ UnitJob.MINER, (unit, delta) => {
+					return ActionUpdateReturn.CONTINUE;
+				} },
+				{ UnitJob.BUILDER, (unit, delta) => {
+					return ActionUpdateReturn.CONTINUE;
+				} }
+			};
+
+			// functions builder
+			public static ActionUpdateFunction Merge(ActionUpdateFunction Action1, ActionUpdateFunction Action2)
+			{
+				return (unit, delta) =>
+				{
+					ActionUpdateReturn r1 = Action1(unit, delta);
+					ActionUpdateReturn r2 = Action2(unit, delta);
+					return (r1 > r2) ? r1 : r2;
+				};
+			}
+
+			public static ActionUpdateFunction ScoreAddByDay(double saturationByDay = 0, double energyByDay = 0, double happynessByDay = 0)
+			{
+				return (unit, delta) =>
+				{
+					double factor = delta / Settings.DayLengthInSecond;
+					unit.saturationScore += saturationByDay * factor;
+					unit.happynessScore += happynessByDay * factor;
+					unit.energyScore += energyByDay * factor;
+					return ActionUpdateReturn.CONTINUE;
+				};
+			}
+			
+			public static ActionUpdateFunction ScoreAddByAction(double saturationByAction = 0, double energyByAction = 0, double happynessByAction = 0)
+			{
+				return (unit, delta) =>
+				{
+					if (unit.actionSystemDaysRemain <= 0) return ActionUpdateReturn.DONE;
+					unit.actionSystemDaysRemain -= delta / Settings.DayLengthInSecond;
+					double factor = delta  / Settings.DayLengthInSecond / unit.actionSystemDaysAmount;
+					unit.saturationScore += saturationByAction * factor;
+					unit.happynessScore += happynessByAction * factor;
+					unit.energyScore += energyByAction * factor;
+					return ActionUpdateReturn.CONTINUE;
+				};
+			}
+		};
+
+		
 		private Rigidbody rb;
 
 		public double saturationScore = 1;
 		public double energyScore = 1;
 		public double happynessScore = .5;
 		
-		public UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
-		public UnitActionSystem? actionSystem = null;
-		public double actionSystemDaysAmount = .0;
-		public double actionSystemDaysRemain = .0;
-		public Vector3? walkingObjective = null;
+		private UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
+		private UnitActionSystem? actionSystem = null;
+		private double actionSystemDaysAmount = .0;
+		private double actionSystemDaysRemain = .0;
+		private Vector3? walkingObjective = null;
 
-		public UnitJob actualJob = UnitJob.NOTHING;
+		private UnitJob actualJob = UnitJob.NOTHING;
 		
-		public UnitJob? learningJob = null;
-		public double learningRemainDay;
+		private UnitJob? learningJob = null;
+		private double learningRemainDay;
 		public double learningProgress
 		{
 			get
