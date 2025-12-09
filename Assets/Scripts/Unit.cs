@@ -298,9 +298,11 @@ namespace ToyTown
 			{NeedState.DESPERATION, (unit) => {
 
 			}},
-			{NeedState.MORTAL, (unit) => {
-
-			}},
+			{NeedState.MORTAL, (unit) =>
+			{
+				unit.Kill();
+			}
+			},
 		};
 		
 		public static Dictionary<NeedState, Action<Unit>> EnterHungerState = new()
@@ -319,9 +321,11 @@ namespace ToyTown
 			{NeedState.DESPERATION, (unit) => {
 
 			}},
-			{NeedState.MORTAL, (unit) => {
-
-			}},
+			{NeedState.MORTAL, (unit) =>
+			{
+				unit.Kill();
+			}
+			},
 		};
 
 
@@ -330,8 +334,8 @@ namespace ToyTown
 		public double saturationScore = 1;
 		public double energyScore = 1;
 		public double happynessScore = .5;
-		private NeedState needStateHunger;
-		private NeedState needStateSleep;
+		public NeedState needStateHunger;
+		public NeedState needStateSleep;
 		
 		private UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
 		private UnitActionSystem? actionSystem = null;
@@ -481,7 +485,7 @@ namespace ToyTown
 				needStateSleep = sleepNeed;
 			}
 
-			NeedState hungerNeed = CalculateNeedState(energyScore);
+			NeedState hungerNeed = CalculateNeedState(saturationScore);
 			if (hungerNeed != needStateHunger)
 			{
 				EnterHungerState[hungerNeed](this);
@@ -502,6 +506,12 @@ namespace ToyTown
 					SwtichSystemAction(UnitActionSystem.SLEEPING);
 				}
 			}
+		}
+
+		void Kill()
+		{
+			isDying = true;
+			Destroy(gameObject);
 		}
 
 		void OnDrawGizmos()
