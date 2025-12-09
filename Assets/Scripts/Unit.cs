@@ -353,7 +353,7 @@ namespace ToyTown
 		public double speed
 		{
 			get {
-				return Settings.UnitBaseSpeed * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1);
+				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1);
 			}
 		}
 
