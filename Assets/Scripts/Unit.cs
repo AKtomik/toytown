@@ -376,7 +376,7 @@ namespace ToyTown
 			// if walking
 			if (IsWalking())
 			{
-				rb.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(speed * Settings.WalkingSpeed * Time.deltaTime)));
+				rb.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.WalkingSpeed)));
 				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime * (float)speed);
 			}
 			else

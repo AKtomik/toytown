@@ -31,7 +31,7 @@ public class SunManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DayAmount += Time.deltaTime / Settings.DayLengthInSecond;
+        DayAmount += Time.deltaTime * Settings.SpeedUp / Settings.DayLengthInSecond;
         float sunX = (float)Today * 360;
         //Debug.Log($"1today {Today} sunX {sunX} {transform.rotation.x},{transform.rotation.y},{transform.rotation.z}");
         directionalLight.transform.eulerAngles = new Vector3(sunX, ConstSunYdegree, ConstSunZdegree);
