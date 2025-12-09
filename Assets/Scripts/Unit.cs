@@ -61,7 +61,7 @@ namespace ToyTown
 				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Wander, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))
 				)},
 			{UnitAction.WORKING, new Action(
-				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.Job, Unit.ActionStartBuilder.GoingToWork),
+				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.JobStart, Unit.ActionStartBuilder.GoingToWork),
 				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Job, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))
 				)},
 			{UnitAction.LEARNING, new Action(
@@ -102,9 +102,14 @@ namespace ToyTown
 				unit.learningRemainDay = Settings.UnitLearningTimeDay;
 			}
 
-			public static void Job(Unit unit)
+			public static void JobStart(Unit unit)
 			{
-				JobsDictionnary[unit.GetActualJob()](unit);
+				JobsActionStartDictionnary[unit.GetActualJob()](unit);
+			}
+			
+			public static void JobSwitch(Unit unit)
+			{
+				JobsSwitchDictionnary[unit.GetActualJob()](unit);
 			}
 			
 			public static void GoingToWork(Unit unit)
@@ -113,7 +118,23 @@ namespace ToyTown
 			}
 
 			// jobs functions
-			public static Dictionary<UnitJob, ActionStartFunction> JobsDictionnary = new()
+			public static Dictionary<UnitJob, ActionStartFunction> JobsSwitchDictionnary = new()
+			{
+				{ UnitJob.FARMER, unit => {
+					
+				} },
+				{ UnitJob.LUMBERJACK, unit => {
+					
+				} },
+				{ UnitJob.MINER, unit => {
+					
+				} },
+				{ UnitJob.BUILDER, unit => {
+					
+				} }
+			};
+			
+			public static Dictionary<UnitJob, ActionStartFunction> JobsActionStartDictionnary = new()
 			{
 				{ UnitJob.FARMER, unit => {
 					
@@ -297,6 +318,7 @@ namespace ToyTown
 		
 		public void SwtichJob(UnitJob job)
 		{
+			ActionStartBuilder.JobSwitch(this);
 			actualJob = job;
 		}
 
