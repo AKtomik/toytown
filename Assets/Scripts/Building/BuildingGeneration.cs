@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BuildingGeneration : MonoBehaviour
@@ -9,6 +10,17 @@ public class BuildingGeneration : MonoBehaviour
     private BuildingData currentBuilding;    // Le bâtiment sélectionné
     private GameObject previewInstance;
     private int i = 0;
+    [SerializeField]
+    private Camera Maincam;
+
+    [SerializeField]
+    private Camera Secondcam;
+
+
+    public void Awake()
+    {
+        Secondcam.gameObject.SetActive(false);
+    }
 
     public void SetBuilding(BuildingData building)
     {
@@ -23,41 +35,61 @@ public class BuildingGeneration : MonoBehaviour
         List<Tile> tiles = TileManager.Instance.freeTiles;
         if (tiles.Count == 0) return;
 
+        if (!VerifyResources())
+        {
+            Debug.Log("Pas assez de ressources");
+            return;
+        }
+
         if (previewInstance == null)
         {
+            Maincam.gameObject.SetActive(false);
+            Secondcam.gameObject.SetActive(true);
+            // Choisir une tile pour placer la preview
             Vector3 spawnPos = tiles[i].transform.position + Vector3.up;
             previewInstance = Instantiate(currentBuilding.prefab, spawnPos, Quaternion.identity);
             previewInstance.GetComponent<Renderer>().material = currentBuilding.previewMaterial;
 
-            //BuildButton.gameObject.SetActive(false);
         }
     }
 
     public void NextPos()
     {
         List<Tile> tiles = TileManager.Instance.freeTiles;
-        if (previewInstance == null || tiles.Count == 0) return;
+        if (tiles.Count == 0 || previewInstance == null) return;
 
-        i = (i + 1) % tiles.Count;
+        // Choisir un index aléatoire
+        i = Random.Range(0, tiles.Count);
+
+        // Placer la preview sur la tile choisie
         previewInstance.transform.position = tiles[i].transform.position + Vector3.up;
     }
 
     public void PrevPos()
     {
         List<Tile> tiles = TileManager.Instance.freeTiles;
-        if (previewInstance == null || tiles.Count == 0) return;
+        if (tiles.Count == 0 || previewInstance == null) return;
 
-        i = (i - 1 + tiles.Count) % tiles.Count;
+        // Choisir un index aléatoire différent si tu veux
+        int newIndex;
+        do
+        {
+            newIndex = Random.Range(0, tiles.Count);
+        } while (tiles.Count > 1 && newIndex == i); // pour ne pas rester sur la même tile
+
+        i = newIndex;
+
         previewInstance.transform.position = tiles[i].transform.position + Vector3.up;
     }
 
+
     public void ValidateSpawn()
     {
-        if (currentBuilding == null || !VerifyResources())
+        /*if (currentBuilding == null || !VerifyResources())
         {
             Debug.Log("Pas assez de ressources");
             return;
-        }
+        }*/
 
         Debug.Log(currentBuilding.buildingName + " construit !");
 
@@ -70,6 +102,9 @@ public class BuildingGeneration : MonoBehaviour
 
             previewInstance = null;
             //BuildButton.gameObject.SetActive(true);
+            Maincam.gameObject.SetActive(true); 
+            Secondcam.gameObject.SetActive(false);
+
         }
     }
 
@@ -86,3 +121,5 @@ public class BuildingGeneration : MonoBehaviour
         return false;
     }
 }
+
+

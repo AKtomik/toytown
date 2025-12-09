@@ -30,4 +30,12 @@ public class TileManager : MonoBehaviour
     {
         freeTiles.Remove(t);
     }
+
+    public void AddTile(Tile tile)
+    {
+        if (tile != null && !freeTiles.Contains(tile))
+            freeTiles.Add(tile);
+    }
+
+
 }

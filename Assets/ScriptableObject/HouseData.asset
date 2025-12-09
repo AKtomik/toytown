@@ -16,5 +16,5 @@ MonoBehaviour:
   prefab: {fileID: 5542576023475657540, guid: e7b84cc73c04a2b4d8dd4b7b817da25d, type: 3}
   woodCost: 2
   rockCost: 2
-  previewMaterial: {fileID: 0}
-  finalMaterial: {fileID: 0}
+  previewMaterial: {fileID: 2100000, guid: bd07b12eb36669a44b8fae9734589821, type: 2}
+  finalMaterial: {fileID: 2100000, guid: f8d433ed5c67ae6438ae62f413814d2a, type: 2}
