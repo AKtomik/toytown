@@ -120,6 +120,9 @@ namespace ToyTown
 			// jobs functions
 			public static Dictionary<UnitJob, ActionStartFunction> JobsSwitchDictionnary = new()
 			{
+				{ UnitJob.NOTHING, unit => {
+					
+				} },
 				{ UnitJob.FARMER, unit => {
 					
 				} },
@@ -136,6 +139,9 @@ namespace ToyTown
 			
 			public static Dictionary<UnitJob, ActionStartFunction> JobsActionStartDictionnary = new()
 			{
+				{ UnitJob.NOTHING, unit => {
+					
+				} },
 				{ UnitJob.FARMER, unit => {
 					
 				} },
@@ -213,6 +219,9 @@ namespace ToyTown
 			// jobs functions
 			public static Dictionary<UnitJob, ActionUpdateFunction> JobsDictionnary = new()
 			{
+				{ UnitJob.NOTHING, (unit, delta) => {
+					return ActionUpdateReturn.CONTINUE;
+				} },
 				{ UnitJob.FARMER, (unit, delta) => {
 					return ActionUpdateReturn.CONTINUE;
 				} },
