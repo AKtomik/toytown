@@ -44,7 +44,7 @@ namespace ToyTown
 	};
 
 	public enum NeedState {
-		BEST = 1,//unused
+		BEST = 1,
 		FINE = 0,
 		NEEDED = -1,
 		DESPERATION = -2,
@@ -282,12 +282,56 @@ namespace ToyTown
 			}
 		};
 
+		public static Dictionary<NeedState, Action<Unit>> EnterSleepState = new()
+		{
+			{NeedState.BEST, (unit) =>
+			{
+				unit.energyScore = 1;
+			}
+			},
+			{NeedState.FINE, (unit) => {
+
+			}},
+			{NeedState.NEEDED, (unit) => {
+
+			}},
+			{NeedState.DESPERATION, (unit) => {
+
+			}},
+			{NeedState.MORTAL, (unit) => {
+
+			}},
+		};
 		
+		public static Dictionary<NeedState, Action<Unit>> EnterHungerState = new()
+		{
+			{NeedState.BEST, (unit) =>
+			{
+				unit.saturationScore = 1;
+			}
+			},
+			{NeedState.FINE, (unit) => {
+
+			}},
+			{NeedState.NEEDED, (unit) => {
+
+			}},
+			{NeedState.DESPERATION, (unit) => {
+
+			}},
+			{NeedState.MORTAL, (unit) => {
+
+			}},
+		};
+
+
 		private Rigidbody rb;
 
 		public double saturationScore = 1;
 		public double energyScore = 1;
 		public double happynessScore = .5;
+		private NeedState needStateHunger;
+		private NeedState needStateSleep;
 		
 		private UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
 		private UnitActionSystem? actionSystem = null;
@@ -296,6 +340,7 @@ namespace ToyTown
 		private Vector3? walkingObjective = null;
 
 		private UnitJob actualJob = UnitJob.NOTHING;
+		public bool isDying { get; private set; }
 		
 		private UnitJob? learningJob = null;
 		private double learningRemainDay;
@@ -354,17 +399,31 @@ namespace ToyTown
 
 		public bool IsHungry()
 		{
-			return saturationScore < Settings.UnitNeedPointNeeded;
+			return needStateHunger < NeedState.FINE;
 		}
 		
 		public bool IsTired()
 		{
-			return energyScore < Settings.UnitNeedPointNeeded;
+			return needStateSleep < NeedState.FINE;
 		}
 
 		public bool IsWalking()
 		{
 			return walkingObjective != null && Vector3.Distance((Vector3)walkingObjective, transform.position) > Settings.WalkingNearObjectiveDistance;
+		}
+		
+		static public NeedState CalculateNeedState(double score)
+		{
+			if (!(score > Settings.UnitNeedPointMortal))
+				return NeedState.MORTAL;
+			else if (!(score > Settings.UnitNeedPointDesperation))
+				return NeedState.DESPERATION;
+			else if (!(score > Settings.UnitNeedPointNeeded))
+				return NeedState.NEEDED;
+			else if (!(score < Settings.UnitMaxNeedPoint))
+				return NeedState.BEST;
+			else
+				return NeedState.FINE;
 		}
 		
 		public double speed
@@ -387,6 +446,7 @@ namespace ToyTown
 			SwtichJob(UnitJob.MINER);
 			SwtichPlayerAction(UnitActionPlayer.WORKING);
 		}
+
 		// Update is called once per frame
 		void Update()
 		{
@@ -414,7 +474,19 @@ namespace ToyTown
 				}
 			}
 
+			NeedState sleepNeed = CalculateNeedState(energyScore);
+			if (sleepNeed != needStateSleep)
+			{
+				EnterSleepState[sleepNeed](this);
+				needStateSleep = sleepNeed;
+			}
 
+			NeedState hungerNeed = CalculateNeedState(energyScore);
+			if (hungerNeed != needStateHunger)
+			{
+				EnterHungerState[hungerNeed](this);
+				needStateHunger = hungerNeed;
+			}
 
 			// if need something
 			if (actionSystem == null)
