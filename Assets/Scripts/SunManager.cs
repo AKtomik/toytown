@@ -6,7 +6,7 @@ public class SunManager : MonoBehaviour
 {
     public SunManager Instance { get; private set; }
 
-    Light directionalLight;
+    public Light directionalLight;
 
     public double StartingDayTime = .25;
     public double DayAmount;
