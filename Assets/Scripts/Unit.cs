@@ -296,10 +296,11 @@ namespace ToyTown
 
 			}},
 			{NeedState.DESPERATION, (unit) => {
-
+				Debug.Log($"{unit} have to sleep");
 			}},
 			{NeedState.MORTAL, (unit) =>
 			{
+				Debug.Log($"{unit} die of lack of sleep");
 				unit.Kill();
 			}
 			},
@@ -319,10 +320,11 @@ namespace ToyTown
 
 			}},
 			{NeedState.DESPERATION, (unit) => {
-
+				Debug.Log($"{unit} have to eat");
 			}},
 			{NeedState.MORTAL, (unit) =>
 			{
+				Debug.Log($"{unit} die of lack of food");
 				unit.Kill();
 			}
 			},
