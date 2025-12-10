@@ -4454,7 +4454,7 @@ MonoBehaviour:
   - {fileID: 4163839607173056758, guid: 668679a64f616ca479a447b7cb0609ea, type: 3}
   - {fileID: 3884736665524331665, guid: 52218179de407204588521f4153ae823, type: 3}
   - {fileID: 2201542505516101758, guid: 7b37ed96b4ce7784d9bedaf95aa7baf0, type: 3}
-  hexRadius: 5
+  radius: 2000
   boostedTileTag: Plain
   boostMultiplier: 10
   rotationAngleY: 30

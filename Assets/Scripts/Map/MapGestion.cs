@@ -1,75 +1,162 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine.Tilemaps;
+using System.Linq;
 
 [ExecuteAlways]
-public class GridPrefabSpawner : MonoBehaviour
+public class HexGridPrefabSpawner : MonoBehaviour
 {
-    public GameObject[] tilesPrefabs; // tableau de prefabs pour tes tiles
-    public int width = 10;
-    public int height = 10;
+    public GameObject[] tilesPrefabs;
 
-    [ContextMenu("Generate Grid")]
-    public void GenerateGrid()
+    // Rayon pour la forme hexagonale (1 = 7 hex, 2 = 19 hex, 3 = 37 hex, etc.)
+    public int hexRadius = 3;
+
+    [Header("Probabilité Spécifique")]
+    public string boostedTileTag = "Plain";
+
+    [Range(1f, 10f)]
+    public float boostMultiplier = 2.0f;
+
+    private Grid grid;
+    private Tilemap tilemap;
+    private Transform spawnRoot;
+
+    public float rotationAngleY = 25f;
+
+    // Vérifie si une cellule fait partie de la forme hexagonale RONDE
+    private bool IsValidHexCell(int x, int y)
     {
-        Grid grid = GetComponent<Grid>();
-        if (grid == null)
+        // Pour offset coordinates (odd-r ou even-r)
+        // Conversion vers axial coordinates (q, r)
+        int q = x - (y - (y & 1)) / 2;
+        int r = y;
+
+        // Conversion vers cube coordinates
+        int s = -q - r;
+
+        // Distance cube = max(|q|, |r|, |s|)
+        int distance = Mathf.Max(Mathf.Abs(q), Mathf.Abs(r), Mathf.Abs(s));
+
+        return distance <= hexRadius;
+    }
+
+    private GameObject ChooseWeightedPrefab()
+    {
+        if (tilesPrefabs == null || tilesPrefabs.Length == 0)
         {
-            Debug.LogError("Le script doit être sur le GameObject qui contient le component Grid.");
-            return;
+            return null;
         }
 
-        // Clear previous children
-        List<Transform> toDestroy = new List<Transform>();
-        for (int i = 0; i < transform.childCount; i++) toDestroy.Add(transform.GetChild(i));
-#if UNITY_EDITOR
-        foreach (var t in toDestroy) DestroyImmediate(t.gameObject);
-#else
-        foreach (var t in toDestroy) Destroy(t.gameObject);
-#endif
+        List<GameObject> weightedList = new List<GameObject>();
 
-        // origine de grille
-        Vector3 originLocal = grid.CellToLocalInterpolated(new Vector3Int(0, 0, 0));
-        Vector3 cellXLocal = grid.CellToLocalInterpolated(new Vector3Int(1, 0, 0)) - originLocal;
-        Vector3 cellYLocal = grid.CellToLocalInterpolated(new Vector3Int(0, 1, 0)) - originLocal;
-        Vector3 normalLocal = Vector3.Cross(cellXLocal.normalized, cellYLocal.normalized).normalized;
-        Vector3 normalWorld = transform.TransformDirection(normalLocal);
-
-        for (int gx = 0; gx < width; gx++)
+        foreach (var prefab in tilesPrefabs)
         {
-            for (int gy = 0; gy < height; gy++)
+            if (prefab == null) continue;
+
+            float weight = 1f;
+
+            if (prefab.CompareTag(boostedTileTag))
             {
-                if (tilesPrefabs == null || tilesPrefabs.Length == 0) continue;
+                weight = boostMultiplier;
+            }
 
-                GameObject prefab = tilesPrefabs[Random.Range(0, tilesPrefabs.Length)];
-                if (prefab == null) continue;
-
-                Vector3 localPos = grid.CellToLocalInterpolated(new Vector3Int(gx, gy, 0));
-                GameObject go = Instantiate(prefab, transform);
-                go.transform.localPosition = localPos;
-                go.transform.localScale = Vector3.one;
-
-                // Ajouter Tile
-                Tile tile = go.GetComponent<Tile>();
-                if (tile == null)
-                    tile = go.AddComponent<Tile>();
-
-                // Ajouter uniquement si c’est une plaine
-                if (prefab.CompareTag("Plain")) // <- utiliser prefab.tag et non go.tag si le tag est sur le prefab
-                {
-                    TileManager.Instance.AddTile(tile);
-                }
-
-
-
-                // Alignement
-                Vector3 prefabUpWorld = go.transform.up;
-                Quaternion alignUp = Quaternion.FromToRotation(prefabUpWorld, normalWorld);
-                go.transform.rotation = alignUp * go.transform.rotation;
+            for (int i = 0; i < (int)weight; i++)
+            {
+                weightedList.Add(prefab);
             }
         }
 
-        Debug.Log("GridPrefabSpawner : génération terminée. Normal locale = " + normalLocal.ToString("F3"));
+        if (weightedList.Count == 0) return null;
+
+        int index = Random.Range(0, weightedList.Count);
+        return weightedList[index];
+    }
+
+    public void GenerateGrid()
+    {
+        grid = GetComponent<Grid>();
+        tilemap = GetComponentInChildren<Tilemap>();
+
+        if (grid == null)
+        {
+            Debug.LogError("Erreur : Le composant Grid est manquant sur ce GameObject.");
+            return;
+        }
+
+        if (tilemap == null)
+        {
+            Debug.LogError("Erreur : Le composant Tilemap (enfant) est manquant.");
+            return;
+        }
+
+        if (spawnRoot == null)
+        {
+            Transform exists = transform.Find("SpawnRoot");
+            if (exists != null) spawnRoot = exists;
+            else
+            {
+                GameObject sr = new GameObject("SpawnRoot");
+                sr.transform.SetParent(transform);
+                sr.transform.localPosition = Vector3.zero;
+                spawnRoot = sr.transform;
+            }
+        }
+
+        List<Transform> toDestroy = new List<Transform>();
+        foreach (Transform child in spawnRoot) toDestroy.Add(child);
+
+#if UNITY_EDITOR
+        foreach (var c in toDestroy) DestroyImmediate(c.gameObject);
+#else
+        foreach (var c in toDestroy) Destroy(c.gameObject);
+#endif
+
+        Quaternion rotation = Quaternion.Euler(0f, rotationAngleY, 0f);
+
+        int tilesGenerated = 0;
+
+        // Calculer la zone à parcourir
+        int range = hexRadius * 2 + 1;
+
+        // Génération hexagonale RONDE
+        for (int y = -range; y <= range; y++)
+        {
+            for (int x = -range; x <= range; x++)
+            {
+                if (!IsValidHexCell(x, y))
+                    continue;
+
+                Vector3Int cell = new Vector3Int(x, y, 0);
+                Vector3 worldPos = grid.GetCellCenterWorld(cell);
+
+                GameObject prefab = ChooseWeightedPrefab();
+
+                if (prefab == null)
+                    continue;
+
+                GameObject go = Instantiate(prefab, worldPos, rotation, spawnRoot);
+
+                MeshRenderer mr = go.GetComponentInChildren<MeshRenderer>();
+                if (mr != null)
+                {
+                    Vector3 meshSize = mr.bounds.size;
+                    float cellWidth = grid.cellSize.x;
+                    float uniformScale = cellWidth / meshSize.x;
+                    go.transform.localScale = Vector3.one * uniformScale;
+                }
+
+                tilesGenerated++;
+            }
+        }
+
+        int expectedTiles = 1 + 3 * hexRadius * (hexRadius + 1);
+        Debug.Log($"Génération terminée : {tilesGenerated} tuiles (attendu: {expectedTiles})");
+
+        if (tilesGenerated != expectedTiles)
+        {
+            Debug.LogWarning($" Nombre de tuiles : {tilesGenerated} (attendu: {expectedTiles})");
+        }
     }
 
     void Start()
