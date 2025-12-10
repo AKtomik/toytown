@@ -122,7 +122,13 @@ namespace ToyTown
 			
 			public static void GoingToWork(Unit unit)
 			{
-				unit.walkingObjective = PlaceManager.Instance.GetNearestPlace((Place)unit.GetActualJob(), unit.transform.position);
+				Place place = (Place)unit.GetActualJob();
+				if (!PlaceManager.Instance.ExistPlace(place, unit.transform.position))
+				{
+					Debug.Log($"{unit} there is no {place} to work!");
+					return;
+				}
+				unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
 			}
 
 			// jobs functions
