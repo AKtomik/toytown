@@ -159,9 +159,8 @@ public class MapGestion : MonoBehaviour
         }
     }
 
-    void Start()
+    void Awake()
     {
-        if (Application.isPlaying)
             GenerateGrid();
     }
 }

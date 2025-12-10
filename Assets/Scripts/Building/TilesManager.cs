@@ -7,7 +7,7 @@ public class TileManager : MonoBehaviour
 
     public List<Tile> freeTiles = new List<Tile>();
 
-    private void Awake()
+    void Start()
     {
         if (Instance == null)
             Instance = this;

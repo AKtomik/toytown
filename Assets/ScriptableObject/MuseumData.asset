@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 339608ec60db0ed439cb5d53b106de49, type: 3}
   m_Name: MuseumData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  buildingName: School
-  prefab: {fileID: 5542576023475657540, guid: 174376f1fb7a2af4a98b03a0506e06c9, type: 3}
+  buildingName: Museum
+  prefab: {fileID: 3884736665524331665, guid: 52218179de407204588521f4153ae823, type: 3}
   woodCost: 2
   rockCost: 2
-  previewMaterial: {fileID: 2100000, guid: eca7bd3ce63b7d94c8ec0aa921542205, type: 2}
-  finalMaterial: {fileID: 2100000, guid: dfd849a04baa5ff4e8f8e06b0817a82b, type: 2}
+  previewMaterial: {fileID: 2100000, guid: 0b567641fc19424469858707fd06d2ae, type: 2}
+  finalMaterial: {fileID: 2100000, guid: 650d37f750fcc19469493b91079efb58, type: 2}
