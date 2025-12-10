@@ -5,33 +5,39 @@ using UnityEngine.InputSystem;
 namespace ToyTown {
 	public class GrabManager : MonoBehaviour
 	{
-		public InputActionReference inputMouseClick;
+		public InputActionReference inputMouseClickPick;
+		public InputActionReference inputMouseClickRelease;
 		public InputActionReference inputMousePosition;
 
-		GameObject MouseHited()
+		RaycastHit? MouseHitedPoint()
 		{
 			Vector2 mousePos = inputMousePosition.action.ReadValue<Vector2>();
 			Ray ray = Camera.main.ScreenPointToRay(mousePos);
 			if (Physics.Raycast(ray, out RaycastHit hit))
 			{
-				return hit.collider.gameObject;
+				return hit;
 			}
 			return null;
+		}
+		
+		GameObject MouseHitedObject()
+		{
+			return MouseHitedPoint()?.collider.gameObject;
 		}
 
 		void OnClick(InputAction.CallbackContext callbackContext)
 		{
 			Debug.Log("click");
-			GameObject hitedObject = MouseHited();
+			GameObject hitedObject = MouseHitedObject();
 			if (hitedObject == null) return;
-			Unit unit = hitedObject.GetComponent<Unit>();
-			if (unit == null) return;
+			if (!hitedObject.TryGetComponent<Unit>(out var unit)) return;
 			Debug.Log($"moving unit {unit}");
 			EnableDrag(new Unit[] { unit });
 		}
 
 		void OnRelease(InputAction.CallbackContext callbackContext)
 		{
+			Debug.Log("release");
 			if (IsDrag())
 			{
 				DisableDrag();
@@ -60,6 +66,7 @@ namespace ToyTown {
 
 		void DisableDrag()
 		{
+			DragedUnit = new Unit[0];
 			Draging = false;
 		}
 
@@ -67,9 +74,10 @@ namespace ToyTown {
 		void Start()
 		{
 			inputMousePosition.action.Enable();
-			inputMouseClick.action.Enable();
-			inputMouseClick.action.performed += OnClick;
-			inputMouseClick.action.canceled += OnRelease;
+			inputMouseClickPick.action.Enable();
+			inputMouseClickRelease.action.Enable();
+			inputMouseClickPick.action.performed += OnClick;
+			inputMouseClickRelease.action.performed += OnRelease;
 		}
 
 		// Update is called once per frame
@@ -77,10 +85,14 @@ namespace ToyTown {
 		{
 			if (IsDrag())
 			{
-				Vector2 mousePos = inputMousePosition.action.ReadValue<Vector2>();
+				Vector3? mapPosPotential = MouseHitedPoint()?.point;
+				if (mapPosPotential == null) return;
+				Vector3 mapPos = (Vector3)mapPosPotential;
+				
 				foreach (Unit unit in Draged())
 				{
-					unit.transform.position = new Vector3(mousePos.x, mousePos.y, unit.transform.position.z);
+					Vector3 unitPos = unit.transform.position;
+					unit.transform.position = new Vector3(mapPos.x, unitPos.y, mapPos.z);
 				}
 			}
 		}
