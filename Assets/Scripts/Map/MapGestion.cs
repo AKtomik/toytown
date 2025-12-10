@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 using System.Linq;
 
 [ExecuteAlways]
-public class HexGridPrefabSpawner : MonoBehaviour
+public class MapGestion : MonoBehaviour
 {
     public GameObject[] tilesPrefabs;
 

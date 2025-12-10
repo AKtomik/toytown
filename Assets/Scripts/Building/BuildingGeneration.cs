@@ -30,10 +30,13 @@ public class BuildingGeneration : MonoBehaviour
 
     public void SpawnBuilding()
     {
-        if (currentBuilding == null) return;
 
         List<Tile> tiles = TileManager.Instance.freeTiles;
-        if (tiles.Count == 0) return;
+        if (tiles.Count == 0)
+        {
+            Debug.Log("pas de tile detecte");
+            return;
+        }
 
         if (!VerifyResources())
         {
@@ -43,6 +46,7 @@ public class BuildingGeneration : MonoBehaviour
 
         if (previewInstance == null)
         {
+            Debug.Log("normalement c'est good");
             Maincam.gameObject.SetActive(false);
             Secondcam.gameObject.SetActive(true);
             // Choisir une tile pour placer la preview
