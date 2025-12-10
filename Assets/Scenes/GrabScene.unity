@@ -1671,6 +1671,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4504462127511076333, guid: d13b6f85a31dc314f8c96e2a868590d3, type: 3}
+      propertyPath: directionalLight
+      value: 
+      objectReference: {fileID: 410087040}
     - target: {fileID: 4908935513618007699, guid: d13b6f85a31dc314f8c96e2a868590d3, type: 3}
       propertyPath: m_Name
       value: SunManager
@@ -2518,12 +2522,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5239388009636467309, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5239388009636467309, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.11989521
+      objectReference: {fileID: 0}
+    - target: {fileID: 5239388009636467309, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5239388009636467309, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.23785
       objectReference: {fileID: 0}
     - target: {fileID: 5239388009636467309, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.682
+      value: 0.218
       objectReference: {fileID: 0}
     - target: {fileID: 5239388009636467309, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2556,6 +2572,10 @@ PrefabInstance:
     - target: {fileID: 5239388009636467309, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5239388009636467309, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6867964091602283402, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
       propertyPath: m_Name
