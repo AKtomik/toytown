@@ -93,6 +93,8 @@ namespace ToyTown
 	}
 
 	[RequireComponent(typeof(Rigidbody))]
+	[RequireComponent(typeof(BoxCollider))]
+	[RequireComponent(typeof(CapsuleCollider))]
 	public class Unit : MonoBehaviour
 	{
 
@@ -343,6 +345,8 @@ namespace ToyTown
 
 
 		private Rigidbody rb;
+		private CapsuleCollider CapsuleCollider;
+		private BoxCollider BoxCollider;
 
 		public double saturationScore = 1;
 		public double energyScore = 1;
@@ -358,6 +362,7 @@ namespace ToyTown
 
 		private UnitJob actualJob = UnitJob.NOTHING;
 		public bool isDying { get; private set; }
+		public bool isGrabed { get; private set; }
 		
 		private UnitJob? learningJob = null;
 		private double learningRemainDay;
@@ -454,6 +459,8 @@ namespace ToyTown
 		void Start()
 		{
 			rb = GetComponent<Rigidbody>();
+			BoxCollider = GetComponent<BoxCollider>();
+			CapsuleCollider = GetComponent<CapsuleCollider>();
 			if (!Action.Dictionnary.Keys.Contains((UnitAction)this.actionPlayer))
 			{
 				Debug.LogError($"actionPlayer is not a correct UnitAction! Please choose a value for {this}.actionPlayer. (this.actionPlayer = {this.actionPlayer})");
@@ -505,6 +512,9 @@ namespace ToyTown
 				needStateHunger = hungerNeed;
 			}
 
+			if (happynessScore > 1) happynessScore = 1;
+			else if (happynessScore < 0) happynessScore = 0;
+
 			// if need something
 			if (actionSystem == null)
 			{
@@ -525,6 +535,24 @@ namespace ToyTown
 		{
 			isDying = true;
 			Destroy(gameObject);
+		}
+		
+		public void Grab()
+		{
+			BoxCollider.enabled = false;
+			CapsuleCollider.enabled = false;
+			rb.useGravity = false;
+			rb.isKinematic = true;
+			isGrabed = true;
+		}
+		
+		public void Release()
+		{
+			BoxCollider.enabled = true;
+			CapsuleCollider.enabled = true;
+			rb.useGravity = true;
+			rb.isKinematic = false;
+			isGrabed = false;
 		}
 
 		void OnDrawGizmos()

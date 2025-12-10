@@ -8,6 +8,7 @@ namespace ToyTown {
 		public InputActionReference inputMouseClickPick;
 		public InputActionReference inputMouseClickRelease;
 		public InputActionReference inputMousePosition;
+		public float YgrabPos = .5f;
 
 		RaycastHit? MouseHitedPoint()
 		{
@@ -61,11 +62,19 @@ namespace ToyTown {
 		void EnableDrag(Unit[] units)
 		{
 			DragedUnit = units;
+			foreach (Unit unit in Draged())
+			{
+				unit.Grab();
+			}
 			Draging = true;
 		}
 
 		void DisableDrag()
 		{
+			foreach (Unit unit in Draged())
+			{
+				unit.Release();
+			}
 			DragedUnit = new Unit[0];
 			Draging = false;
 		}
@@ -91,8 +100,7 @@ namespace ToyTown {
 				
 				foreach (Unit unit in Draged())
 				{
-					Vector3 unitPos = unit.transform.position;
-					unit.transform.position = new Vector3(mapPos.x, unitPos.y, mapPos.z);
+					unit.transform.position = new Vector3(mapPos.x, YgrabPos, mapPos.z);
 				}
 			}
 		}
