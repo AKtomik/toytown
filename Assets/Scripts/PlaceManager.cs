@@ -78,5 +78,10 @@ namespace ToyTown {
 			}
 			return nearestPos;
 		}
+
+		public bool ExistPlace(Place place, Vector3 pos)
+		{
+			return PlaceDictionary[place].Count == 0;
+		}
 	}
 }

@@ -187,6 +187,11 @@ namespace ToyTown
 			{
 				return unit =>
 				{
+					if (!PlaceManager.Instance.ExistPlace(place, unit.transform.position))
+					{
+						Debug.Log($"{unit} there is no {place} to go!");
+						return;
+					}
 					unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
 				};
 			}
