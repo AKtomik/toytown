@@ -11,9 +11,14 @@ namespace ToyTown {
 		WOOD = UnitJob.LUMBERJACK,
 		MINE = UnitJob.MINER,
 		CONSTRUCTION = UnitJob.BUILDER,
-		CANTINE,
-		HOUSE,
-		SCHOOL,
+		
+		CANTINE = 11,
+		HOUSE = 12,
+		SCHOOL = 13,
+
+		FARM = 21,
+		LIBRARY = 22,
+		MUSEUM = 23,
 	}
 
 	public class PlaceManager : MonoBehaviour
@@ -36,10 +41,15 @@ namespace ToyTown {
 			{Place.BUSH, new()},
 			{Place.WOOD, new()},
 			{Place.MINE, new()},
-			{Place.SCHOOL, new()},
+			{Place.CONSTRUCTION, new()},
+
 			{Place.CANTINE, new()},
 			{Place.HOUSE, new()},
-			{Place.CONSTRUCTION, new()},
+			{Place.SCHOOL, new()},
+			
+			{Place.FARM, new()},
+			{Place.LIBRARY, new()},
+			{Place.MUSEUM, new()},
 		};
 
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
