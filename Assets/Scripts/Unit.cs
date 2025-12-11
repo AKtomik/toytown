@@ -426,8 +426,8 @@ namespace ToyTown
 		
 		public void SwtichJob(UnitJob job)
 		{
-			ActionStartBuilder.JobSwitch(this);
 			actualJob = job;
+			ActionStartBuilder.JobSwitch(this);
 		}
 
 		public UnitJob GetActualJob()
@@ -502,6 +502,7 @@ namespace ToyTown
 			if (!adultRender.TryGetComponent<MeshRenderer>(out var adultMesh)) Debug.LogError($"no adultMesh! {adultMesh}");
 			adultMesh.materials = new Material[] { colorMaterial };
 			// ! test
+			Debug.Log($"switch job to startingJob {startingJob}");
 			SwtichJob(startingJob);
 			SwtichPlayerAction(UnitActionPlayer.WORKING);
 		}
