@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using System.Collections.Generic;
 using System.Linq;
 //using System.;
@@ -345,10 +346,23 @@ namespace ToyTown
 			},
 		};
 
+		public static Dictionary<string, string> FiguresColorsAdult = new()
+		{
+			{"RED", "Assets/Materials/FigureRed.mat"},
+			{"ORANGE", "Assets/Materials/FigureOrange.mat"},
+			{"GREEN", "Assets/Materials/FigureGreen.mat"},
+			{"CYAN", "Assets/Materials/FigureCyan.mat"},
+			{"BASE", "Assets/Materials/FigureBase.mat"},
+		};
+
 
 		private Rigidbody rb;
 		private CapsuleCollider CapsuleCollider;
 		private BoxCollider BoxCollider;
+		
+		public Renderer childRender;
+		public Renderer adultRender;
+		
 
 		public double saturationScore = 1;
 		public double energyScore = 1;
@@ -363,6 +377,7 @@ namespace ToyTown
 		private bool hasPlaceToGo;
 		private Vector3? walkingObjective = null;
 
+		public UnitJob startingJob = UnitJob.NOTHING;
 		private UnitJob actualJob = UnitJob.NOTHING;
 		public bool isDying { get; private set; }
 		public bool isGrabed { get; private set; }
@@ -469,8 +484,13 @@ namespace ToyTown
 				Debug.LogError($"actionPlayer is not a correct UnitAction! Please choose a value for {this}.actionPlayer. (this.actionPlayer = {this.actionPlayer})");
 				this.actionPlayer = UnitActionPlayer.WANDERING;
 			}
+			// init
+			string colorKey = FiguresColorsAdult.Keys.ElementAt(Random.Range(0, FiguresColorsAdult.Keys.Count()));
+			Material colorMaterial = Resources.Load<Material>(FiguresColorsAdult[colorKey]);
+			childRender.material = colorMaterial;
+			adultRender.material = colorMaterial;
 			// ! test
-			SwtichJob(UnitJob.MINER);
+			SwtichJob(startingJob);
 			SwtichPlayerAction(UnitActionPlayer.WORKING);
 		}
 
