@@ -109,6 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83761d1968927a040a3964808780512a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  ToolObject: {fileID: 0}
   childRender: {fileID: 959170811453921421}
   adultRender: {fileID: 164443332669608061}
   UnitMaterials:
@@ -117,6 +118,17 @@ MonoBehaviour:
   - {fileID: 2100000, guid: c67eaa00aeae60c42b997378a4f2671f, type: 2}
   - {fileID: 2100000, guid: 74a1f41dcd1b2874490b067dad77d310, type: 2}
   - {fileID: 2100000, guid: 3885cf1e098acea449367025406b0619, type: 2}
+  RenderOfTools:
+  - mesh: {fileID: 0}
+    material: {fileID: 0}
+  - mesh: {fileID: 509335385064758991, guid: c0b36c98dcf39a94aa1ee09cd4c23295, type: 3}
+    material: {fileID: 3258156148452725180, guid: c0b36c98dcf39a94aa1ee09cd4c23295, type: 3}
+  - mesh: {fileID: 1504137610994509186, guid: 8c6b49f28bf55134cbd4e7ef9e13ebad, type: 3}
+    material: {fileID: 5478737755916093609, guid: 8c6b49f28bf55134cbd4e7ef9e13ebad, type: 3}
+  - mesh: {fileID: 4987632398419711469, guid: d2a65edf7a7119c49b4e6f3f51becb62, type: 3}
+    material: {fileID: 5478737755916093609, guid: 8c6b49f28bf55134cbd4e7ef9e13ebad, type: 3}
+  - mesh: {fileID: -6430519207706653962, guid: 919fde5885bd1f943a735b85a58daf7c, type: 3}
+    material: {fileID: 1240721427442285925, guid: 919fde5885bd1f943a735b85a58daf7c, type: 3}
   saturationScore: 1
   energyScore: 1
   happynessScore: 0.5
