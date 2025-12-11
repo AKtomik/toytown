@@ -346,13 +346,13 @@ namespace ToyTown
 			},
 		};
 
-		public static Dictionary<string, Material> FiguresColorsAdult = new()
+		public static Dictionary<string, string> FiguresColorsAdult = new()
 		{
-			{"RED", Resources.Load<Material>("Assets/Materials/FigureRed.mat")},
-			{"ORANGE", Resources.Load<Material>("Assets/Materials/FigureOrange.mat")},
-			{"GREEN", Resources.Load<Material>("Assets/Materials/FigureGreen.mat")},
-			{"CYAN", Resources.Load<Material>("Assets/Materials/FigureCyan.mat")},
-			{"BASE", Resources.Load<Material>("Assets/Materials/FigureBase.mat")},
+			{"RED", "Assets/Materials/FigureRed.mat"},
+			{"ORANGE", "Assets/Materials/FigureOrange.mat"},
+			{"GREEN", "Assets/Materials/FigureGreen.mat"},
+			{"CYAN", "Assets/Materials/FigureCyan.mat"},
+			{"BASE", "Assets/Materials/FigureBase.mat"},
 		};
 
 
@@ -377,6 +377,7 @@ namespace ToyTown
 		private bool hasPlaceToGo;
 		private Vector3? walkingObjective = null;
 
+		public UnitJob startingJob = UnitJob.NOTHING;
 		private UnitJob actualJob = UnitJob.NOTHING;
 		public bool isDying { get; private set; }
 		public bool isGrabed { get; private set; }
@@ -485,11 +486,11 @@ namespace ToyTown
 			}
 			// init
 			string colorKey = FiguresColorsAdult.Keys.ElementAt(Random.Range(0, FiguresColorsAdult.Keys.Count()));
-			Material colorMaterial = FiguresColorsAdult[colorKey];
+			Material colorMaterial = Resources.Load<Material>(FiguresColorsAdult[colorKey]);
 			childRender.material = colorMaterial;
 			adultRender.material = colorMaterial;
 			// ! test
-			SwtichJob(UnitJob.MINER);
+			SwtichJob(startingJob);
 			SwtichPlayerAction(UnitActionPlayer.WORKING);
 		}
 
