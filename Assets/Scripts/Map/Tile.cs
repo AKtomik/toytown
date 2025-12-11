@@ -1,47 +1,41 @@
 using UnityEngine;
+using ToyTown;
 
 public class Tile : MonoBehaviour
 {
-    [SerializeField]
-    private bool isBuildable;
+    public bool IsBuilderPresent { get; private set; } = false;
 
-    /*
-    --1 =  plaines
-    --2 = rock
-    --3 = food
-    --4 = wood
-    */
-    [SerializeField]
-    public int typeRessources;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private int builderCount = 0;
+
+    private void OnTriggerEnter(Collider other)
     {
-        
+        Unit unit = other.GetComponent<Unit>();
+
+        if (unit != null && unit.GetActualJob() == UnitJob.BUILDER)
+        {
+            builderCount++;
+            if (builderCount > 0 && !IsBuilderPresent)
+            {
+                IsBuilderPresent = true;
+                Debug.Log($"Tile {name}: BUILDER entré. Construction possible.");
+            }
+        }
     }
 
-    /*private void OnMouseDown()
+    private void OnTriggerExit(Collider other)
     {
-        if(typeRessources == 1)
-        {
-            Debug.Log("plain");
-            Debug.Log("aucune ressource sur les plaines");
-        }
-        else if (typeRessources == 2)
-        {
-            RessourcesGestion.AddRock();
-            Debug.Log("rock");
-        }
-        else if (typeRessources == 3)
-        {
-            RessourcesGestion.AddFood();
-            Debug.Log("food");
-        }
-        else if (typeRessources == 4)
-        {
-            RessourcesGestion.AddWood();
-            Debug.Log("wood");
-        }
-    }*/
+        Unit unit = other.GetComponent<Unit>();
 
+        if (unit != null && unit.GetActualJob() == UnitJob.BUILDER)
+        {
+            builderCount--;
 
+            if (builderCount <= 0 && IsBuilderPresent)
+            {
+                builderCount = 0;
+                IsBuilderPresent = false;
+                Debug.Log($"Tile {name}: Dernier BUILDER parti. Construction en pause.");
+            }
+        }
+    }
 }

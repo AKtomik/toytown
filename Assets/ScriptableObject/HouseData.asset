@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: HouseData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   buildingName: House
-  prefab: {fileID: 5542576023475657540, guid: e7b84cc73c04a2b4d8dd4b7b817da25d, type: 3}
+  prefab: {fileID: 7213148078788775080, guid: b89cdfd1b30a3f34cadea2b91b57c862, type: 3}
   woodCost: 2
   rockCost: 2
-  previewMaterial: {fileID: 2100000, guid: bd07b12eb36669a44b8fae9734589821, type: 2}
-  finalMaterial: {fileID: 2100000, guid: f8d433ed5c67ae6438ae62f413814d2a, type: 2}
+  previewMaterial: {fileID: 2100000, guid: a4cb773729cb20d4890fba039af8d075, type: 2}
+  finalMaterial: {fileID: 2100000, guid: 5588ac5587485e9449f57026eddea044, type: 2}
+  associatedPlace: 12
