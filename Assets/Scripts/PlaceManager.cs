@@ -65,7 +65,7 @@ namespace ToyTown {
 		// Update is called once per frame
 		void Update()
 		{
-			
+
 		}
 
 		public Vector3 GetNearestPlace(Place place, Vector3 pos)

@@ -84,9 +84,16 @@ public class BuildingGeneration : MonoBehaviour
 
                 Renderer newBuildingRenderer = previewInstance.GetComponentInChildren<Renderer>();
 
-                if (newBuildingRenderer != null)
+                Renderer[] allRenderers = previewInstance.GetComponentsInChildren<Renderer>();
+
+                if (allRenderers != null && allRenderers.Length > 0)
                 {
-                    newBuildingRenderer.material = currentBuilding.previewMaterial;
+                    // Parcourt tous les Renderers trouvés sur l'objet parent et ses enfants
+                    foreach (Renderer renderer in allRenderers)
+                    {
+                        // Applique le nouveau matériau à ce Renderer
+                        renderer.material = currentBuilding.previewMaterial;
+                    }
                 }
             }
             else
