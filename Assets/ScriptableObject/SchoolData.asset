@@ -18,3 +18,4 @@ MonoBehaviour:
   rockCost: 2
   previewMaterial: {fileID: 2100000, guid: 085054c1c17a4624891be69bdbe82ecc, type: 2}
   finalMaterial: {fileID: 2100000, guid: a3f4fa0c94fb944429b2a95243614a67, type: 2}
+  associatedPlace: 7

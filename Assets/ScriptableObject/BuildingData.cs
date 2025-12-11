@@ -1,3 +1,4 @@
+using ToyTown;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Building/BuildingData")]
@@ -9,4 +10,5 @@ public class BuildingData : ScriptableObject
     public int rockCost;
     public Material previewMaterial;
     public Material finalMaterial;
+    public Place associatedPlace;
 }
