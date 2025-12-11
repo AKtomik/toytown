@@ -16,9 +16,9 @@ namespace ToyTown {
 		SCHOOL,
 	}
 
-	public class GameManager : MonoBehaviour
+	public class PlaceManager : MonoBehaviour
 	{
-		public static GameManager Instance { get; private set; }
+		public static PlaceManager Instance { get; private set; }
 
 		// this is here only for adding places with editor
 		// ! do NOT add places here with code
@@ -77,6 +77,28 @@ namespace ToyTown {
 				}
 			}
 			return nearestPos;
+		}
+
+		public float RayGroundRange = 100f;
+		public int? RayGroundMask;
+		
+		public Place? GetTilePlace(Vector3 pos)
+		{
+			Vector3 origin = pos + Vector3.up * .5f;
+			Vector3 direction = Vector3.down;
+
+			RaycastHit hit;
+			if (RayGroundMask.HasValue)
+				Physics.Raycast(origin, direction, out hit, RayGroundRange, RayGroundMask.Value);
+			else
+				Physics.Raycast(origin, direction, out hit, RayGroundRange);
+			GameObject gameObject = hit.collider.gameObject;
+			return Place.BUSH;
+		}
+
+		public bool ExistPlace(Place place, Vector3 pos)
+		{
+			return PlaceDictionary[place].Count == 0;
 		}
 	}
 }
