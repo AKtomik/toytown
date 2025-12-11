@@ -348,11 +348,11 @@ namespace ToyTown
 
 		public static Dictionary<string, string> FiguresColorsAdult = new()
 		{
-			{"RED", "Assets/Materials/FigureRed.mat"},
-			{"ORANGE", "Assets/Materials/FigureOrange.mat"},
-			{"GREEN", "Assets/Materials/FigureGreen.mat"},
-			{"CYAN", "Assets/Materials/FigureCyan.mat"},
-			{"BASE", "Assets/Materials/FigureBase.mat"},
+			{"RED", "FigureRed.png"},
+			{"ORANGE", "FigureOrange.png"},
+			{"GREEN", "FigureGreen.png"},
+			{"CYAN", "FigureCyan.png"},
+			{"BASE", "FigureYellow.png"},
 		};
 
 
@@ -487,8 +487,12 @@ namespace ToyTown
 			// init
 			string colorKey = FiguresColorsAdult.Keys.ElementAt(Random.Range(0, FiguresColorsAdult.Keys.Count()));
 			Material colorMaterial = Resources.Load<Material>(FiguresColorsAdult[colorKey]);
-			childRender.material = colorMaterial;
-			adultRender.material = colorMaterial;
+			if (colorMaterial == null) Debug.LogError($"Material not found! for colorKey [{colorKey}], path FiguresColorsAdult[colorKey] [{FiguresColorsAdult[colorKey]}]");
+			Debug.Log($"colorKey {colorKey} colorMaterial {colorMaterial} FiguresColorsAdult[colorKey] {FiguresColorsAdult[colorKey]}");
+			if (!childRender.TryGetComponent<MeshRenderer>(out var childMesh)) Debug.LogError($"no childMesh! {childMesh}");
+			childMesh.materials = new Material[] { colorMaterial };
+			if (!adultRender.TryGetComponent<MeshRenderer>(out var adultMesh)) Debug.LogError($"no adultMesh! {adultMesh}");
+			adultMesh.materials = new Material[] { colorMaterial };
 			// ! test
 			SwtichJob(startingJob);
 			SwtichPlayerAction(UnitActionPlayer.WORKING);
