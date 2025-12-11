@@ -109,11 +109,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83761d1968927a040a3964808780512a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  childRender: {fileID: 959170811453921421}
+  adultRender: {fileID: 164443332669608061}
   saturationScore: 1
   energyScore: 1
   happynessScore: 0.5
   needStateHunger: 0
   needStateSleep: 0
+  startingJob: 0
 --- !u!65 &7544546338647566361
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -196,6 +199,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bf9bd226a1f6c548903eded1dbfb5a4, type: 3}
+--- !u!23 &164443332669608061 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 1bf9bd226a1f6c548903eded1dbfb5a4, type: 3}
+  m_PrefabInstance: {fileID: 1551962823776963833}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1297903701916904210 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1bf9bd226a1f6c548903eded1dbfb5a4, type: 3}
@@ -262,6 +270,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e6231624cb0c5f48b6da2c2c444aa08, type: 3}
+--- !u!23 &959170811453921421 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 5e6231624cb0c5f48b6da2c2c444aa08, type: 3}
+  m_PrefabInstance: {fileID: 1913534394421789705}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2090941373334004706 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5e6231624cb0c5f48b6da2c2c444aa08, type: 3}
