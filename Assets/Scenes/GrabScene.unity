@@ -3876,7 +3876,7 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!114 &1613191250
+--- !u!114 &1589462393
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3886,10 +3886,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: UI/Click
+  m_Name: UI/RightClick
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_ActionId: 3c7022bf-7922-4f7c-a998-c437916075ad
+  m_ActionId: 44b200b1-1557-4083-816c-b22cbdf77ddf
 --- !u!1 &1615355378
 GameObject:
   m_ObjectHideFlags: 0
@@ -4874,8 +4874,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb63f317df38884a9b18cdd1835deb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  inputMouseClick: {fileID: 1613191250}
+  inputMouseClickPick: {fileID: 2078831935}
+  inputMouseClickRelease: {fileID: 1589462393}
   inputMousePosition: {fileID: 795436699}
+  YgrabPos: 0.5
 --- !u!4 &1976818606
 Transform:
   m_ObjectHideFlags: 0
@@ -4970,6 +4972,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2078831935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: UI/Click
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_ActionId: 3c7022bf-7922-4f7c-a998-c437916075ad
 --- !u!1 &2091184021
 GameObject:
   m_ObjectHideFlags: 0
