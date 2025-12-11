@@ -16,6 +16,6 @@ MonoBehaviour:
   prefab: {fileID: 7368240338111972036, guid: ce6fd6f23e1dedb4e9816f7663bc7c30, type: 3}
   woodCost: 2
   rockCost: 2
-  previewMaterial: {fileID: 2100000, guid: aac6bf827c9e19945906b793f6ea6c2a, type: 2}
-  finalMaterial: {fileID: 2100000, guid: 9c73dc5a48c4a9646a04496a6b78b46a, type: 2}
+  previewMaterial: {fileID: 2100000, guid: c6fa456d54abfd940b73c2fe7ef0a0fd, type: 2}
+  finalMaterial: {fileID: 2100000, guid: c075e9c998b05d144a8576f3c5a9a469, type: 2}
   associatedPlace: 22

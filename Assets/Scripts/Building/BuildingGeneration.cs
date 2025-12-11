@@ -206,7 +206,9 @@ public class BuildingGeneration : MonoBehaviour
 
         if (placeManager != null && placeManager.PlaceDictionary.ContainsKey(data.associatedPlace))
         {
-            placeManager.PlaceDictionary[data.associatedPlace].Add(buildingInstance);
+            PlaceManager.Instance.PlaceDictionary[data.associatedPlace].Add(buildingInstance);
+            PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Add(buildingInstance);
         }
+
     }
 }
