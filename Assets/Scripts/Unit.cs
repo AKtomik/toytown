@@ -553,6 +553,8 @@ namespace ToyTown
 			rb.useGravity = true;
 			rb.isKinematic = false;
 			isGrabed = false;
+			Place? GroundPlace = PlaceManager.Instance.GetTilePlace(transform.position);
+			if (!GroundPlace.HasValue) return;
 		}
 
 		void OnDrawGizmos()
