@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: FarmData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   buildingName: Farm
-  prefab: {fileID: 5542576023475657540, guid: e7b84cc73c04a2b4d8dd4b7b817da25d, type: 3}
+  prefab: {fileID: 4163839607173056758, guid: 668679a64f616ca479a447b7cb0609ea, type: 3}
   woodCost: 2
   rockCost: 2
-  previewMaterial: {fileID: 2100000, guid: bd07b12eb36669a44b8fae9734589821, type: 2}
-  finalMaterial: {fileID: 2100000, guid: 9ee3ad8c44edef5408fc6227d8284437, type: 2}
+  previewMaterial: {fileID: 2100000, guid: aac6bf827c9e19945906b793f6ea6c2a, type: 2}
+  finalMaterial: {fileID: 2100000, guid: 9c73dc5a48c4a9646a04496a6b78b46a, type: 2}

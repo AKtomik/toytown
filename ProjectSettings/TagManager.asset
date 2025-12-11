@@ -13,6 +13,9 @@ TagManager:
   - RockTxt
   - House
   - School
+  - Farm
+  - Museum
+  - Tree
   layers:
   - Default
   - TransparentFX
@@ -21,7 +24,7 @@ TagManager:
   - Water
   - UI
   - Buildings
-  - 
+  - Tiles
   - 
   - 
   - 

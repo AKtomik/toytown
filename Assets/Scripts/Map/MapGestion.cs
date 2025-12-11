@@ -78,17 +78,7 @@ public class MapGestion : MonoBehaviour
         grid = GetComponent<Grid>();
         tilemap = GetComponentInChildren<Tilemap>();
 
-        if (grid == null)
-        {
-            Debug.LogError("Erreur : Le composant Grid est manquant sur ce GameObject.");
-            return;
-        }
 
-        if (tilemap == null)
-        {
-            Debug.LogError("Erreur : Le composant Tilemap (enfant) est manquant.");
-            return;
-        }
 
         if (spawnRoot == null)
         {
@@ -159,9 +149,8 @@ public class MapGestion : MonoBehaviour
         }
     }
 
-    void Start()
+    void Awake()
     {
-        if (Application.isPlaying)
             GenerateGrid();
     }
 }
