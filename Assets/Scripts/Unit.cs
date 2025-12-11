@@ -346,22 +346,13 @@ namespace ToyTown
 			},
 		};
 
-		public static Dictionary<string, string> FiguresColorsAdult = new()
-		{
-			{"RED", "FigureRed.png"},
-			{"ORANGE", "FigureOrange.png"},
-			{"GREEN", "FigureGreen.png"},
-			{"CYAN", "FigureCyan.png"},
-			{"BASE", "FigureYellow.png"},
-		};
-
-
 		private Rigidbody rb;
 		private CapsuleCollider CapsuleCollider;
 		private BoxCollider BoxCollider;
 		
 		public Renderer childRender;
 		public Renderer adultRender;
+		public List<Material> UnitMaterials = new();
 		
 
 		public double saturationScore = 1;
@@ -485,10 +476,8 @@ namespace ToyTown
 				this.actionPlayer = UnitActionPlayer.WANDERING;
 			}
 			// init
-			string colorKey = FiguresColorsAdult.Keys.ElementAt(Random.Range(0, FiguresColorsAdult.Keys.Count()));
-			Material colorMaterial = Resources.Load<Material>(FiguresColorsAdult[colorKey]);
-			if (colorMaterial == null) Debug.LogError($"Material not found! for colorKey [{colorKey}], path FiguresColorsAdult[colorKey] [{FiguresColorsAdult[colorKey]}]");
-			Debug.Log($"colorKey {colorKey} colorMaterial {colorMaterial} FiguresColorsAdult[colorKey] {FiguresColorsAdult[colorKey]}");
+			Material colorMaterial = UnitMaterials.ElementAt(Random.Range(0, UnitMaterials.Count));
+			if (colorMaterial == null) Debug.LogError($"Material not found!");
 			if (!childRender.TryGetComponent<MeshRenderer>(out var childMesh)) Debug.LogError($"no childMesh! {childMesh}");
 			childMesh.materials = new Material[] { colorMaterial };
 			if (!adultRender.TryGetComponent<MeshRenderer>(out var adultMesh)) Debug.LogError($"no adultMesh! {adultMesh}");

@@ -111,6 +111,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   childRender: {fileID: 959170811453921421}
   adultRender: {fileID: 164443332669608061}
+  UnitMaterials:
+  - {fileID: 2100000, guid: 6f4ab98af67fdfa44a06d749ebe0c22f, type: 2}
+  - {fileID: 2100000, guid: 38eba01410655d141ba0480f92c146f2, type: 2}
+  - {fileID: 2100000, guid: 87554170417b87f4cb9ab76b6e191dc3, type: 2}
+  - {fileID: 2100000, guid: f2ae54ba1a1ed5248b7c098e16f3bc71, type: 2}
+  - {fileID: 2100000, guid: f4241dd9365678742aef6e399fef0fe4, type: 2}
   saturationScore: 1
   energyScore: 1
   happynessScore: 0.5
