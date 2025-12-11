@@ -198,8 +198,10 @@ namespace ToyTown
 					if (!PlaceManager.Instance.ExistPlace(place, unit.transform.position))
 					{
 						Debug.Log($"{unit} there is no {place} to go!");
+						unit.hasPlaceToGo = false;
 						return;
 					}
+					unit.hasPlaceToGo = true;
 					unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
 				};
 			}
@@ -358,6 +360,7 @@ namespace ToyTown
 		private UnitActionSystem? actionSystem = null;
 		private double actionSystemDaysAmount = .0;
 		private double actionSystemDaysRemain = .0;
+		private bool hasPlaceToGo;
 		private Vector3? walkingObjective = null;
 
 		private UnitJob actualJob = UnitJob.NOTHING;
@@ -475,6 +478,10 @@ namespace ToyTown
 		void Update()
 		{
 			// if walking
+			if (!hasPlaceToGo)
+			{
+				return;
+			}
 			if (IsWalking())
 			{
 				rb.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.WalkingSpeed)));

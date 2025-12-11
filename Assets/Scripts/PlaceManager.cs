@@ -93,6 +93,7 @@ namespace ToyTown {
 			else
 				Physics.Raycast(origin, direction, out hit, RayGroundRange);
 			GameObject gameObject = hit.collider.gameObject;
+			Debug.Log($"gameObject {gameObject}");
 			return Place.BUSH;
 		}
 
