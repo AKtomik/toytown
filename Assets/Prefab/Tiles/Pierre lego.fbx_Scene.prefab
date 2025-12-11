@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pierre lego.fbx_Scene
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 73600586936574041aca29eb1d742b8e, type: 3}
+      propertyPath: m_TagString
+      value: Rock
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 65702495048144492, guid: 73600586936574041aca29eb1d742b8e, type: 3}
