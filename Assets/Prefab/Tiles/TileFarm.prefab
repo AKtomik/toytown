@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TileFarm
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2dd9287d63baaab47be9188dee5b7464, type: 3}
+      propertyPath: m_TagString
+      value: Farm
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 65702495048144492, guid: 2dd9287d63baaab47be9188dee5b7464, type: 3}
