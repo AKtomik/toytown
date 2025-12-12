@@ -11,11 +11,11 @@ namespace ToyTown
 	using ActionUpdateFunction = Func<Unit, float, ActionUpdateReturn>;
 
 	public enum UnitJob {
-		NOTHING,
-		FARMER,
-		LUMBERJACK,
-		MINER,
-		BUILDER,
+		NOTHING = 0,
+		FARMER = 1,
+		LUMBERJACK = 2,
+		MINER = 3,
+		BUILDER = 4,
 	};
 	
 	public enum UnitAction {
@@ -138,19 +138,24 @@ namespace ToyTown
 			public static Dictionary<UnitJob, ActionStartFunction> JobsSwitchDictionnary = new()
 			{
 				{ UnitJob.NOTHING, unit => {
-					
+					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[0].mesh;
+					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[0].material };
 				} },
 				{ UnitJob.FARMER, unit => {
-					
+					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[1].mesh;
+					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[1].material };
 				} },
 				{ UnitJob.LUMBERJACK, unit => {
-					
+					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[2].mesh;
+					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[2].material };
 				} },
 				{ UnitJob.MINER, unit => {
-					
+					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[3].mesh;
+					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[3].material };
 				} },
 				{ UnitJob.BUILDER, unit => {
-					
+					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[4].mesh;
+					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[4].material };
 				} }
 			};
 			
@@ -346,22 +351,23 @@ namespace ToyTown
 			},
 		};
 
-		public static Dictionary<string, string> FiguresColorsAdult = new()
-		{
-			{"RED", "Assets/Materials/FigureRed.mat"},
-			{"ORANGE", "Assets/Materials/FigureOrange.mat"},
-			{"GREEN", "Assets/Materials/FigureGreen.mat"},
-			{"CYAN", "Assets/Materials/FigureCyan.mat"},
-			{"BASE", "Assets/Materials/FigureBase.mat"},
-		};
-
-
-		private Rigidbody rb;
-		private CapsuleCollider CapsuleCollider;
-		private BoxCollider BoxCollider;
+		private Rigidbody RigidBodyComponent;
+		private MeshFilter toolMeshFilterComponent;
+		private MeshRenderer toolMeshRenderComponent;
+		private CapsuleCollider CapsuleColliderValue;
+		private BoxCollider BoxColliderValue;
 		
+		public Renderer ToolObject;
 		public Renderer childRender;
 		public Renderer adultRender;
+		public List<Material> UnitMaterials = new();
+		[System.Serializable]
+		public struct ToolRender
+		{
+			public Mesh mesh;
+			public Material material;
+		}
+		public List<ToolRender> RenderOfTools = new();
 		
 
 		public double saturationScore = 1;
@@ -369,6 +375,11 @@ namespace ToyTown
 		public double happynessScore = .5;
 		public NeedState needStateHunger;
 		public NeedState needStateSleep;
+
+		public double age = 0;
+		public double adultAge = 0;
+		public bool spawnAdult = false;
+		public bool isAdult { get { return age > adultAge; } }
 		
 		private UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
 		private UnitActionSystem? actionSystem = null;
@@ -420,8 +431,8 @@ namespace ToyTown
 		
 		public void SwtichJob(UnitJob job)
 		{
-			ActionStartBuilder.JobSwitch(this);
 			actualJob = job;
+			ActionStartBuilder.JobSwitch(this);
 		}
 
 		public UnitJob GetActualJob()
@@ -435,6 +446,11 @@ namespace ToyTown
 				return (UnitAction)actionSystem;
 			else
 				return (UnitAction)actionPlayer;
+		}
+		
+		private void GrowingUp()
+		{
+			Debug.Log($"{this} is growing up and can work");
 		}
 
 		public bool IsHungry()
@@ -476,20 +492,38 @@ namespace ToyTown
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
-			rb = GetComponent<Rigidbody>();
-			BoxCollider = GetComponent<BoxCollider>();
-			CapsuleCollider = GetComponent<CapsuleCollider>();
+			RigidBodyComponent = GetComponent<Rigidbody>();
+			toolMeshFilterComponent = ToolObject.GetComponent<MeshFilter>();
+			toolMeshRenderComponent = ToolObject.GetComponent<MeshRenderer>();
+			BoxColliderValue = GetComponent<BoxCollider>();
+			if (BoxColliderValue == null) Debug.LogError($"BoxCollider ref is null! [{BoxColliderValue}]");
+			CapsuleColliderValue = GetComponent<CapsuleCollider>();
+			if (CapsuleColliderValue == null) Debug.LogError($"CapsuleCollider ref is null! [{CapsuleColliderValue}]");
 			if (!Action.Dictionnary.Keys.Contains((UnitAction)this.actionPlayer))
 			{
 				Debug.LogError($"actionPlayer is not a correct UnitAction! Please choose a value for {this}.actionPlayer. (this.actionPlayer = {this.actionPlayer})");
 				this.actionPlayer = UnitActionPlayer.WANDERING;
 			}
 			// init
-			string colorKey = FiguresColorsAdult.Keys.ElementAt(Random.Range(0, FiguresColorsAdult.Keys.Count()));
-			Material colorMaterial = Resources.Load<Material>(FiguresColorsAdult[colorKey]);
-			childRender.material = colorMaterial;
-			adultRender.material = colorMaterial;
+			Material colorMaterial = UnitMaterials.ElementAt(Random.Range(0, UnitMaterials.Count));
+			if (colorMaterial == null) Debug.LogError($"Material not found!");
+			if (!childRender.TryGetComponent<MeshRenderer>(out var childMesh)) Debug.LogError($"no childMesh! {childMesh}");
+			childMesh.materials = new Material[] { colorMaterial };
+			if (!adultRender.TryGetComponent<MeshRenderer>(out var adultMesh)) Debug.LogError($"no adultMesh! {adultMesh}");
+			adultMesh.materials = new Material[] { colorMaterial };
+
+			// random age
+			if (spawnAdult)
+			{
+				GrowingUp();
+			} else
+			{
+				adultAge = Settings.UnitAdultAgeMin + Random.value * (Settings.UnitAdultAgeMax - Settings.UnitAdultAgeMin);
+				Debug.Log($"{this} will grow up in {adultAge} days!");
+			}
+
 			// ! test
+			Debug.Log($"switch job to startingJob {startingJob}");
 			SwtichJob(startingJob);
 			SwtichPlayerAction(UnitActionPlayer.WORKING);
 		}
@@ -497,6 +531,14 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
+			// growing up
+			bool wasAdult = isAdult;
+			age += Time.deltaTime * speed / Settings.DayLengthInSecond;
+			if (!wasAdult && isAdult)
+			{
+				GrowingUp();
+			}
+
 			// if walking
 			if (!hasPlaceToGo)
 			{
@@ -504,7 +546,7 @@ namespace ToyTown
 			}
 			if (IsWalking())
 			{
-				rb.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.WalkingSpeed)));
+				RigidBodyComponent.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.WalkingSpeed)));
 				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime * (float)speed);
 			}
 			else
@@ -566,19 +608,23 @@ namespace ToyTown
 		
 		public void Grab()
 		{
-			BoxCollider.enabled = false;
-			CapsuleCollider.enabled = false;
-			rb.useGravity = false;
-			rb.isKinematic = true;
+			BoxColliderValue = GetComponent<BoxCollider>();
+			BoxColliderValue.enabled = false;
+			CapsuleColliderValue = GetComponent<CapsuleCollider>();
+			CapsuleColliderValue.enabled = false;
+			RigidBodyComponent.useGravity = false;
+			RigidBodyComponent.isKinematic = true;
 			isGrabed = true;
 		}
 		
 		public void Release()
 		{
-			BoxCollider.enabled = true;
-			CapsuleCollider.enabled = true;
-			rb.useGravity = true;
-			rb.isKinematic = false;
+			BoxColliderValue = GetComponent<BoxCollider>();
+			BoxColliderValue.enabled = true;
+			CapsuleColliderValue = GetComponent<CapsuleCollider>();
+			CapsuleColliderValue.enabled = true;
+			RigidBodyComponent.useGravity = true;
+			RigidBodyComponent.isKinematic = false;
 			isGrabed = false;
 			Place? GroundPlace = PlaceManager.Instance.GetTilePlace(transform.position);
 			if (!GroundPlace.HasValue) return;
