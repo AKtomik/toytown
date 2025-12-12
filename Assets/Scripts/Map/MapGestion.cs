@@ -1,8 +1,9 @@
-using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine.Tilemaps;
 using System.Linq;
+using ToyTown;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [ExecuteAlways]
 public class MapGestion : MonoBehaviour
@@ -126,7 +127,12 @@ public class MapGestion : MonoBehaviour
                     continue;
 
                 GameObject go = Instantiate(prefab, worldPos, rotation, spawnRoot);
-
+                PlaceInstance placeInstance = go.GetComponent<PlaceInstance>();
+                if (placeInstance != null && PlaceManager.Instance != null)
+                {
+                    // Appelez directement la méthode d'enregistrement du PlaceManager
+                    PlaceManager.Instance.RegisterPlace(placeInstance.placeType, go);
+                }
                 MeshRenderer mr = go.GetComponentInChildren<MeshRenderer>();
                 if (mr != null)
                 {

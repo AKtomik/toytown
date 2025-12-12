@@ -4,7 +4,6 @@ namespace ToyTown
 {
     public class PlaceInstance : MonoBehaviour
     {
-        [Tooltip("Quel type de lieu est cet objet ? Doit correspondre à l'enum Place.")]
         public Place placeType;
 
         void Start()
