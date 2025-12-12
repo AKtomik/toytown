@@ -528,7 +528,7 @@ namespace ToyTown
 			}
 		}
 
-		bool firstTicked = false;
+		int tickCount = 0;
 		void FirstTick()
 		{
 			
@@ -541,9 +541,9 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
-			if (!firstTicked)
+			tickCount += 1;
+			if (tickCount == 3)
 			{
-				firstTicked = true;
 				FirstTick();
 			}
 
