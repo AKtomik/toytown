@@ -443,12 +443,22 @@ namespace ToyTown
 		
 		public void StartLearning(UnitJob job)
 		{
+			if (!isAdult && !Settings.ChildLearnable && job != UnitJob.NOTHING)
+			{
+				Debug.Log($"{this} cant learn");	
+				return;
+			}
 			learningJob = job;
 			SwtichPlayerAction(UnitActionPlayer.LEARNING);
 		}
 		
 		public void SwtichJob(UnitJob job)
 		{
+			if (!isAdult && !Settings.ChildLabour && job != UnitJob.NOTHING)
+			{
+				Debug.Log($"{this} cant work bcs is a child");	
+				return;
+			}
 			actualJob = job;
 			ActionStartBuilder.JobSwitch(this);
 		}
@@ -542,6 +552,8 @@ namespace ToyTown
 				GrowingUp();
 			} else
 			{
+				SwtichJob(UnitJob.NOTHING);
+				SwtichPlayerAction(UnitActionPlayer.WANDERING);
 				adultAge = Math.Round(Settings.UnitAdultAgeMin + randomLater * (Settings.UnitAdultAgeMax - Settings.UnitAdultAgeMin));
 				Debug.Log($"{this} will grow up in {adultAge} days!");
 			}
