@@ -817,11 +817,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1813598818}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &2064618381 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6867964091602283402, guid: 844c84842d9a8ae4596b9d8ad2b47893, type: 3}
-  m_PrefabInstance: {fileID: 5976842027029505735}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3436032577760824296
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -894,6 +889,14 @@ PrefabInstance:
     - target: {fileID: 657077782713982689, guid: eac186f227c7a704391680e8a00b8d5c, type: 3}
       propertyPath: m_Name
       value: PlaceManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742018659502500538, guid: eac186f227c7a704391680e8a00b8d5c, type: 3}
+      propertyPath: PlaceEditor.Array.data[1].place
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8742018659502500538, guid: eac186f227c7a704391680e8a00b8d5c, type: 3}
+      propertyPath: PlaceEditor.Array.data[2].place
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8742018659502500538, guid: eac186f227c7a704391680e8a00b8d5c, type: 3}
       propertyPath: PlaceEditor.Array.data[0].gameObject
@@ -1029,14 +1032,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7909209403866469842, guid: 99ca8ccaa5c675843b51898672b19594, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7909209403866469842, guid: 99ca8ccaa5c675843b51898672b19594, type: 3}
-      propertyPath: unitPrefab
-      value: 
-      objectReference: {fileID: 2064618381}
     - target: {fileID: 9186453288971300156, guid: 99ca8ccaa5c675843b51898672b19594, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.28432

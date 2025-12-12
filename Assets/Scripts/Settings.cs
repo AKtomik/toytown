@@ -16,6 +16,7 @@ public static class Settings
 	static public double UnitAdultAgeMax = 6;
 	static public double UnitAverageSpawnByDay = 1;
 	static public double UnitVariationSpawn = 5;
+	static public double RethinkingTimeDay = .5;
 	
 	static public double WalkingNearObjectiveDistance = 1.2;
 	static public double WalkingSpeed = 1;

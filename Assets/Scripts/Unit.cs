@@ -390,6 +390,7 @@ namespace ToyTown
 		private double actionSystemDaysAmount = .0;
 		private double actionSystemDaysRemain = .0;
 		private bool hasPlaceToGo;
+		private double noPlaceRethinking = 0;
 		private Vector3? walkingObjective = null;
 
 		public UnitJob startingJob = UnitJob.NOTHING;
@@ -425,6 +426,14 @@ namespace ToyTown
 			EndSystemAction();//!
 			Action.Dictionnary[(UnitAction)action].Start(this);
 			actionPlayer = action;
+		}
+
+		public void ReswitchAction()
+		{
+			if (actionSystem != null)
+				SwtichSystemAction(actionSystem.Value);
+			else
+				SwtichPlayerAction(actionPlayer);
 		}
 		
 		public void StartLearning(UnitJob job)
@@ -551,7 +560,8 @@ namespace ToyTown
 
 			// growing up
 			bool wasAdult = isAdult;
-			age += Time.deltaTime * speed / Settings.DayLengthInSecond;
+			double spendTime = Time.deltaTime * speed / Settings.DayLengthInSecond;
+			age += spendTime;
 			if (!wasAdult && isAdult)
 			{
 				GrowingUp();
@@ -560,7 +570,12 @@ namespace ToyTown
 			// if walking
 			if (!hasPlaceToGo)
 			{
-				
+				noPlaceRethinking += spendTime;
+				if (noPlaceRethinking > Settings.RethinkingTimeDay)
+				{
+					noPlaceRethinking = 0;
+					ReswitchAction();
+				}
 			}
 			else if (IsWalking())
 			{
@@ -650,7 +665,7 @@ namespace ToyTown
 
 		void OnDrawGizmos()
 		{
-			float GizAlpha = IsWalking() ? .4f : .9f;
+			float GizAlpha = !hasPlaceToGo ? .2f : IsWalking() ? .4f : .9f;
 			UnitAction action = GetActualAction();
 
 			if (action == UnitAction.WORKING)
