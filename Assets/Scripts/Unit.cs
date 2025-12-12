@@ -131,6 +131,7 @@ namespace ToyTown
 					Debug.Log($"{unit} there is no {place} to work!");
 					return;
 				}
+				Debug.Log($"{unit} is going to work {place} ({PlaceManager.Instance})");
 				unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
 			}
 
@@ -208,6 +209,7 @@ namespace ToyTown
 						return;
 					}
 					unit.hasPlaceToGo = true;
+					Debug.Log($"{unit} is going to place {place} ({PlaceManager.Instance})");
 					unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
 				};
 			}
