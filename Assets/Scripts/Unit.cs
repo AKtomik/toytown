@@ -665,7 +665,7 @@ namespace ToyTown
 
 		void OnDrawGizmos()
 		{
-			float GizAlpha = !hasPlaceToGo ? .2f : IsWalking() ? .4f : .9f;
+			float GizAlpha = (IsWalking() || !hasPlaceToGo && Random.value < .5) ? .4f : .9f;
 			UnitAction action = GetActualAction();
 
 			if (action == UnitAction.WORKING)
