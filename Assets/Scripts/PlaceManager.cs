@@ -104,7 +104,7 @@ namespace ToyTown {
 		}
 
 		public float RayGroundRange = 100f;
-		public int? RayGroundMask = 2^7;
+		public int? RayGroundMask = 2 << 7;
 		
 		public Place? GetTilePlace(Vector3 pos)
 		{
@@ -117,6 +117,7 @@ namespace ToyTown {
 			else
 				Physics.Raycast(origin, direction, out hit, RayGroundRange);
 			GameObject gameObject = hit.collider.gameObject;
+			if (gameObject == null) throw new Exception($"there is no tile ground");
 			Debug.Log($"FALL ON gameObject {gameObject}");
 			return Place.BUSH;
 		}
