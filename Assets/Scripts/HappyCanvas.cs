@@ -64,7 +64,10 @@ namespace ToyTown {
 		{
 			if (unitCounterMesh != null) unitCounterMesh.text = UnitManager.Instance.UnitCount().ToString();
 			var jobCount = UnitManager.Instance.UnitCountByJobs();
-			
+			foreach (var jobAndMeshStruct in unitJobCounterMesh)
+			{
+				jobAndMeshStruct.mesh.text = jobCount[jobAndMeshStruct.job].ToString();
+			}
 		}
 	}
 }

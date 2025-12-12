@@ -382,8 +382,10 @@ namespace ToyTown
 
 		public double age = 0;
 		public double adultAge = 0;
+		public double deathAge = 0;
 		public bool spawnAdult = false;
 		public bool isAdult { get { return age > adultAge; } }
+		public bool isTooOld { get { return age > deathAge; } }
 		
 		private UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
 		private UnitActionSystem? actionSystem = null;
@@ -531,13 +533,16 @@ namespace ToyTown
 			if (!adultRender.TryGetComponent<MeshRenderer>(out var adultMesh)) Debug.LogError($"no adultMesh! {adultMesh}");
 			adultMesh.materials = new Material[] { colorMaterial };
 
-			// random age
+			// random age and death
+			float randomLater = Random.value;
+			deathAge = Math.Round(Settings.UnitDeathAgeMin + randomLater * (Settings.UnitDeathAgeMax - Settings.UnitDeathAgeMin));
+				Debug.Log($"{this} will die in {deathAge} days!");
 			if (spawnAdult)
 			{
 				GrowingUp();
 			} else
 			{
-				adultAge = Settings.UnitAdultAgeMin + Random.value * (Settings.UnitAdultAgeMax - Settings.UnitAdultAgeMin);
+				adultAge = Math.Round(Settings.UnitAdultAgeMin + randomLater * (Settings.UnitAdultAgeMax - Settings.UnitAdultAgeMin));
 				Debug.Log($"{this} will grow up in {adultAge} days!");
 			}
 		}
@@ -568,6 +573,10 @@ namespace ToyTown
 			if (!wasAdult && isAdult)
 			{
 				GrowingUp();
+			}
+			if (!isDying && isTooOld)
+			{
+				Kill();
 			}
 
 			// if walking

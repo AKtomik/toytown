@@ -14,6 +14,8 @@ public static class Settings
 	static public double UnitMaxNeedPoint = 1;
 	static public double UnitAdultAgeMin = 3;
 	static public double UnitAdultAgeMax = 6;
+	static public double UnitDeathAgeMin = 15;
+	static public double UnitDeathAgeMax = 30;
 	static public double UnitAverageSpawnByDay = 1;
 	static public double UnitVariationSpawn = 5;
 	static public double RethinkingTimeDay = .5;
