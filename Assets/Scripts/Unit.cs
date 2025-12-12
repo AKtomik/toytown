@@ -375,6 +375,11 @@ namespace ToyTown
 		public double happynessScore = .5;
 		public NeedState needStateHunger;
 		public NeedState needStateSleep;
+
+		public double age = 0;
+		public double adultAge = 0;
+		public bool spawnAdult = false;
+		public bool isAdult { get { return age > adultAge; } }
 		
 		private UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
 		private UnitActionSystem? actionSystem = null;
@@ -442,6 +447,11 @@ namespace ToyTown
 			else
 				return (UnitAction)actionPlayer;
 		}
+		
+		private void GrowingUp()
+		{
+			Debug.Log($"{this} is growing up and can work");
+		}
 
 		public bool IsHungry()
 		{
@@ -501,6 +511,17 @@ namespace ToyTown
 			childMesh.materials = new Material[] { colorMaterial };
 			if (!adultRender.TryGetComponent<MeshRenderer>(out var adultMesh)) Debug.LogError($"no adultMesh! {adultMesh}");
 			adultMesh.materials = new Material[] { colorMaterial };
+
+			// random age
+			if (spawnAdult)
+			{
+				GrowingUp();
+			} else
+			{
+				adultAge = Settings.UnitAdultAgeMin + Random.value * (Settings.UnitAdultAgeMax - Settings.UnitAdultAgeMin);
+				Debug.Log($"{this} will grow up in {adultAge} days!");
+			}
+
 			// ! test
 			SwtichJob(startingJob);
 			SwtichPlayerAction(UnitActionPlayer.WORKING);
@@ -509,6 +530,14 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
+			// growing up
+			bool wasAdult = isAdult;
+			age += Time.deltaTime * speed / Settings.DayLengthInSecond;
+			if (!wasAdult && isAdult)
+			{
+				GrowingUp();
+			}
+
 			// if walking
 			if (!hasPlaceToGo)
 			{
