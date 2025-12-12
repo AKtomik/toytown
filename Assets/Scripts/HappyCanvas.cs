@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -8,14 +9,11 @@ namespace ToyTown {
 	public class HappyCanvas : MonoBehaviour
 	{
 		[SerializeField]
-		GameObject dayCounterObject;
 		TextMeshProUGUI dayCounterMesh;
 		
 		[SerializeField]
-		GameObject BarFillMask;
 		RectMask2D BarFillRectmaskComponent;
 		[SerializeField]
-		GameObject BarGrayMask;
 		RectMask2D BarGrayRectmaskComponent;
 		[SerializeField]
 		int BarPixelStartToRight;
@@ -23,33 +21,22 @@ namespace ToyTown {
 		int BarPixelEndToRight;
 		
 		[SerializeField]
-		GameObject unitCounterObject;
-		[SerializeField]
 		TextMeshProUGUI unitCounterMesh;
 		
-		[SerializeField]
-		public struct JobTextUi
-		{
-			public UnitJob job;
-			public GameObject textObject;
-		}
+		[System.Serializable]
 		public struct JobTextMesh
 		{
 			public TextMeshProUGUI mesh;
 			public GameObject textObject;
 		}
-		JobTextUi unitJobCounterObject;
-		JobTextMesh unitJobCounterMesh;
+		[SerializeField]
+		List<JobTextMesh> unitJobCounterMesh;
 
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
 			//var components = dayCounterObject.GetComponents<Component>();
 			//Debug.Log($"Components found: {string.Join(", ", components.Select(c => c.GetType().Name))}");
-			if (!dayCounterObject.TryGetComponent(out dayCounterMesh)) Debug.LogError($"no TextMeshProFEZ component in dayCounterObject! {dayCounterObject}");
-			if (!unitCounterObject.TryGetComponent(out unitCounterMesh)) Debug.LogError($"no TextMeshProIBF component in unitCounterObject! {unitCounterObject}");
-			if (!BarFillMask.TryGetComponent(out BarFillRectmaskComponent)) Debug.LogError($"no RectMask2D component in BarFillMask! {BarFillMask}");
-			if (!BarGrayMask.TryGetComponent(out BarGrayRectmaskComponent)) Debug.LogError($"no RectMask2D component in BarGrayMask! {BarGrayMask}");
 		}
 
 		// Update is called once per frame

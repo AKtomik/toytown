@@ -2529,12 +2529,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb79693b0bb8ebd429a5bffd639cf35b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  dayCounterObject: {fileID: 3258437305997996213}
-  BarFillMask: {fileID: 2776679232655885149}
-  BarGrayMask: {fileID: 7306517392100041667}
+  dayCounterMesh: {fileID: 8593125711434030252}
+  BarFillRectmaskComponent: {fileID: 4151453371337512894}
+  BarGrayRectmaskComponent: {fileID: 932656504860539398}
   BarPixelStartToRight: 330
   BarPixelEndToRight: 50
-  unitCounterObject: {fileID: 5654128452182502321}
   unitCounterMesh: {fileID: 8619246328538755508}
 --- !u!1 &5654128452182502321
 GameObject:
