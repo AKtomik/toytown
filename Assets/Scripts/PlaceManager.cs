@@ -55,6 +55,7 @@ namespace ToyTown {
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
+			Debug.Log($"mono placeManager started");
 			Instance = this;
 			foreach (var item in PlaceEditor)
 			{
@@ -115,7 +116,7 @@ namespace ToyTown {
         public void RegisterPlace(Place place, GameObject placeObject)
         {
             PlaceDictionary[place].Add(placeObject);
-            Debug.Log($"[PlaceManager] Enregistré : {placeObject.name} comme {place}. Total: {PlaceDictionary[place].Count}");
+            Debug.Log($"[PlaceManager] Enregistrï¿½ : {placeObject.name} comme {place}. Total: {PlaceDictionary[place].Count}");
         }
 
         public void UnregisterPlace(Place place, GameObject placeObject)
