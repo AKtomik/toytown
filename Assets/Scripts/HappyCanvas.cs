@@ -26,8 +26,8 @@ namespace ToyTown {
 		[System.Serializable]
 		public struct JobTextMesh
 		{
+			public UnitJob job;
 			public TextMeshProUGUI mesh;
-			public GameObject textObject;
 		}
 		[SerializeField]
 		List<JobTextMesh> unitJobCounterMesh;
