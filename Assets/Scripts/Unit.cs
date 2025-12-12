@@ -128,9 +128,12 @@ namespace ToyTown
 				Place place = (Place)unit.GetActualJob();
 				if (!PlaceManager.Instance.ExistPlace(place, unit.transform.position))
 				{
+					unit.hasPlaceToGo = false;
 					Debug.Log($"{unit} there is no {place} to work!");
 					return;
 				}
+				unit.hasPlaceToGo = true;
+				Debug.Log($"{unit} is going to work {place} ({PlaceManager.Instance})");
 				unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
 			}
 
@@ -208,6 +211,7 @@ namespace ToyTown
 						return;
 					}
 					unit.hasPlaceToGo = true;
+					Debug.Log($"{unit} is going to place {place} ({PlaceManager.Instance})");
 					unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
 				};
 			}
@@ -526,7 +530,7 @@ namespace ToyTown
 			}
 		}
 
-		bool firstTicked = false;
+		int tickCount = 0;
 		void FirstTick()
 		{
 			
@@ -539,9 +543,9 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
-			if (!firstTicked)
+			tickCount += 1;
+			if (tickCount == 2)
 			{
-				firstTicked = true;
 				FirstTick();
 			}
 
@@ -556,9 +560,9 @@ namespace ToyTown
 			// if walking
 			if (!hasPlaceToGo)
 			{
-				return;
+				
 			}
-			if (IsWalking())
+			else if (IsWalking())
 			{
 				RigidBodyComponent.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.WalkingSpeed)));
 				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime * (float)speed);
