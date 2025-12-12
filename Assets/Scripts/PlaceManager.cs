@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Search;
 using UnityEngine;
 
@@ -51,6 +52,22 @@ namespace ToyTown {
 			{Place.LIBRARY, new()},
 			{Place.MUSEUM, new()},
 		};
+		
+		Dictionary<string, Place> GroundTagPlaceDictionary = new()
+		{
+			{"Plain", Place.BUSH},
+			{"Tree", Place.WOOD},
+			{"Rock", Place.MINE},
+			{"NO1", Place.CONSTRUCTION},
+
+			{"NO2", Place.CANTINE},
+			{"House", Place.HOUSE},
+			{"Scool", Place.SCHOOL},
+			
+			{"Farm", Place.FARM},
+			{"NO3", Place.LIBRARY},
+			{"NO4", Place.MUSEUM},
+		};
 
 		void Awake()
 		{
@@ -71,12 +88,13 @@ namespace ToyTown {
 		}
 
 		public float RayGroundRange = 100f;
+		public string GroundLayerName = "Tiles";
 		LayerMask RayGroundMask;
 		
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
-			LayerMask.GetMask("Tiles");
+			RayGroundMask = LayerMask.GetMask(GroundLayerName);
 		}
 
 		// Update is called once per frame
@@ -114,26 +132,20 @@ namespace ToyTown {
 			Physics.Raycast(origin, direction, out RaycastHit hit, RayGroundRange, RayGroundMask);
 			if (hit.collider == null) {
 				Debug.LogError($"there is no collided ground (mask {RayGroundMask.value})");
-        for (int i = 0; i < 32; i++)
-        {
-					if ((RayGroundMask.value & (1 << i)) != 0)
-					{
-						Debug.Log($"Layer {i}: {LayerMask.LayerToName(i)}");
-					}
-				}
 				return Place.POINT;
 			}
-			GameObject gameObject = hit.collider.gameObject;
-			if (gameObject == null) {
+			GameObject groundObject = hit.collider.gameObject;
+			if (groundObject == null) {
 				Debug.LogError($"there is no game ground (mask {RayGroundMask})");
 				return Place.POINT;
 			}
-			Debug.Log($"FALL ON gameObject {gameObject}");
-			if (gameObject == null) {
-				Debug.LogError($"there is no tile ground (object {gameObject} mask {RayGroundMask})");
+			Debug.Log($"FALL ON gameObject {groundObject} with tag {groundObject.tag}");
+			string groundTag = groundObject.tag;
+			if (!GroundTagPlaceDictionary.Keys.Contains(groundTag)) {
+				Debug.LogError($"there is no place corresponding to the tag [{groundTag}] (object {groundObject})");
 				return Place.POINT;
 			}
-			return Place.BUSH;
+			return GroundTagPlaceDictionary[groundTag];
 		}
 
 		public bool ExistPlace(Place place, Vector3 pos)

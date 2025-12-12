@@ -661,6 +661,47 @@ namespace ToyTown
 			isGrabed = false;
 			Place? GroundPlace = PlaceManager.Instance.GetTilePlace(transform.position);
 			if (!GroundPlace.HasValue) return;
+			Debug.Log($"Drop ON GroundPlace [{GroundPlace}]");
+			switch (GroundPlace.Value)
+			{
+
+				case Place.FARM:
+				case Place.BUSH:
+					{
+						SwtichJob(UnitJob.FARMER);
+						SwtichPlayerAction(UnitActionPlayer.WORKING);
+					} break;
+				case Place.CONSTRUCTION:
+					{
+						SwtichJob(UnitJob.BUILDER);
+						SwtichPlayerAction(UnitActionPlayer.WORKING);
+					} break;
+				case Place.WOOD:
+					{
+						SwtichJob(UnitJob.LUMBERJACK);
+						SwtichPlayerAction(UnitActionPlayer.WORKING);
+					} break;
+				case Place.MINE:
+					{
+						SwtichJob(UnitJob.MINER);
+						SwtichPlayerAction(UnitActionPlayer.WORKING);
+					} break;
+					
+				case Place.CANTINE:
+					{
+						SwtichSystemAction(UnitActionSystem.EATING);
+					} break;
+				case Place.HOUSE:
+					{
+						SwtichSystemAction(UnitActionSystem.SLEEPING);
+					} break;
+				
+				case Place.POINT:
+				default:
+					{
+						
+					} break;
+			}
 		}
 
 		void OnDrawGizmos()
