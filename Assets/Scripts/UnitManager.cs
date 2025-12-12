@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -44,6 +46,20 @@ namespace ToyTown {
 		public int UnitCount()
 		{
 			return UnitArray().Length;
+		}
+		
+		public Dictionary<UnitJob, int> UnitCountByJobs()
+		{
+			Dictionary<UnitJob, int> jobCount = new();
+			foreach (UnitJob job in Enum.GetValues(typeof(UnitJob)).Cast<UnitJob>())
+			{
+				jobCount[job] = 0;
+			}
+			foreach (Unit unit in UnitArray())
+			{
+				jobCount[unit.GetActualJob()] += 1;
+			}
+			return jobCount;
 		}
 
 		public double ComputeTotalHappyness()

@@ -42,11 +42,27 @@ namespace ToyTown {
 			}
 			
 			// happy count
+			RefreshHappyness();
+			RefreshUnitCount();
+		}
+
+		void RefreshHappyness()
+		{
 			float fillProgress = (float)(UnitManager.Instance.ComputeTotalHappyness() / Settings.RequireHappyness);
 			float grayProgress = (float)(UnitManager.Instance.UnitCount() / Settings.RequireHappyness);
 			BarFillRectmaskComponent.padding = new Vector4(0, 0, BarPixelStartToRight + (BarPixelEndToRight - BarPixelStartToRight) * fillProgress, 0);
 			BarGrayRectmaskComponent.padding = new Vector4(0, 0, BarPixelStartToRight + (BarPixelEndToRight - BarPixelStartToRight) * grayProgress, 0);
-			// BarPixelStartToRight + (BarPixelEndToRight - BarPixelStartToRight) * grayProgress
+		}
+
+		void RefreshUnitCount()
+		{
+			UnitManager.Instance.UnitCount();
+			var jobCount = UnitManager.Instance.UnitCountByJobs();
+			Debug.Log($"jobCounting");
+			foreach (UnitJob job in jobCount.Keys)
+			{
+				Debug.Log($"jobCount[{job}] = {jobCount[job]}");
+			}
 		}
 	}
 }
