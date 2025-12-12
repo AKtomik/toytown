@@ -391,6 +391,7 @@ namespace ToyTown
 		private double actionSystemDaysRemain = .0;
 		private bool hasPlaceToGo;
 		private double noPlaceRethinking = 0;
+		private bool walkingWondering;
 		private Vector3? walkingObjective = null;
 
 		public UnitJob startingJob = UnitJob.NOTHING;
@@ -412,6 +413,7 @@ namespace ToyTown
 
 		public void SwtichSystemAction(UnitActionSystem action)
 		{
+			walkingWondering = false;
 			Action.Dictionnary[(UnitAction)action].Start(this);
 			actionSystem = action;
 		}
@@ -424,6 +426,7 @@ namespace ToyTown
 		public void SwtichPlayerAction(UnitActionPlayer action)
 		{
 			EndSystemAction();//!
+			walkingWondering = false;
 			Action.Dictionnary[(UnitAction)action].Start(this);
 			actionPlayer = action;
 		}
@@ -501,7 +504,7 @@ namespace ToyTown
 		public double speed
 		{
 			get {
-				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1);
+				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1) * (walkingWondering ? .5 : 1);
 			}
 		}
 
@@ -570,14 +573,20 @@ namespace ToyTown
 			// if walking
 			if (!hasPlaceToGo)
 			{
+				// rethinking
 				noPlaceRethinking += spendTime;
 				if (noPlaceRethinking > Settings.RethinkingTimeDay)
 				{
 					noPlaceRethinking = 0;
 					ReswitchAction();
 				}
+				// wondering
+				if (!IsWalking())
+				{
+					walkingObjective = PlaceManager.Instance.RandomPlace();
+				}
 			}
-			else if (IsWalking())
+			if (IsWalking())
 			{
 				RigidBodyComponent.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.WalkingSpeed)));
 				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime * (float)speed);
@@ -645,6 +654,7 @@ namespace ToyTown
 			BoxColliderValue.enabled = false;
 			CapsuleColliderValue = GetComponent<CapsuleCollider>();
 			CapsuleColliderValue.enabled = false;
+			RigidBodyComponent = GetComponent<Rigidbody>();
 			RigidBodyComponent.useGravity = false;
 			RigidBodyComponent.isKinematic = true;
 			isGrabed = true;
@@ -656,11 +666,59 @@ namespace ToyTown
 			BoxColliderValue.enabled = true;
 			CapsuleColliderValue = GetComponent<CapsuleCollider>();
 			CapsuleColliderValue.enabled = true;
+			RigidBodyComponent = GetComponent<Rigidbody>();
 			RigidBodyComponent.useGravity = true;
 			RigidBodyComponent.isKinematic = false;
 			isGrabed = false;
+
 			Place? GroundPlace = PlaceManager.Instance.GetTilePlace(transform.position);
-			if (!GroundPlace.HasValue) return;
+			if (!GroundPlace.HasValue || GroundPlace == Place.POINT) return;
+			Debug.Log($"FALL ON Place [{GroundPlace}]");
+
+			switch (GroundPlace.Value)
+			{
+
+				case Place.FARM:
+				case Place.BUSH:
+					{
+						SwtichJob(UnitJob.FARMER);
+						SwtichPlayerAction(UnitActionPlayer.WORKING);
+					} break;
+				case Place.CONSTRUCTION:
+					{
+						SwtichJob(UnitJob.BUILDER);
+						SwtichPlayerAction(UnitActionPlayer.WORKING);
+					} break;
+				case Place.WOOD:
+					{
+						SwtichJob(UnitJob.LUMBERJACK);
+						SwtichPlayerAction(UnitActionPlayer.WORKING);
+					} break;
+				case Place.MINE:
+					{
+						SwtichJob(UnitJob.MINER);
+						SwtichPlayerAction(UnitActionPlayer.WORKING);
+					} break;
+					
+				case Place.CANTINE:
+					{
+						SwtichSystemAction(UnitActionSystem.EATING);
+					} break;
+				case Place.HOUSE:
+					{
+						SwtichSystemAction(UnitActionSystem.SLEEPING);
+					} break;
+					
+				case Place.SCHOOL:
+					{
+						//SwtichSystemAction(UnitActionSystem.SLEEPING);
+					} break;
+				
+				default:
+					{
+						
+					} break;
+			}
 		}
 
 		void OnDrawGizmos()

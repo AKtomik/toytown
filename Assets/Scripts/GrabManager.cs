@@ -13,6 +13,7 @@ namespace ToyTown {
 		RaycastHit? MouseHitedPoint()
 		{
 			Vector2 mousePos = inputMousePosition.action.ReadValue<Vector2>();
+			if (!Camera.main) return null;
 			Ray ray = Camera.main.ScreenPointToRay(mousePos);
 			if (Physics.Raycast(ray, out RaycastHit hit))
 			{
@@ -28,7 +29,7 @@ namespace ToyTown {
 
 		void OnClick(InputAction.CallbackContext callbackContext)
 		{
-			Debug.Log("click");
+			//Debug.Log("click");
 			GameObject hitedObject = MouseHitedObject();
 			if (hitedObject == null) return;
 			if (!hitedObject.TryGetComponent<Unit>(out var unit)) return;
@@ -38,7 +39,7 @@ namespace ToyTown {
 
 		void OnRelease(InputAction.CallbackContext callbackContext)
 		{
-			Debug.Log("release");
+			//Debug.Log("release");
 			if (IsDrag())
 			{
 				DisableDrag();
