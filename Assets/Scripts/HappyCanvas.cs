@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -6,12 +8,13 @@ namespace ToyTown {
 	{
 		[SerializeField]
 		GameObject dayCounterObject;
-		TextMesh dayCounterMesh;
+		TextMeshProUGUI dayCounterMesh;
 
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
-			//Debug.Log($"{typeof(dayCounterObject)} {GetComponents(dayCounterObject)}");
+			//var components = dayCounterObject.GetComponents<Component>();
+			//Debug.Log($"Components found: {string.Join(", ", components.Select(c => c.GetType().Name))}");
 			if (!dayCounterObject.TryGetComponent(out dayCounterMesh)) Debug.LogError($"no TextMeshPro component! {dayCounterObject}");;
 		}
 
@@ -20,7 +23,7 @@ namespace ToyTown {
 		{
 			if (dayCounterMesh != null)
 			{
-				dayCounterMesh.text = $"Day {SunManager.Instance.DayAmount}";
+				dayCounterMesh.text = $"Day {Math.Round(SunManager.Instance.DayAmount)}";
 			}
 		}
 	}
