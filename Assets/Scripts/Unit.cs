@@ -450,6 +450,9 @@ namespace ToyTown
 		
 		private void GrowingUp()
 		{
+			childRender.gameObject.SetActive(false);
+			ToolObject.gameObject.SetActive(true);
+			adultRender.gameObject.SetActive(true);
 			Debug.Log($"{this} is growing up and can work");
 		}
 
