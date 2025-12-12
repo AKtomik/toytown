@@ -524,7 +524,12 @@ namespace ToyTown
 				adultAge = Settings.UnitAdultAgeMin + Random.value * (Settings.UnitAdultAgeMax - Settings.UnitAdultAgeMin);
 				Debug.Log($"{this} will grow up in {adultAge} days!");
 			}
+		}
 
+		bool firstTicked = false;
+		void FirstTick()
+		{
+			
 			// ! test
 			Debug.Log($"switch job to startingJob {startingJob}");
 			SwtichJob(startingJob);
@@ -534,6 +539,12 @@ namespace ToyTown
 		// Update is called once per frame
 		void Update()
 		{
+			if (!firstTicked)
+			{
+				firstTicked = true;
+				FirstTick();
+			}
+
 			// growing up
 			bool wasAdult = isAdult;
 			age += Time.deltaTime * speed / Settings.DayLengthInSecond;
