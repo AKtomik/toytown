@@ -52,15 +52,28 @@ namespace ToyTown {
 			{Place.MUSEUM, new()},
 		};
 
-		// Start is called once before the first execution of Update after the MonoBehaviour is created
-		void Start()
+        void Awake()
+        {
+            Debug.Log($"mono placeManager awaked");
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+
+            // Vous pouvez laisser l'ajout PlaceEditor dans Awake ou Start, 
+            // mais si des PlaceInstance en Start ont besoin des données Editor, laissez-le ici.
+            foreach (var item in PlaceEditor)
+            {
+                PlaceDictionary[item.place].Add(item.gameObject);
+            }
+        }
+
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
 		{
-			Debug.Log($"mono placeManager started");
-			Instance = this;
-			foreach (var item in PlaceEditor)
-			{
-				PlaceDictionary[item.place].Add(item.gameObject);
-			}
+
 		}
 
 		// Update is called once per frame

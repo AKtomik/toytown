@@ -18,7 +18,7 @@ public static class Settings
 	static public double UnitVariationSpawn = 5;
 	static public double RethinkingTimeDay = .5;
 	
-	static public double WalkingNearObjectiveDistance = 0;
+	static public double WalkingNearObjectiveDistance = 0.5;
 	static public double WalkingSpeed = 1;
 
 	static public double RequireHappyness = 20;
