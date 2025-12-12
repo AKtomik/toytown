@@ -165,13 +165,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2dd9287d63baaab47be9188dee5b7464, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7845084604604502087}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2dd9287d63baaab47be9188dee5b7464, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 982300270838611392}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2dd9287d63baaab47be9188dee5b7464, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4470934846460378144}
+      addedObject: {fileID: -6782201656612510079}
   m_SourcePrefab: {fileID: 100100000, guid: 2dd9287d63baaab47be9188dee5b7464, type: 3}
 --- !u!4 &452190518313115751 stripped
 Transform:
@@ -183,7 +177,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2dd9287d63baaab47be9188dee5b7464, type: 3}
   m_PrefabInstance: {fileID: 1318458406645321007}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7845084604604502087
+--- !u!114 &-6782201656612510079
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -192,54 +186,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2201542505516101758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a332fabf16f2c5a4db32d244a504bf4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d7e368735635ed47b0f25a8c15836d4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Tile
---- !u!65 &982300270838611392
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2201542505516101758}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 5.2123523, y: 0.682486, z: 5.9002934}
-  m_Center: {x: 0.031751297, y: 0.010583759, z: -0.015877025}
---- !u!54 &4470934846460378144
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2201542505516101758}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_EditorClassIdentifier: Assembly-CSharp::ToyTown.PlaceInstance
+  placeType: 3

@@ -109,7 +109,18 @@ namespace ToyTown {
 
 		public bool ExistPlace(Place place, Vector3 pos)
 		{
-			return PlaceDictionary[place].Count == 0;
-		}
-	}
+            return PlaceDictionary.ContainsKey(place) && PlaceDictionary[place].Count > 0;
+        }
+
+        public void RegisterPlace(Place place, GameObject placeObject)
+        {
+            PlaceDictionary[place].Add(placeObject);
+            Debug.Log($"[PlaceManager] Enregistré : {placeObject.name} comme {place}. Total: {PlaceDictionary[place].Count}");
+        }
+
+        public void UnregisterPlace(Place place, GameObject placeObject)
+        {
+			bool removed = PlaceDictionary[place].Remove(placeObject);
+        }
+    }
 }
