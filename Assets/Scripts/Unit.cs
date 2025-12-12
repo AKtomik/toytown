@@ -542,7 +542,7 @@ namespace ToyTown
 		void Update()
 		{
 			tickCount += 1;
-			if (tickCount == 3)
+			if (tickCount == 2)
 			{
 				FirstTick();
 			}
