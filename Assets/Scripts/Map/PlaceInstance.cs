@@ -9,7 +9,6 @@ namespace ToyTown
 
         void Start()
         {
-            // Vérifie si le manager existe et s'enregistre
             if (PlaceManager.Instance != null)
             {
                 PlaceManager.Instance.RegisterPlace(placeType, gameObject);
