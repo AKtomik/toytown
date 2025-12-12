@@ -391,6 +391,7 @@ namespace ToyTown
 		private double actionSystemDaysRemain = .0;
 		private bool hasPlaceToGo;
 		private double noPlaceRethinking = 0;
+		private bool walkingWondering;
 		private Vector3? walkingObjective = null;
 
 		public UnitJob startingJob = UnitJob.NOTHING;
@@ -412,6 +413,7 @@ namespace ToyTown
 
 		public void SwtichSystemAction(UnitActionSystem action)
 		{
+			walkingWondering = false;
 			Action.Dictionnary[(UnitAction)action].Start(this);
 			actionSystem = action;
 		}
@@ -424,6 +426,7 @@ namespace ToyTown
 		public void SwtichPlayerAction(UnitActionPlayer action)
 		{
 			EndSystemAction();//!
+			walkingWondering = false;
 			Action.Dictionnary[(UnitAction)action].Start(this);
 			actionPlayer = action;
 		}
@@ -501,7 +504,7 @@ namespace ToyTown
 		public double speed
 		{
 			get {
-				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1);
+				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1) * (walkingWondering ? .5 : 1);
 			}
 		}
 
@@ -570,14 +573,20 @@ namespace ToyTown
 			// if walking
 			if (!hasPlaceToGo)
 			{
+				// rethinking
 				noPlaceRethinking += spendTime;
 				if (noPlaceRethinking > Settings.RethinkingTimeDay)
 				{
 					noPlaceRethinking = 0;
 					ReswitchAction();
 				}
+				// wondering
+				if (!IsWalking())
+				{
+					walkingObjective = PlaceManager.Instance.RandomPlace();
+				}
 			}
-			else if (IsWalking())
+			if (IsWalking())
 			{
 				RigidBodyComponent.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.WalkingSpeed)));
 				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime * (float)speed);

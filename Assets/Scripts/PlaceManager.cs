@@ -156,6 +156,15 @@ namespace ToyTown {
 			return PlaceDictionary.ContainsKey(place) && PlaceDictionary[place].Count > 0;
 		}
 
+		public Vector3 RandomPlace()
+		{
+			List<GameObject> placeList = new();
+			foreach (Place place in PlaceDictionary.Keys)
+				foreach (GameObject placeObject in PlaceDictionary[place])
+					placeList.Add(placeObject);
+			return placeList[UnityEngine.Random.Range(0, placeList.Count)].transform.position;
+		}
+
 		public void RegisterPlace(Place place, GameObject placeObject)
 		{
 			PlaceDictionary[place].Add(placeObject);

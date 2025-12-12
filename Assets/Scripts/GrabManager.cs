@@ -13,6 +13,7 @@ namespace ToyTown {
 		RaycastHit? MouseHitedPoint()
 		{
 			Vector2 mousePos = inputMousePosition.action.ReadValue<Vector2>();
+			if (!Camera.main) return null;
 			Ray ray = Camera.main.ScreenPointToRay(mousePos);
 			if (Physics.Raycast(ray, out RaycastHit hit))
 			{
