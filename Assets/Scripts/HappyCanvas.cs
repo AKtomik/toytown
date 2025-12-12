@@ -32,6 +32,14 @@ namespace ToyTown {
 		[SerializeField]
 		List<JobTextMesh> unitJobCounterMesh;
 
+		[SerializeField]
+		GameObject oneFullSection;
+		[SerializeField]
+		TextMeshProUGUI oneText;
+		[SerializeField]
+		GameObject oneJobsSection;
+		
+
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
@@ -50,6 +58,9 @@ namespace ToyTown {
 
 			// unit count
 			RefreshUnitCount();
+
+			// show unit
+			RefreshUnitSelect();
 		}
 
 		void RefreshHappyness()
@@ -68,6 +79,35 @@ namespace ToyTown {
 			{
 				jobAndMeshStruct.mesh.text = jobCount[jobAndMeshStruct.job].ToString();
 			}
+		}
+		string Capitalize(string input)
+		{
+			return char.ToUpper(input[0]) + input[1..].ToLower();
+		}
+		void RefreshUnitSelect()
+		{
+			Unit unit = GrabManager.Instance.lastGrabed;
+			if (unit == null)
+			{
+				oneFullSection.SetActive(false);
+				return;
+			}
+			oneFullSection.SetActive(true);
+			
+			if (unit.isAdult)
+				oneText.text = $"is a {Capitalize(unit.GetActualJob().ToString())} and is {Capitalize(unit.GetActualAction().ToString())}";
+			else
+				oneText.text = $"is a child";
+			int dayAge = (int)Math.Floor(unit.age);
+			oneText.text += $"\nis born since {dayAge} {(dayAge > 1 ? "days" : "day")}";
+
+			
+			if (!unit.IsWaitingLearningJob())
+			{
+				oneJobsSection.SetActive(false);
+				return;
+			}
+			oneJobsSection.SetActive(true);
 		}
 	}
 }

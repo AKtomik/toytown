@@ -5,11 +5,14 @@ using UnityEngine.InputSystem;
 namespace ToyTown {
 	public class GrabManager : MonoBehaviour
 	{
+		public static GrabManager Instance { get; private set; }
+
 		public InputActionReference inputMouseClickPick;
 		public InputActionReference inputMouseClickRelease;
 		public InputActionReference inputMousePosition;
 		public float YgrabPos = .5f;
 		public bool canTakeMultiples = false;
+		public Unit lastGrabed;
 
 		RaycastHit? MouseHitedPoint()
 		{
@@ -45,6 +48,9 @@ namespace ToyTown {
 			if (IsDrag())
 			{
 				DisableDrag();
+			} else
+			{
+				lastGrabed = null;
 			}
 		}
 
@@ -65,6 +71,7 @@ namespace ToyTown {
 		void EnableDrag(Unit[] units)
 		{
 			DragedUnit = units;
+			lastGrabed = units[0];
 			foreach (Unit unit in units)
 			{
 				unit.Grab();
@@ -85,7 +92,8 @@ namespace ToyTown {
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
-			Debug.Log($"grabManager started");
+			Debug.Log($"mono grabManager started");
+			Instance = this;
 			inputMousePosition.action.Enable();
 			inputMouseClickPick.action.Enable();
 			inputMouseClickRelease.action.Enable();

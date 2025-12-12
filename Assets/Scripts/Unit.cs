@@ -233,6 +233,7 @@ namespace ToyTown
 			
 			public static ActionUpdateReturn Learn(Unit unit, float delta)
 			{
+				if (unit.learningJob == UnitJob.NOTHING) return ActionUpdateReturn.CONTINUE;
 				unit.learningRemainDay -= delta / Settings.DayLengthInSecond;
 				if (unit.learningRemainDay <= 0)
 				{
@@ -475,6 +476,17 @@ namespace ToyTown
 			else
 				return (UnitAction)actionPlayer;
 		}
+
+		public bool IsWaitingLearningJob()
+		{
+			return GetActualAction() == UnitAction.LEARNING && learningJob == UnitJob.NOTHING;
+		}
+		
+		public void SelectLearningJob(UnitJob job)
+		{
+			learningJob = job;
+		}
+
 		
 		private void GrowingUp()
 		{
@@ -732,7 +744,7 @@ namespace ToyTown
 					
 				case Place.SCHOOL:
 					{
-						//SwtichSystemAction(UnitActionSystem.SLEEPING);
+						StartLearning(UnitJob.NOTHING);
 					} break;
 				
 				default:
