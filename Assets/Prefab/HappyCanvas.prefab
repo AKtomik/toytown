@@ -2535,6 +2535,7 @@ MonoBehaviour:
   BarPixelStartToRight: 330
   BarPixelEndToRight: 50
   unitCounterObject: {fileID: 5654128452182502321}
+  unitCounterMesh: {fileID: 8619246328538755508}
 --- !u!1 &5654128452182502321
 GameObject:
   m_ObjectHideFlags: 0

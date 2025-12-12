@@ -24,7 +24,22 @@ namespace ToyTown {
 		
 		[SerializeField]
 		GameObject unitCounterObject;
+		[SerializeField]
 		TextMeshProUGUI unitCounterMesh;
+		
+		[SerializeField]
+		public struct JobTextUi
+		{
+			public UnitJob job;
+			public GameObject textObject;
+		}
+		public struct JobTextMesh
+		{
+			public TextMeshProUGUI mesh;
+			public GameObject textObject;
+		}
+		JobTextUi unitJobCounterObject;
+		JobTextMesh unitJobCounterMesh;
 
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
@@ -62,7 +77,7 @@ namespace ToyTown {
 		{
 			if (unitCounterMesh != null) unitCounterMesh.text = UnitManager.Instance.UnitCount().ToString();
 			var jobCount = UnitManager.Instance.UnitCountByJobs();
-
+			
 		}
 	}
 }
