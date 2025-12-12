@@ -9,6 +9,7 @@ namespace ToyTown {
 		public InputActionReference inputMouseClickRelease;
 		public InputActionReference inputMousePosition;
 		public float YgrabPos = .5f;
+		public bool canTakeMultiples = false;
 
 		RaycastHit? MouseHitedPoint()
 		{
@@ -30,6 +31,7 @@ namespace ToyTown {
 		void OnClick(InputAction.CallbackContext callbackContext)
 		{
 			//Debug.Log("click");
+			if (IsDrag() && !canTakeMultiples) return;
 			GameObject hitedObject = MouseHitedObject();
 			if (hitedObject == null) return;
 			if (!hitedObject.TryGetComponent<Unit>(out var unit)) return;
@@ -63,7 +65,7 @@ namespace ToyTown {
 		void EnableDrag(Unit[] units)
 		{
 			DragedUnit = units;
-			foreach (Unit unit in Draged())
+			foreach (Unit unit in units)
 			{
 				unit.Grab();
 			}
