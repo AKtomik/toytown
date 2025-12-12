@@ -531,10 +531,10 @@ namespace ToyTown
 		}
 
 		int tickCount = 0;
+		public int selfCount = 0;
 		void FirstTick()
 		{
-			
-			// ! test
+			selfCount++;
 			Debug.Log($"switch job to startingJob {startingJob}");
 			SwtichJob(startingJob);
 			SwtichPlayerAction(UnitActionPlayer.WORKING);
