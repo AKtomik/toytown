@@ -177,6 +177,7 @@ public class BuildingGeneration : MonoBehaviour
 
     private IEnumerator ConstructionRoutine(Tile targetTile, GameObject buildingInstance, BuildingData data)
     {
+        targetTile.tag = "ToBuild";
         Debug.Log($"En attente du BUILDER sur la tuile {targetTile.name} pour {data.buildingName}");
 
         // Attente du builder (nécessite que Tile.cs ait IsBuilderPresent)
@@ -191,6 +192,7 @@ public class BuildingGeneration : MonoBehaviour
 
         Debug.Log($"Construction de {data.buildingName} terminée !");
         FinalizeConstruction(buildingInstance, data);
+        targetTile.tag = data.buildingName;
     }
 
     public void FinalizeConstruction(GameObject buildingInstance, BuildingData data)
