@@ -52,26 +52,26 @@ namespace ToyTown {
 			{Place.MUSEUM, new()},
 		};
 
-        void Awake()
-        {
-            Debug.Log($"mono placeManager awaked");
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            Instance = this;
+		void Awake()
+		{
+			Debug.Log($"mono placeManager awaked");
+			if (Instance != null && Instance != this)
+			{
+				Destroy(gameObject);
+				return;
+			}
+			Instance = this;
 
-            // Vous pouvez laisser l'ajout PlaceEditor dans Awake ou Start, 
-            // mais si des PlaceInstance en Start ont besoin des données Editor, laissez-le ici.
-            foreach (var item in PlaceEditor)
-            {
-                PlaceDictionary[item.place].Add(item.gameObject);
-            }
-        }
+			// Vous pouvez laisser l'ajout PlaceEditor dans Awake ou Start, 
+			// mais si des PlaceInstance en Start ont besoin des données Editor, laissez-le ici.
+			foreach (var item in PlaceEditor)
+			{
+				PlaceDictionary[item.place].Add(item.gameObject);
+			}
+		}
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+		// Start is called once before the first execution of Update after the MonoBehaviour is created
+		void Start()
 		{
 
 		}
@@ -123,18 +123,18 @@ namespace ToyTown {
 
 		public bool ExistPlace(Place place, Vector3 pos)
 		{
-            return PlaceDictionary.ContainsKey(place) && PlaceDictionary[place].Count > 0;
-        }
+			return PlaceDictionary.ContainsKey(place) && PlaceDictionary[place].Count > 0;
+		}
 
-        public void RegisterPlace(Place place, GameObject placeObject)
-        {
-            PlaceDictionary[place].Add(placeObject);
-            Debug.Log($"[PlaceManager] Enregistr� : {placeObject.name} comme {place}. Total: {PlaceDictionary[place].Count}");
-        }
+		public void RegisterPlace(Place place, GameObject placeObject)
+		{
+			PlaceDictionary[place].Add(placeObject);
+			Debug.Log($"[PlaceManager] Enregistr� : {placeObject.name} comme {place}. Total: {PlaceDictionary[place].Count}");
+		}
 
-        public void UnregisterPlace(Place place, GameObject placeObject)
-        {
+		public void UnregisterPlace(Place place, GameObject placeObject)
+		{
 			bool removed = PlaceDictionary[place].Remove(placeObject);
-        }
-    }
+		}
+	}
 }
