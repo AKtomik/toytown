@@ -55,10 +55,12 @@ namespace ToyTown {
 		
 		Dictionary<string, Place> GroundTagPlaceDictionary = new()
 		{
-			{"Plain", Place.BUSH},
+			{"Plain", Place.POINT},
+
+			{"Bush", Place.BUSH},
 			{"Tree", Place.WOOD},
 			{"Rock", Place.MINE},
-			{"NO1", Place.CONSTRUCTION},
+			{"ToBuild", Place.CONSTRUCTION},
 
 			{"NO2", Place.CANTINE},
 			{"House", Place.HOUSE},
@@ -87,13 +89,14 @@ namespace ToyTown {
 			}
 		}
 
-		public float RayGroundRange = 100f;
+		public float RayGroundRange = 1000f;
 		public string GroundLayerName = "Tiles";
 		LayerMask RayGroundMask;
 		
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
+			Debug.Log($"mono placeManager started");
 			RayGroundMask = LayerMask.GetMask(GroundLayerName);
 		}
 
@@ -126,20 +129,20 @@ namespace ToyTown {
 
 		public Place? GetTilePlace(Vector3 pos)
 		{
-			Vector3 origin = pos + Vector3.up * .5f;
+			Vector3 origin = pos + Vector3.up * 10f;
 			Vector3 direction = Vector3.down;
 
-			Physics.Raycast(origin, direction, out RaycastHit hit, RayGroundRange, RayGroundMask);
+			Physics.Raycast(origin, direction, out RaycastHit hit, RayGroundRange + 10f, RayGroundMask);
 			if (hit.collider == null) {
-				Debug.LogError($"there is no collided ground (mask {RayGroundMask.value})");
+				Debug.LogError($"there is no collided ground (mask {RayGroundMask.value}={GroundLayerName})");
 				return Place.POINT;
 			}
 			GameObject groundObject = hit.collider.gameObject;
 			if (groundObject == null) {
-				Debug.LogError($"there is no game ground (mask {RayGroundMask})");
+				Debug.LogError($"there is no game ground (mask {RayGroundMask}={GroundLayerName})");
 				return Place.POINT;
 			}
-			Debug.Log($"FALL ON gameObject {groundObject} with tag {groundObject.tag}");
+			Debug.Log($"FALL ON tag [{groundObject.tag}]");
 			string groundTag = groundObject.tag;
 			if (!GroundTagPlaceDictionary.Keys.Contains(groundTag)) {
 				Debug.LogError($"there is no place corresponding to the tag [{groundTag}] (object {groundObject})");

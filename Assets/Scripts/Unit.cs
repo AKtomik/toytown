@@ -645,6 +645,7 @@ namespace ToyTown
 			BoxColliderValue.enabled = false;
 			CapsuleColliderValue = GetComponent<CapsuleCollider>();
 			CapsuleColliderValue.enabled = false;
+			RigidBodyComponent = GetComponent<Rigidbody>();
 			RigidBodyComponent.useGravity = false;
 			RigidBodyComponent.isKinematic = true;
 			isGrabed = true;
@@ -656,12 +657,15 @@ namespace ToyTown
 			BoxColliderValue.enabled = true;
 			CapsuleColliderValue = GetComponent<CapsuleCollider>();
 			CapsuleColliderValue.enabled = true;
+			RigidBodyComponent = GetComponent<Rigidbody>();
 			RigidBodyComponent.useGravity = true;
 			RigidBodyComponent.isKinematic = false;
 			isGrabed = false;
+
 			Place? GroundPlace = PlaceManager.Instance.GetTilePlace(transform.position);
-			if (!GroundPlace.HasValue) return;
-			Debug.Log($"Drop ON GroundPlace [{GroundPlace}]");
+			if (!GroundPlace.HasValue || GroundPlace == Place.POINT) return;
+			Debug.Log($"FALL ON Place [{GroundPlace}]");
+
 			switch (GroundPlace.Value)
 			{
 
@@ -695,8 +699,12 @@ namespace ToyTown
 					{
 						SwtichSystemAction(UnitActionSystem.SLEEPING);
 					} break;
+					
+				case Place.SCHOOL:
+					{
+						//SwtichSystemAction(UnitActionSystem.SLEEPING);
+					} break;
 				
-				case Place.POINT:
 				default:
 					{
 						
