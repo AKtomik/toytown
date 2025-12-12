@@ -233,6 +233,7 @@ namespace ToyTown
 			
 			public static ActionUpdateReturn Learn(Unit unit, float delta)
 			{
+				if (unit.learningJob == UnitJob.NOTHING) return ActionUpdateReturn.CONTINUE;
 				unit.learningRemainDay -= delta / Settings.DayLengthInSecond;
 				if (unit.learningRemainDay <= 0)
 				{
@@ -382,8 +383,10 @@ namespace ToyTown
 
 		public double age = 0;
 		public double adultAge = 0;
+		public double deathAge = 0;
 		public bool spawnAdult = false;
 		public bool isAdult { get { return age > adultAge; } }
+		public bool isTooOld { get { return age > deathAge; } }
 		
 		private UnitActionPlayer actionPlayer = UnitActionPlayer.WANDERING;
 		private UnitActionSystem? actionSystem = null;
@@ -441,12 +444,22 @@ namespace ToyTown
 		
 		public void StartLearning(UnitJob job)
 		{
+			if (!isAdult && !Settings.ChildLearnable && job != UnitJob.NOTHING)
+			{
+				Debug.Log($"{this} cant learn");	
+				return;
+			}
 			learningJob = job;
 			SwtichPlayerAction(UnitActionPlayer.LEARNING);
 		}
 		
 		public void SwtichJob(UnitJob job)
 		{
+			if (!isAdult && !Settings.ChildLabour && job != UnitJob.NOTHING)
+			{
+				Debug.Log($"{this} cant work bcs is a child");	
+				return;
+			}
 			actualJob = job;
 			ActionStartBuilder.JobSwitch(this);
 		}
@@ -463,6 +476,17 @@ namespace ToyTown
 			else
 				return (UnitAction)actionPlayer;
 		}
+
+		public bool IsWaitingLearningJob()
+		{
+			return GetActualAction() == UnitAction.LEARNING && learningJob == UnitJob.NOTHING;
+		}
+		
+		public void SelectLearningJob(UnitJob job)
+		{
+			learningJob = job;
+		}
+
 		
 		private void GrowingUp()
 		{
@@ -531,13 +555,18 @@ namespace ToyTown
 			if (!adultRender.TryGetComponent<MeshRenderer>(out var adultMesh)) Debug.LogError($"no adultMesh! {adultMesh}");
 			adultMesh.materials = new Material[] { colorMaterial };
 
-			// random age
+			// random age and death
+			float randomLater = Random.value;
+			deathAge = Math.Round(Settings.UnitDeathAgeMin + randomLater * (Settings.UnitDeathAgeMax - Settings.UnitDeathAgeMin));
+				Debug.Log($"{this} will die in {deathAge} days!");
 			if (spawnAdult)
 			{
 				GrowingUp();
 			} else
 			{
-				adultAge = Settings.UnitAdultAgeMin + Random.value * (Settings.UnitAdultAgeMax - Settings.UnitAdultAgeMin);
+				SwtichJob(UnitJob.NOTHING);
+				SwtichPlayerAction(UnitActionPlayer.WANDERING);
+				adultAge = Math.Round(Settings.UnitAdultAgeMin + randomLater * (Settings.UnitAdultAgeMax - Settings.UnitAdultAgeMin));
 				Debug.Log($"{this} will grow up in {adultAge} days!");
 			}
 		}
@@ -568,6 +597,10 @@ namespace ToyTown
 			if (!wasAdult && isAdult)
 			{
 				GrowingUp();
+			}
+			if (!isDying && isTooOld)
+			{
+				Kill();
 			}
 
 			// if walking
@@ -711,7 +744,7 @@ namespace ToyTown
 					
 				case Place.SCHOOL:
 					{
-						//SwtichSystemAction(UnitActionSystem.SLEEPING);
+						StartLearning(UnitJob.NOTHING);
 					} break;
 				
 				default:

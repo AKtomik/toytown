@@ -638,7 +638,7 @@ GameObject:
   - component: {fileID: 7568752761456302824}
   - component: {fileID: 2205155546467129288}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: JobChoicePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
