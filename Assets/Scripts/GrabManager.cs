@@ -82,6 +82,7 @@ namespace ToyTown {
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
+			Debug.Log($"grabManager started");
 			inputMousePosition.action.Enable();
 			inputMouseClickPick.action.Enable();
 			inputMouseClickRelease.action.Enable();

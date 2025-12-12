@@ -15,6 +15,7 @@ namespace ToyTown {
 		void Start()
 		{
 			Instance = this;
+			Debug.Log($"mono unitManager started");
 			if (unitPrefab == null) throw new Exception($"unitPrefab is not defined, assign it in the unity editor in UnitManager!");
 			Instantiate(unitPrefab, transform.position, transform.rotation);
 		}
