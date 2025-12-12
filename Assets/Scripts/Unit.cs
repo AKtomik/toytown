@@ -431,8 +431,8 @@ namespace ToyTown
 		
 		public void SwtichJob(UnitJob job)
 		{
-			ActionStartBuilder.JobSwitch(this);
 			actualJob = job;
+			ActionStartBuilder.JobSwitch(this);
 		}
 
 		public UnitJob GetActualJob()
@@ -523,6 +523,7 @@ namespace ToyTown
 			}
 
 			// ! test
+			Debug.Log($"switch job to startingJob {startingJob}");
 			SwtichJob(startingJob);
 			SwtichPlayerAction(UnitActionPlayer.WORKING);
 		}

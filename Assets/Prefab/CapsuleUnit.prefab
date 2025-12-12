@@ -66,8 +66,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
-  m_Height: 8
+  m_Radius: 1
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5205281633525069285
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83761d1968927a040a3964808780512a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  ToolObject: {fileID: 0}
+  ToolObject: {fileID: 8826972714539832773}
   childRender: {fileID: 959170811453921421}
   adultRender: {fileID: 164443332669608061}
   UnitMaterials:
@@ -152,10 +152,10 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 4, z: 2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 4, y: 8, z: 4}
+  m_Center: {x: 0, y: 3, z: 0}
 --- !u!1001 &1551962823776963833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -362,5 +362,10 @@ PrefabInstance:
 --- !u!4 &7652909024641920682 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d2a65edf7a7119c49b4e6f3f51becb62, type: 3}
+  m_PrefabInstance: {fileID: 7907794603704895809}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8826972714539832773 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: d2a65edf7a7119c49b4e6f3f51becb62, type: 3}
   m_PrefabInstance: {fileID: 7907794603704895809}
   m_PrefabAsset: {fileID: 0}
