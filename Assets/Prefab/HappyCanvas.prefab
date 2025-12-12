@@ -2534,6 +2534,7 @@ MonoBehaviour:
   BarGrayMask: {fileID: 7306517392100041667}
   BarPixelStartToRight: 330
   BarPixelEndToRight: 50
+  unitCounterObject: {fileID: 5654128452182502321}
 --- !u!1 &5654128452182502321
 GameObject:
   m_ObjectHideFlags: 0

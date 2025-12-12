@@ -21,13 +21,18 @@ namespace ToyTown {
 		int BarPixelStartToRight;
 		[SerializeField]
 		int BarPixelEndToRight;
+		
+		[SerializeField]
+		GameObject unitCounterObject;
+		TextMeshProUGUI unitCounterMesh;
 
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
 			//var components = dayCounterObject.GetComponents<Component>();
 			//Debug.Log($"Components found: {string.Join(", ", components.Select(c => c.GetType().Name))}");
-			if (!dayCounterObject.TryGetComponent(out dayCounterMesh)) Debug.LogError($"no TextMeshPro component in dayCounterObject! {dayCounterObject}");
+			if (!dayCounterObject.TryGetComponent(out dayCounterMesh)) Debug.LogError($"no TextMeshProFEZ component in dayCounterObject! {dayCounterObject}");
+			if (!unitCounterObject.TryGetComponent(out unitCounterMesh)) Debug.LogError($"no TextMeshProIBF component in unitCounterObject! {unitCounterObject}");
 			if (!BarFillMask.TryGetComponent(out BarFillRectmaskComponent)) Debug.LogError($"no RectMask2D component in BarFillMask! {BarFillMask}");
 			if (!BarGrayMask.TryGetComponent(out BarGrayRectmaskComponent)) Debug.LogError($"no RectMask2D component in BarGrayMask! {BarGrayMask}");
 		}
@@ -36,13 +41,12 @@ namespace ToyTown {
 		void Update()
 		{
 			// day count
-			if (dayCounterMesh != null)
-			{
-				dayCounterMesh.text = $"Day {Math.Round(SunManager.Instance.DayAmount)}";
-			}
+			if (dayCounterMesh != null) dayCounterMesh.text = $"{(SunManager.Instance.IsDay ? "Day" : "Night")} {Math.Round(SunManager.Instance.DayAmount)}";
 			
 			// happy count
 			RefreshHappyness();
+
+			// unit count
 			RefreshUnitCount();
 		}
 
@@ -56,13 +60,9 @@ namespace ToyTown {
 
 		void RefreshUnitCount()
 		{
-			UnitManager.Instance.UnitCount();
+			if (unitCounterMesh != null) unitCounterMesh.text = UnitManager.Instance.UnitCount().ToString();
 			var jobCount = UnitManager.Instance.UnitCountByJobs();
-			Debug.Log($"jobCounting");
-			foreach (UnitJob job in jobCount.Keys)
-			{
-				Debug.Log($"jobCount[{job}] = {jobCount[job]}");
-			}
+
 		}
 	}
 }

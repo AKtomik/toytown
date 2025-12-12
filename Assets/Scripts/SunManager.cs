@@ -21,6 +21,14 @@ namespace ToyTown
 			{
 				return DayAmount % 1;
 			}
+		}
+
+		public bool IsDay
+		{
+			get
+			{
+				return Today < .5;
+			}
 			private set {}
 		}
 
