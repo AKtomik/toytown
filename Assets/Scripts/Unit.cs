@@ -638,13 +638,13 @@ namespace ToyTown
 			return wasWalking;
 		}
 		
-		static public NeedState CalculateNeedState(double score)
+		static public NeedState CalculateNeedState(double score, bool isHour = false)
 		{
 			if (!(score > Settings.UnitNeedPointMortal))
 				return NeedState.MORTAL;
 			else if (!(score > Settings.UnitNeedPointDesperation))
 				return NeedState.DESPERATION;
-			else if (!(score > Settings.UnitNeedPointNeeded))
+			else if (!(score > (isHour ? Settings.UnitNeedPointNeededHour : Settings.UnitNeedPointNeeded)))
 				return NeedState.NEEDED;
 			else if (!(score < Settings.UnitMaxNeedPoint))
 				return NeedState.BEST;
@@ -799,14 +799,16 @@ namespace ToyTown
 				miningAnimationProgress = 0;
 			}
 
-			NeedState sleepNeed = CalculateNeedState(energyScore);
+			bool isSleepHour = Settings.UnitNeedSleepHourMin > SunManager.Instance.Today && Settings.UnitNeedSleepHourMax < SunManager.Instance.Today;
+			NeedState sleepNeed = CalculateNeedState(energyScore, isSleepHour);
 			if (sleepNeed != needStateSleep)
 			{
 				EnterSleepState[sleepNeed](this);
 				needStateSleep = sleepNeed;
 			}
 
-			NeedState hungerNeed = CalculateNeedState(saturationScore);
+			bool isEatHour = Settings.UnitNeedEatHourMin > SunManager.Instance.Today && Settings.UnitNeedEatHourMax < SunManager.Instance.Today;
+			NeedState hungerNeed = CalculateNeedState(saturationScore, isEatHour);
 			if (hungerNeed != needStateHunger)
 			{
 				EnterHungerState[hungerNeed](this);

@@ -12,8 +12,15 @@ public static class Settings
 
 	static public double UnitNeedPointMortal = 0;
 	static public double UnitNeedPointDesperation = .1;
-	static public double UnitNeedPointNeeded = .5;
+	static public double UnitNeedPointNeededHour = .75;
+	static public double UnitNeedPointNeeded = .3;
 	static public double UnitMaxNeedPoint = 1;
+
+	static public double UnitNeedSleepHourMin = .5;
+	static public double UnitNeedSleepHourMax = 0;
+	
+	static public double UnitNeedEatHourMin = .4;
+	static public double UnitNeedEatHourMax = .5;
 
 	static public double UnitAdultAgeMin = 3;
 	static public double UnitAdultAgeMax = 6;
