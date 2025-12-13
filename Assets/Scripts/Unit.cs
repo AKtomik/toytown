@@ -8,8 +8,8 @@ using System.Resources;
 
 namespace ToyTown
 {
-	using ActionStartFunction = Action<Unit>;
-	using ActionUpdateFunction = Func<Unit, float, ActionUpdateReturn>;
+	using ActionStartFunction = Func<Unit, ActionReturn>;
+	using ActionUpdateFunction = Func<Unit, float, ActionReturn>;
 
 	public enum UnitJob {
 		NOTHING = 0,
@@ -40,7 +40,7 @@ namespace ToyTown
 		WALKING = UnitAction.WALKING,
 	};
 
-	public enum ActionUpdateReturn {
+	public enum ActionReturn {
 		CONTINUE,
 		DONE,
 	};
@@ -103,40 +103,53 @@ namespace ToyTown
 		public static class ActionStartBuilder
 		{	
 			// raw functions
-			public static void Default(Unit unit)
+			public static ActionReturn Default(Unit unit)
 			{
 				unit.actionSystemDaysAmount = 0;
 				unit.actionSystemDaysRemain = 0;
+				return ActionReturn.CONTINUE;
 			}
 			
-			public static void Learn(Unit unit)
+			public static ActionReturn Learn(Unit unit)
 			{
 				unit.learningRemainDay = Settings.UnitLearningTimeDay;
+				return ActionReturn.CONTINUE;
+			}
+			
+			public static ActionReturn Eat(Unit unit)
+			{
+				if (RessourcesGestion.FoodQuantity < 1)
+					return ActionReturn.DONE;
+				RessourcesGestion.RemoveFood(1);
+				return ActionReturn.CONTINUE;
 			}
 
-			public static void JobStart(Unit unit)
+			public static ActionReturn JobStart(Unit unit)
 			{
 				JobsActionStartDictionnary[unit.GetActualJob()](unit);
+				return ActionReturn.CONTINUE;
 			}
 			
-			public static void JobSwitch(Unit unit)
+			public static ActionReturn JobSwitch(Unit unit)
 			{
 				JobsSwitchDictionnary[unit.GetActualJob()](unit);
+				return ActionReturn.CONTINUE;
 			}
 			
-			public static void GoingToWork(Unit unit)
+			public static ActionReturn GoingToWork(Unit unit)
 			{
 				Place place = (Place)unit.GetActualJob();
 				if (!PlaceManager.Instance.ExistPlace(place, unit.transform.position))
 				{
 					unit.hasPlaceToGo = false;
 					if (place != Place.POINT) Debug.Log($"{unit} there is no {place} to work!");
-					return;
+					return ActionReturn.DONE;
 				}
 				unit.hasPlaceToGo = true;
 				Debug.Log($"{unit} is going to work {place} ({PlaceManager.Instance})");
 				unit.walkingToObject = PlaceManager.Instance.GetNearestPlaceObject(place, unit.transform.position);
 				unit.walkingObjective = unit.walkingToObject.transform.position;
+				return ActionReturn.CONTINUE;
 			}
 
 			// jobs functions
@@ -145,6 +158,7 @@ namespace ToyTown
 				{ UnitJob.NOTHING, unit => {
 					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[0].mesh;
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[0].material };
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.FARMER, unit => {
 					Gradient gradient = new();
@@ -158,40 +172,44 @@ namespace ToyTown
 					unit.miningParticulesColor = new ParticleSystem.MinMaxGradient(gradient);
 					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[1].mesh;
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[1].material };
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.LUMBERJACK, unit => {
 					unit.miningParticulesColor = new Color(.2f, .1f, .1f);
 					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[2].mesh;
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[2].material };
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.MINER, unit => {
 					unit.miningParticulesColor = new Color(.5f, .5f, .5f);
 					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[3].mesh;
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[3].material };
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.BUILDER, unit => {
 					unit.miningParticulesColor = new Color(.5f, .5f, .0f);
 					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[4].mesh;
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[4].material };
+					return ActionReturn.CONTINUE;
 				} }
 			};
 			
 			public static Dictionary<UnitJob, ActionStartFunction> JobsActionStartDictionnary = new()
 			{
 				{ UnitJob.NOTHING, unit => {
-					
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.FARMER, unit => {
-					
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.LUMBERJACK, unit => {
-					
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.MINER, unit => {
-					
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.BUILDER, unit => {
-					
+					return ActionReturn.CONTINUE;
 				} }
 			};
 
@@ -200,8 +218,9 @@ namespace ToyTown
 			{
 				return (unit) =>
 				{
-					Action1(unit);
-					Action2(unit);
+					ActionReturn r1 = Action1(unit);
+					ActionReturn r2 = Action2(unit);
+					return (r1 > r2) ? r1 : r2;
 				};
 			}
 
@@ -211,6 +230,7 @@ namespace ToyTown
 				{
 					unit.actionSystemDaysAmount = timerDayAmount;
 					unit.actionSystemDaysRemain = timerDayAmount;
+					return ActionReturn.CONTINUE;
 				};
 			}
 
@@ -221,6 +241,7 @@ namespace ToyTown
 					unit.hasPlaceToGo = true;
 					Debug.Log($"{unit} is going to self");
 					unit.walkingObjective = unit.transform.position;
+					return ActionReturn.CONTINUE;
 				};
 			}
 
@@ -232,12 +253,13 @@ namespace ToyTown
 					{
 						Debug.Log($"{unit} there is no {place} to go!");
 						unit.hasPlaceToGo = false;
-						return;
+						return ActionReturn.DONE;
 					}
 					unit.hasPlaceToGo = true;
 					Debug.Log($"{unit} is going to place {place} ({PlaceManager.Instance})");
 					unit.walkingToObject = PlaceManager.Instance.GetNearestPlaceObject(place, unit.transform.position);
 					unit.walkingObjective = unit.walkingToObject.transform.position;
+					return ActionReturn.CONTINUE;
 				};
 			}
 		};
@@ -245,32 +267,32 @@ namespace ToyTown
 		public static class ActionUpdateBuilder
 		{
 			// raw functions
-			public static ActionUpdateReturn Default(Unit unit, float delta)
+			public static ActionReturn Default(Unit unit, float delta)
 			{
-				return ActionUpdateReturn.CONTINUE;
+				return ActionReturn.CONTINUE;
 			}
 
-			public static ActionUpdateReturn Wander(Unit unit, float delta)
+			public static ActionReturn Wander(Unit unit, float delta)
 			{
 				// TODO : implement
-				return ActionUpdateReturn.CONTINUE;
+				return ActionReturn.CONTINUE;
 			}
 			
-			public static ActionUpdateReturn Learn(Unit unit, float delta)
+			public static ActionReturn Learn(Unit unit, float delta)
 			{
-				if (unit.learningJob == UnitJob.NOTHING) return ActionUpdateReturn.CONTINUE;
+				if (unit.learningJob == UnitJob.NOTHING) return ActionReturn.CONTINUE;
 				unit.learningRemainDay -= delta / Settings.DayLengthInSecond;
 				if (unit.learningRemainDay <= 0)
 				{
 					unit.SwtichJob((UnitJob)unit.learningJob);
 					unit.learningJob = null;
 					unit.learningRemainDay = 0;
-					return ActionUpdateReturn.DONE;
+					return ActionReturn.DONE;
 				}
-				return ActionUpdateReturn.CONTINUE;
+				return ActionReturn.CONTINUE;
 			}
 			
-			public static ActionUpdateReturn Job(Unit unit, float delta)
+			public static ActionReturn Job(Unit unit, float delta)
 			{
 				return JobsDictionnary[unit.GetActualJob()](unit, delta);
 			}
@@ -279,7 +301,7 @@ namespace ToyTown
 			public static Dictionary<UnitJob, ActionUpdateFunction> JobsDictionnary = new()
 			{
 				{ UnitJob.NOTHING, (unit, delta) => {
-					return ActionUpdateReturn.CONTINUE;
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.FARMER, (unit, delta) => {
 					unit.isMiningAnimationThisTick = true;
@@ -290,7 +312,7 @@ namespace ToyTown
 						RessourcesGestion.AddFood();
 						if (Settings.IsChangingPlaceAfterMining) unit.walkingObjective = PlaceManager.Instance.RandomWorkPlace(Place.BUSH);
 					}
-					return ActionUpdateReturn.CONTINUE;
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.LUMBERJACK, (unit, delta) => {
 					unit.isMiningAnimationThisTick = true;
@@ -301,7 +323,7 @@ namespace ToyTown
 						RessourcesGestion.AddWood();
 						if (Settings.IsChangingPlaceAfterMining) unit.walkingObjective = PlaceManager.Instance.RandomWorkPlace(Place.WOOD);
 					}
-					return ActionUpdateReturn.CONTINUE;
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.MINER, (unit, delta) => {
 					unit.isMiningAnimationThisTick = true;
@@ -312,7 +334,7 @@ namespace ToyTown
 						RessourcesGestion.AddRock();
 						if (Settings.IsChangingPlaceAfterMining) unit.walkingObjective = PlaceManager.Instance.RandomWorkPlace(Place.MINE);
 					}
-					return ActionUpdateReturn.CONTINUE;
+					return ActionReturn.CONTINUE;
 				} },
 				{ UnitJob.BUILDER, (unit, delta) => {
 					// is mining but no resource
@@ -325,13 +347,13 @@ namespace ToyTown
 							Debug.Log($"{buildingReference.buildingData} building is finish! {buildingReference.timeConstructRemain}");
 							buildingReference.timeConstructRemain = 0;
 							BuildingGeneration.Instance.FinalizeConstruction(unit.walkingToObject);
-							return ActionUpdateReturn.DONE;
+							return ActionReturn.DONE;
 						}
 					} else
 					{
 						Debug.LogError($"builder cant find component BuildingReference if its walking objective! {unit.walkingToObject}\nAre you sure the object added in placemanager is right?");
 					}
-					return ActionUpdateReturn.CONTINUE;
+					return ActionReturn.CONTINUE;
 				} }
 			};
 
@@ -340,8 +362,8 @@ namespace ToyTown
 			{
 				return (unit, delta) =>
 				{
-					ActionUpdateReturn r1 = Action1(unit, delta);
-					ActionUpdateReturn r2 = Action2(unit, delta);
+					ActionReturn r1 = Action1(unit, delta);
+					ActionReturn r2 = Action2(unit, delta);
 					return (r1 > r2) ? r1 : r2;
 				};
 			}
@@ -354,7 +376,7 @@ namespace ToyTown
 					unit.saturationScore += saturationByDay * factor;
 					unit.happynessScore += happynessByDay * factor;
 					unit.energyScore += energyByDay * factor;
-					return ActionUpdateReturn.CONTINUE;
+					return ActionReturn.CONTINUE;
 				};
 			}
 			
@@ -362,13 +384,13 @@ namespace ToyTown
 			{
 				return (unit, delta) =>
 				{
-					if (unit.actionSystemDaysRemain <= 0) return ActionUpdateReturn.DONE;
+					if (unit.actionSystemDaysRemain <= 0) return ActionReturn.DONE;
 					unit.actionSystemDaysRemain -= delta / Settings.DayLengthInSecond;
 					double factor = delta  / Settings.DayLengthInSecond / unit.actionSystemDaysAmount;
 					unit.saturationScore += saturationByAction * factor;
 					unit.happynessScore += happynessByAction * factor;
 					unit.energyScore += energyByAction * factor;
-					return ActionUpdateReturn.CONTINUE;
+					return ActionReturn.CONTINUE;
 				};
 			}
 		};
@@ -723,10 +745,10 @@ namespace ToyTown
 			}
 			else
 			{
-				ActionUpdateReturn actionFeedback = Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime * (float)speed);
+				ActionReturn actionFeedback = Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime * (float)speed);
 
 				// if action done
-				if (actionFeedback == ActionUpdateReturn.DONE)
+				if (actionFeedback == ActionReturn.DONE)
 				{
 					if (actionSystem != null)
 					{
