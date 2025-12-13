@@ -163,43 +163,26 @@ public class BuildingGeneration : MonoBehaviour
         GameObject buildingToConstruct = previewInstance;
         BuildingData buildingData = currentBuilding;
 
-        // --- CHANGEMENT ICI ---
-        // On retire la tuile de la liste MAINTENANT.
-        // Comme ça, le prochain SpawnBuilding() ne pourra pas la sélectionner.
+
         TileManager.Instance.RemoveTile(selectedTile);
 
-        // On détache la preview du script pour pouvoir en relancer une autre
         previewInstance = null;
 
-        // On lance la construction autonome
-        StartCoroutine(ConstructionRoutine(selectedTile, buildingToConstruct, buildingData));
+        LaunchConstruct(selectedTile, buildingToConstruct, buildingData);
     }
 
-    private IEnumerator ConstructionRoutine(Tile targetTile, GameObject buildingInstance, BuildingData data)
+
+    public void LaunchConstruct(Tile targetTile, GameObject buildingInstance, BuildingData data)
     {
         targetTile.tag = "ToBuild";
-        Debug.Log($"En attente du BUILDER sur la tuile {targetTile.name} pour {data.buildingName}");
+        PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Add(buildingInstance);
 
-        // Attente du builder (nécessite que Tile.cs ait IsBuilderPresent)
-        while (targetTile == null || !targetTile.IsBuilderPresent)
-        {
-            yield return null;
-        }
-
-        Debug.Log($"Builder détecté sur {targetTile.name} ! Construction de {data.buildingName} en cours...");
-
-        yield return new WaitForSeconds(5);
-
-        Debug.Log($"Construction de {data.buildingName} terminée !");
-        FinalizeConstruction(buildingInstance, data);
-        targetTile.tag = data.buildingName;
     }
 
-    public void FinalizeConstruction(GameObject buildingInstance, BuildingData data)
+    public void FinalizeConstruction(Tile targetTile, GameObject buildingInstance, BuildingData data)
     {
-        if (buildingInstance == null) return;
+        targetTile.tag = data.buildingName;
 
-        // Changement visuel final
         Renderer buildingRenderer = buildingInstance.GetComponentInChildren<Renderer>();
         if (buildingRenderer != null)
         {
@@ -209,7 +192,7 @@ public class BuildingGeneration : MonoBehaviour
         if (placeManager != null && placeManager.PlaceDictionary.ContainsKey(data.associatedPlace))
         {
             PlaceManager.Instance.PlaceDictionary[data.associatedPlace].Add(buildingInstance);
-            PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Add(buildingInstance);
+            PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Remove(buildingInstance);
         }
 
     }
