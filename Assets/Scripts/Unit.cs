@@ -80,7 +80,7 @@ namespace ToyTown
 				)},
 			// action system
 			{UnitAction.EATING, new Action(
-				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .05), Unit.ActionStartBuilder.GoingToPlace(Place.CANTINE)),
+				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .05), Unit.ActionStartBuilder.GoingToSelf()),
 				update: Unit.ActionUpdateBuilder.ScoreAddByAction(saturationByAction: 1)
 				)},
 			{UnitAction.SLEEPING, new Action(
@@ -198,6 +198,16 @@ namespace ToyTown
 				{
 					unit.actionSystemDaysAmount = timerDayAmount;
 					unit.actionSystemDaysRemain = timerDayAmount;
+				};
+			}
+
+			public static ActionStartFunction GoingToSelf()
+			{
+				return unit =>
+				{
+					unit.hasPlaceToGo = true;
+					Debug.Log($"{unit} is going to self");
+					unit.walkingObjective = unit.transform.position;
 				};
 			}
 
@@ -551,7 +561,7 @@ namespace ToyTown
 		public double speed
 		{
 			get {
-				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1) * (walkingWondering ? .5 : 1);
+				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1) * (walkingWondering ? .5 : 1) * (!isAdult ? 2 : 1);
 			}
 		}
 
@@ -736,7 +746,7 @@ namespace ToyTown
 			switch (GroundPlace.Value)
 			{
 
-				case Place.FARM:
+				//case Place.FARM:
 				case Place.BUSH:
 					{
 						SwtichJob(UnitJob.FARMER);
@@ -758,7 +768,7 @@ namespace ToyTown
 						SwtichPlayerAction(UnitActionPlayer.WORKING);
 					} break;
 					
-				case Place.CANTINE:
+				case Place.FARM:
 					{
 						SwtichSystemAction(UnitActionSystem.EATING);
 					} break;

@@ -5,7 +5,7 @@ public static class Settings
 	static public double DayLengthInSecond = 120;
 	static public double UnitBaseSpeed = 2;
 	static public double UnitLearningTimeDay = 2;
-	static public double SpeedUp = 2;
+	static public double SpeedUp = 1;
 	
 
 	static public double UnitNeedPointMortal = 0;
