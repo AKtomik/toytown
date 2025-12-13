@@ -64,7 +64,7 @@ namespace ToyTown {
 
 			{"NO2", Place.CANTINE},
 			{"House", Place.HOUSE},
-			{"Scool", Place.SCHOOL},
+			{"School", Place.SCHOOL},
 			
 			{"Farm", Place.FARM},
 			{"NO3", Place.LIBRARY},
