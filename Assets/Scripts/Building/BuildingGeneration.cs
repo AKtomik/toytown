@@ -30,7 +30,7 @@ public class BuildingGeneration : MonoBehaviour
 
     public void Start()
     {
-        // Sécurité pour trouver le PlaceManager s'il n'est pas assigné
+        // Sï¿½curitï¿½ pour trouver le PlaceManager s'il n'est pas assignï¿½
         if (PlaceManager.Instance != null)
         {
             placeManager = PlaceManager.Instance;
@@ -47,7 +47,7 @@ public class BuildingGeneration : MonoBehaviour
     {
         navButton.gameObject.SetActive(true);
 
-        // On récupère la liste à jour (les tuiles en attente de construction n'y sont plus)
+        // On rï¿½cupï¿½re la liste ï¿½ jour (les tuiles en attente de construction n'y sont plus)
         List<Tile> tiles = TileManager.Instance.freeTiles;
 
         if (!VerifyResources())
@@ -56,7 +56,7 @@ public class BuildingGeneration : MonoBehaviour
             return;
         }
 
-        // Mise à jour visuelle si on change juste de bâtiment
+        // Mise ï¿½ jour visuelle si on change juste de bï¿½timent
         if (previewInstance != null)
         {
             Renderer buildingRenderer = previewInstance.GetComponentInChildren<Renderer>();
@@ -66,7 +66,7 @@ public class BuildingGeneration : MonoBehaviour
             }
         }
 
-        // Création d'une nouvelle preview si aucune n'existe
+        // Crï¿½ation d'une nouvelle preview si aucune n'existe
         if (previewInstance == null)
         {
             Maincam.gameObject.SetActive(false);
@@ -75,7 +75,7 @@ public class BuildingGeneration : MonoBehaviour
             // On s'assure que l'index i est valide
             if (tiles.Count > 0)
             {
-                // Si l'index i dépasse la nouvelle taille de liste, on le remet à 0
+                // Si l'index i dï¿½passe la nouvelle taille de liste, on le remet ï¿½ 0
                 if (i >= tiles.Count) i = 0;
 
                 Vector3 spawnPos = tiles[i].transform.position;
@@ -88,10 +88,10 @@ public class BuildingGeneration : MonoBehaviour
 
                 if (allRenderers != null && allRenderers.Length > 0)
                 {
-                    // Parcourt tous les Renderers trouvés sur l'objet parent et ses enfants
+                    // Parcourt tous les Renderers trouvï¿½s sur l'objet parent et ses enfants
                     foreach (Renderer renderer in allRenderers)
                     {
-                        // Applique le nouveau matériau à ce Renderer
+                        // Applique le nouveau matï¿½riau ï¿½ ce Renderer
                         renderer.material = currentBuilding.previewMaterial;
                     }
                 }
@@ -109,7 +109,7 @@ public class BuildingGeneration : MonoBehaviour
         List<Tile> tiles = TileManager.Instance.freeTiles;
         if (tiles.Count == 0 || previewInstance == null) return;
 
-        // On prend une nouvelle position aléatoire
+        // On prend une nouvelle position alï¿½atoire
         i = Random.Range(0, tiles.Count);
         previewInstance.transform.position = tiles[i].transform.position;
     }
@@ -120,7 +120,7 @@ public class BuildingGeneration : MonoBehaviour
         if (tiles.Count == 0 || previewInstance == null) return;
 
         int newIndex;
-        // Petit algo pour essayer d'avoir une position différente de l'actuelle
+        // Petit algo pour essayer d'avoir une position diffï¿½rente de l'actuelle
         int attempts = 0;
         do
         {
@@ -155,9 +155,9 @@ public class BuildingGeneration : MonoBehaviour
 
         List<Tile> tiles = TileManager.Instance.freeTiles;
 
-        // Vérification de sécurité
+        // Vï¿½rification de sï¿½curitï¿½
         if (tiles.Count == 0) return;
-        if (i >= tiles.Count) i = 0; // Sécurité si l'index est hors limite
+        if (i >= tiles.Count) i = 0; // Sï¿½curitï¿½ si l'index est hors limite
 
         Tile selectedTile = tiles[i];
         GameObject buildingToConstruct = previewInstance;
@@ -175,6 +175,8 @@ public class BuildingGeneration : MonoBehaviour
     public void LaunchConstruct(Tile targetTile, GameObject buildingInstance, BuildingData data)
     {
         targetTile.tag = "ToBuild";
+        var buildingReference = buildingInstance.AddComponent<BuildingComponent>();
+        buildingReference.buildingData = data;
         PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Add(buildingInstance);
 
     }

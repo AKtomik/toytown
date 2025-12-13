@@ -317,12 +317,13 @@ namespace ToyTown
 				{ UnitJob.BUILDER, (unit, delta) => {
 					// is mining but no resource
 					unit.isMiningAnimationThisTick = true;
-					if (unit.walkingToObject.TryGetComponent<BuildingData>(out var building))
+					Debug.Log($"{unit.walkingToObject} {unit.walkingToObject} {unit.walkingToObject.name}");
+ 					if (unit.walkingToObject.TryGetComponent<BuildingComponent>(out var buildingReference))
 					{
-						Debug.Log($"TOIMPLEMENT BUILDING {building}");
+						Debug.Log($"TOIMPLEMENT BUILDING {buildingReference.buildingData}");
 					} else
 					{
-						Debug.LogError($"builder cant find scriptableObject BuildingData if its walking objective! {unit.walkingToObject}\nAre you sure the object added in placemanager is right?");
+						Debug.LogError($"builder cant find component BuildingReference if its walking objective! {unit.walkingToObject}\nAre you sure the object added in placemanager is right?");
 					}
 					return ActionUpdateReturn.CONTINUE;
 				} }
