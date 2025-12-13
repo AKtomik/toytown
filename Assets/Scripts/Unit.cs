@@ -415,7 +415,7 @@ namespace ToyTown
 
 		public double saturationScore = 1;
 		public double energyScore = 1;
-		public double happynessScore = .5;
+		public double happynessScore = 0;
 		public NeedState needStateHunger;
 		public NeedState needStateSleep;
 
