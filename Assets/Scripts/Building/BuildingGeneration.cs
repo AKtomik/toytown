@@ -179,13 +179,22 @@ public class BuildingGeneration : MonoBehaviour
         var buildingReference = buildingInstance.AddComponent<BuildingComponent>();
         buildingReference.buildingData = data;
         buildingReference.floorTile = targetTile;
+        buildingReference.timeConstructRemain = data.TimeToConstruct;
+        buildingReference.isFinish = false;
         PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Add(buildingInstance);
     }
 
 
 
-    public void FinalizeConstruction(Tile targetTile, GameObject buildingInstance, BuildingData data)
+    public void FinalizeConstruction(GameObject buildingInstance)
     {
+
+        var buildingReference = buildingInstance.GetComponent<BuildingComponent>();
+        buildingReference.isFinish = false;
+        Tile targetTile = buildingReference.floorTile;
+        BuildingData data = buildingReference.buildingData;
+        buildingReference.timeConstructRemain = data.TimeToConstruct;
+
         targetTile.tag = data.buildingName;
 
         Renderer buildingRenderer = buildingInstance.GetComponentInChildren<Renderer>();
