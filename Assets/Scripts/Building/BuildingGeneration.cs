@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class BuildingGeneration : MonoBehaviour
 {
+    public static BuildingGeneration Instance { get; private set; }
     private BuildingData currentBuilding;
     private GameObject previewInstance;
     private int i = 0;
@@ -30,6 +31,8 @@ public class BuildingGeneration : MonoBehaviour
 
     public void Start()
     {
+        Instance = this;
+
         // S�curit� pour trouver le PlaceManager s'il n'est pas assign�
         if (PlaceManager.Instance != null)
         {
@@ -177,6 +180,7 @@ public class BuildingGeneration : MonoBehaviour
         targetTile.tag = "ToBuild";
         var buildingReference = buildingInstance.AddComponent<BuildingComponent>();
         buildingReference.buildingData = data;
+        buildingReference.floorTile = targetTile;
         PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Add(buildingInstance);
 
     }

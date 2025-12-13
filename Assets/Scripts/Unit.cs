@@ -317,10 +317,17 @@ namespace ToyTown
 				{ UnitJob.BUILDER, (unit, delta) => {
 					// is mining but no resource
 					unit.isMiningAnimationThisTick = true;
-					Debug.Log($"{unit.walkingToObject} {unit.walkingToObject} {unit.walkingToObject.name}");
  					if (unit.walkingToObject.TryGetComponent<BuildingComponent>(out var buildingReference))
 					{
-						Debug.Log($"TOIMPLEMENT BUILDING {buildingReference.buildingData}");
+						buildingReference.buildingData.TimeToConstruct -= (float)(delta / Settings.DayLengthInSecond);
+						Debug.Log($"{buildingReference.buildingData} building... {buildingReference.buildingData.TimeToConstruct}");
+						if (buildingReference.buildingData.TimeToConstruct < 0)
+						{
+							Debug.Log($"{buildingReference.buildingData} building is finish! {buildingReference.buildingData.TimeToConstruct}");
+							buildingReference.buildingData.TimeToConstruct = 0;
+							BuildingGeneration.Instance.FinalizeConstruction(buildingReference.floorTile, unit.walkingToObject, buildingReference.buildingData);
+							return ActionUpdateReturn.DONE;
+						}
 					} else
 					{
 						Debug.LogError($"builder cant find component BuildingReference if its walking objective! {unit.walkingToObject}\nAre you sure the object added in placemanager is right?");
