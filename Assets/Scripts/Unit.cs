@@ -68,11 +68,11 @@ namespace ToyTown
 		{
 			// action order
 			{UnitAction.WANDERING, new Action(
-				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Wander, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.2, happynessByDay: -.1))
+				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Wander, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.1, happynessByDay: -.1))
 				)},
 			{UnitAction.WORKING, new Action(
 				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.JobStart, Unit.ActionStartBuilder.GoingToWork),
-				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Job, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.5, happynessByDay: .1))
+				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Job, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.3, happynessByDay: 0))
 				)},
 			{UnitAction.LEARNING, new Action(
 				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.Learn, Unit.ActionStartBuilder.GoingToPlace(Place.SCHOOL)),
@@ -81,15 +81,15 @@ namespace ToyTown
 			// action system
 			{UnitAction.EATING, new Action(
 				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .05), Unit.ActionStartBuilder.GoingToSelf()),
-				update: Unit.ActionUpdateBuilder.ScoreAddByAction(saturationByAction: 1)
+				update: Unit.ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5, happynessByAction: .1)
 				)},
 			{UnitAction.SLEEPING, new Action(
 				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .5), Unit.ActionStartBuilder.GoingToPlace(Place.HOUSE)),
-				update: Unit.ActionUpdateBuilder.ScoreAddByAction(energyByAction: 1)
+				update: Unit.ActionUpdateBuilder.ScoreAddByAction(energyByAction: .5, happynessByAction: .2)
 				)},
 			// between action
 			{UnitAction.WALKING, new Action(
-				update: Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)
+				update: Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.15, energyByDay: -.15, happynessByDay: 0)
 				)},
 		};
 	}
@@ -352,6 +352,7 @@ namespace ToyTown
 			}},
 			{NeedState.DESPERATION, (unit) => {
 				Debug.Log($"{unit} have to sleep");
+				unit.happynessScore -= 2.5;
 			}},
 			{NeedState.MORTAL, (unit) =>
 			{
@@ -376,6 +377,7 @@ namespace ToyTown
 			}},
 			{NeedState.DESPERATION, (unit) => {
 				Debug.Log($"{unit} have to eat");
+				unit.happynessScore -= 2.5;
 			}},
 			{NeedState.MORTAL, (unit) =>
 			{
