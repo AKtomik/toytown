@@ -2,68 +2,52 @@ using UnityEngine;
 
 public class BouncingBall : MonoBehaviour
 {
-    [Header("Param�tres de rebond")]
-    [SerializeField] private float bounceForce = 5f;
-    [SerializeField] private float gravity = 9.81f;
+	[SerializeField]
+	PhysicsMaterial bounceMaterial;
+	
+	[SerializeField]
+	float baseSpeed;
 
-    [Header("Physique")]
-    [SerializeField] private PhysicsMaterial bounceMaterial;
+	private Rigidbody rb;
+	private float lastSpeed;
 
-    private Rigidbody rb;
+	void Awake()
+	{
+		rb = GetComponent<Rigidbody>();
+		if (rb == null)
+			rb = gameObject.AddComponent<Rigidbody>();
 
-    void Start()
-    {
-        // R�cup�re ou ajoute un Rigidbody
-        rb = GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            rb = gameObject.AddComponent<Rigidbody>();
-        }
+		rb.mass = 0.5f;
+		rb.linearDamping = 0f;
+		rb.angularDamping = 0f;
+		rb.useGravity = true;
+		rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
-        // Configuration du Rigidbody
-        rb.mass = 0.5f; // Masse du ballon
-        rb.linearDamping = 0.1f; // R�sistance de l'air
+		SphereCollider col = GetComponent<SphereCollider>();
+		if (col == null)
+			col = gameObject.AddComponent<SphereCollider>();
 
-        // R�cup�re ou ajoute un Collider sph�rique
-        SphereCollider sphereCollider = GetComponent<SphereCollider>();
-        if (sphereCollider == null)
-        {
-            sphereCollider = gameObject.AddComponent<SphereCollider>();
-        }
+		if (bounceMaterial == null)
+		{
+			bounceMaterial = new PhysicsMaterial("InfiniteBounce");
+			bounceMaterial.bounciness = 1f;
+			bounceMaterial.dynamicFriction = 0f;
+			bounceMaterial.staticFriction = 0f;
+			bounceMaterial.bounceCombine = PhysicsMaterialCombine.Maximum;
+			bounceMaterial.frictionCombine = PhysicsMaterialCombine.Minimum;
+		}
 
-        // Cr�e ou applique le mat�riau physique
-        if (bounceMaterial == null)
-        {
-            bounceMaterial = new PhysicsMaterial("BounceMaterial");
-            bounceMaterial.bounciness = 0.8f; // Coefficient de rebond (0 � 1)
-            bounceMaterial.dynamicFriction = 0.3f;
-            bounceMaterial.staticFriction = 0.3f;
-            bounceMaterial.bounceCombine = PhysicsMaterialCombine.Maximum;
-        }
+		col.material = bounceMaterial;
+	}
 
-        sphereCollider.material = bounceMaterial;
+	void FixedUpdate()
+	{
+		lastSpeed = rb.linearVelocity.magnitude;
+	}
 
-        // Lance le ballon vers le haut au d�marrage (optionnel)
-        rb.AddForce(Vector3.up * bounceForce, ForceMode.Impulse);
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        // Optionnel : ajoute un peu de force suppl�mentaire au rebond
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            // Calcule la direction du rebond
-            Vector3 bounceDirection = Vector3.Reflect(rb.linearVelocity.normalized, collision.contacts[0].normal);
-
-            // Ajoute une petite force pour accentuer le rebond
-            rb.AddForce(bounceDirection * bounceForce * 0.1f, ForceMode.Impulse);
-        }
-    }
-
-    void FixedUpdate()
-    {
-        // Applique une gravit� personnalis�e si n�cessaire
-        // (Par d�faut Unity utilise Physics.gravity)
-        // rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
-    }
+	void OnCollisionEnter(Collision collision)
+	{
+		Vector3 dir = rb.linearVelocity.normalized;
+		rb.linearVelocity = dir * lastSpeed;
+	}
 }
