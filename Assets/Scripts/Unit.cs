@@ -452,6 +452,16 @@ namespace ToyTown
 			}
 		}
 
+		[SerializeField]
+		ParticleSystem miningParticules;
+		public ParticleSystem.MinMaxGradient miningParticulesColor { 
+			get { return miningParticules.main.startColor; }
+			private set { 
+				var main = miningParticules.main;
+				main.startColor = value;
+				}
+			}
+
 		// Switching actual action
 
 		public void SwtichSystemAction(UnitActionSystem action)
@@ -715,7 +725,12 @@ namespace ToyTown
 			if (isMining)
 			{
 				miningAnimationProgress += speed * Time.deltaTime;
-				miningAnimationProgress %= 1;
+				if (miningAnimationProgress > 1)
+				{
+					miningAnimationProgress %= 1;
+					miningParticulesColor = new Color(.5f, .5f, .5f);
+					miningParticules.Play();
+				}
 				toolTransform.localRotation = Quaternion.Euler((float)(-90 + 90 * miningAnimationProgress), 0f, -90f);
 			}
 			else
