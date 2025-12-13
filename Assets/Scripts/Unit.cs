@@ -268,6 +268,7 @@ namespace ToyTown
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.FARMER, (unit, delta) => {
+					unit.isMining = true;
 					unit.miningProgress += Settings.MiningFoodByDay * delta / Settings.DayLengthInSecond;
 					if (unit.miningProgress > 1)
 					{
@@ -277,6 +278,7 @@ namespace ToyTown
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.LUMBERJACK, (unit, delta) => {
+					unit.isMining = true;
 					unit.miningProgress += Settings.MiningWoodByDay * delta / Settings.DayLengthInSecond;
 					if (unit.miningProgress > 1)
 					{
@@ -286,6 +288,7 @@ namespace ToyTown
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.MINER, (unit, delta) => {
+					unit.isMining = true;
 					unit.miningProgress += Settings.MiningStoneByDay * delta / Settings.DayLengthInSecond;
 					if (unit.miningProgress > 1)
 					{
@@ -393,17 +396,18 @@ namespace ToyTown
 		private CapsuleCollider CapsuleColliderValue;
 		private BoxCollider BoxColliderValue;
 		
-		public Renderer ToolObject;
+		public Transform toolTransform;
+		public Renderer toolRender;
 		public Renderer childRender;
 		public Renderer adultRender;
 		public List<Material> UnitMaterials = new();
 		[System.Serializable]
-		public struct ToolRender
+		public struct ToolsRenderStruct
 		{
 			public Mesh mesh;
 			public Material material;
 		}
-		public List<ToolRender> RenderOfTools = new();
+		public List<ToolsRenderStruct> RenderOfTools = new();
 		
 
 		public double saturationScore = 1;
@@ -523,7 +527,7 @@ namespace ToyTown
 		private void GrowingUp()
 		{
 			childRender.gameObject.SetActive(false);
-			ToolObject.gameObject.SetActive(true);
+			toolRender.gameObject.SetActive(true);
 			adultRender.gameObject.SetActive(true);
 			Debug.Log($"{this} is growing up and can work");
 		}
@@ -566,13 +570,19 @@ namespace ToyTown
 				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1) * (walkingWondering ? .5 : 1) * (!isAdult ? 2 : 1);
 			}
 		}
+		
+		public bool isMining
+		{
+			get;
+			private set;
+		}
 
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
 			RigidBodyComponent = GetComponent<Rigidbody>();
-			toolMeshFilterComponent = ToolObject.GetComponent<MeshFilter>();
-			toolMeshRenderComponent = ToolObject.GetComponent<MeshRenderer>();
+			toolMeshFilterComponent = toolRender.GetComponent<MeshFilter>();
+			toolMeshRenderComponent = toolRender.GetComponent<MeshRenderer>();
 			BoxColliderValue = GetComponent<BoxCollider>();
 			if (BoxColliderValue == null) Debug.LogError($"BoxCollider ref is null! [{BoxColliderValue}]");
 			CapsuleColliderValue = GetComponent<CapsuleCollider>();
@@ -639,8 +649,9 @@ namespace ToyTown
 			}
 
 			if (isGrabed) return;
+			isMining = false;
 
-			// if walking
+			// if wandering
 			if (!hasPlaceToGo)
 			{
 				// rethinking
@@ -656,6 +667,8 @@ namespace ToyTown
 					walkingObjective = PlaceManager.Instance.RandomPlace();
 				}
 			}
+
+			// if walking
 			if (IsWalking())
 			{
 				RigidBodyComponent.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.WalkingSpeed)));
@@ -677,6 +690,28 @@ namespace ToyTown
 						SwtichPlayerAction(UnitActionPlayer.WANDERING);
 					}
 				}
+			}
+
+			// rotating
+			if (walkingObjective != null)
+			{
+				Vector3 direction = walkingObjective.Value - transform.position;
+				direction.y = 0f;
+				Quaternion WantedRotation = Quaternion.LookRotation(direction);
+				//transform.rotation = WantedRotation;
+				transform.rotation = Quaternion.Slerp(transform.rotation, WantedRotation, (float)(speed * Time.deltaTime * 1));
+			}
+
+			// mining animation
+			if (isMining)
+			{
+				miningProgress += speed * Time.deltaTime;
+				miningProgress %= 1;
+				toolTransform.localRotation = Quaternion.Euler((float)(-90 + 90 * miningProgress), 0f, -90f);
+			}
+			else
+			{
+				miningProgress = 0;
 			}
 
 			NeedState sleepNeed = CalculateNeedState(energyScore);
