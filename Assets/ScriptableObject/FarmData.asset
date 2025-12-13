@@ -19,3 +19,4 @@ MonoBehaviour:
   previewMaterial: {fileID: 2100000, guid: aac6bf827c9e19945906b793f6ea6c2a, type: 2}
   finalMaterial: {fileID: 2100000, guid: 9c73dc5a48c4a9646a04496a6b78b46a, type: 2}
   associatedPlace: 21
+  TimeToConstruct: 0.5

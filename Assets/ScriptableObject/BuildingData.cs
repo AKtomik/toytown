@@ -12,4 +12,5 @@ public class BuildingData : ScriptableObject
     public Material finalMaterial;
     public Place associatedPlace;
     public float TimeToConstruct;
+    public bool isFull;
 }

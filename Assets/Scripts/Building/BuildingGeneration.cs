@@ -9,6 +9,7 @@ public class BuildingGeneration : MonoBehaviour
 {
     public static BuildingGeneration Instance { get; private set; }
     private BuildingData currentBuilding;
+   
     private GameObject previewInstance;
     private int i = 0;
 
@@ -165,10 +166,7 @@ public class BuildingGeneration : MonoBehaviour
         Tile selectedTile = tiles[i];
         GameObject buildingToConstruct = previewInstance;
         BuildingData buildingData = currentBuilding;
-
-
         TileManager.Instance.RemoveTile(selectedTile);
-
         previewInstance = null;
 
         LaunchConstruct(selectedTile, buildingToConstruct, buildingData);
@@ -182,8 +180,9 @@ public class BuildingGeneration : MonoBehaviour
         buildingReference.buildingData = data;
         buildingReference.floorTile = targetTile;
         PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Add(buildingInstance);
-
     }
+
+
 
     public void FinalizeConstruction(Tile targetTile, GameObject buildingInstance, BuildingData data)
     {
