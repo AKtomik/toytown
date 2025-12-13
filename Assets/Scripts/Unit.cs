@@ -879,23 +879,31 @@ namespace ToyTown
 				//case Place.FARM:
 				case Place.BUSH:
 					{
-						SwtichJob(UnitJob.FARMER);
-						SwtichPlayerAction(UnitActionPlayer.WORKING);
+						if (GetActualJob() == UnitJob.FARMER)
+							SwtichPlayerAction(UnitActionPlayer.WORKING);
+						else
+							Debug.Log($"{this} that not my job!");
 					} break;
 				case Place.CONSTRUCTION:
 					{
-						SwtichJob(UnitJob.BUILDER);
-						SwtichPlayerAction(UnitActionPlayer.WORKING);
+						if (GetActualJob() == UnitJob.BUILDER)
+							SwtichPlayerAction(UnitActionPlayer.WORKING);
+						else
+							Debug.Log($"{this} that not my job!");
 					} break;
 				case Place.WOOD:
 					{
-						SwtichJob(UnitJob.LUMBERJACK);
-						SwtichPlayerAction(UnitActionPlayer.WORKING);
+						if (GetActualJob() == UnitJob.LUMBERJACK)
+							SwtichPlayerAction(UnitActionPlayer.WORKING);
+						else
+							Debug.Log($"{this} that not my job!");
 					} break;
 				case Place.MINE:
 					{
-						SwtichJob(UnitJob.MINER);
-						SwtichPlayerAction(UnitActionPlayer.WORKING);
+						if (GetActualJob() == UnitJob.MINER)
+							SwtichPlayerAction(UnitActionPlayer.WORKING);
+						else
+							Debug.Log($"{this} that not my job!");
 					} break;
 					
 				case Place.FARM:
