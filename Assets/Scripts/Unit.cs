@@ -223,7 +223,7 @@ namespace ToyTown
 						ActionReturn r = action(unit);
 						if (r == ActionReturn.DONE) return ActionReturn.DONE;
 					}
-					return ActionReturn.DONE;
+					return ActionReturn.CONTINUE;
 				};
 			}
 
@@ -370,7 +370,7 @@ namespace ToyTown
 						ActionReturn r = action(unit, delta);
 						if (r == ActionReturn.DONE) return ActionReturn.DONE;
 					}
-					return ActionReturn.DONE;
+					return ActionReturn.CONTINUE;
 				};
 			}
 
