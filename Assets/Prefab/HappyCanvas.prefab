@@ -5684,11 +5684,131 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 593852652548504737, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 593852652548504737, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 593852652548504737, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7636745481352698700}
+    - target: {fileID: 593852652548504737, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectLearningJob
+      objectReference: {fileID: 0}
+    - target: {fileID: 593852652548504737, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ToyTown.HappyCanvas, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 593852652548504737, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: FARMER
+      objectReference: {fileID: 0}
+    - target: {fileID: 593852652548504737, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196997736055295490, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196997736055295490, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196997736055295490, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7636745481352698700}
+    - target: {fileID: 1196997736055295490, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196997736055295490, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectLearningJob
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196997736055295490, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ToyTown.HappyCanvas, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196997736055295490, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: LUMBERJACK
+      objectReference: {fileID: 0}
+    - target: {fileID: 1196997736055295490, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1412866205597710025, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1412866205597710025, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1412866205597710025, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7636745481352698700}
+    - target: {fileID: 1412866205597710025, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1412866205597710025, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectLearningJob
+      objectReference: {fileID: 0}
+    - target: {fileID: 1412866205597710025, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ToyTown.HappyCanvas, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1412866205597710025, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: BUILDER
+      objectReference: {fileID: 0}
+    - target: {fileID: 1412866205597710025, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3387822602702126346, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -15.599976
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966239848720408335, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966239848720408335, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966239848720408335, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7636745481352698700}
+    - target: {fileID: 4966239848720408335, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966239848720408335, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectLearningJob
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966239848720408335, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ToyTown.HappyCanvas, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966239848720408335, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
+      value: MINER
+      objectReference: {fileID: 0}
+    - target: {fileID: 4966239848720408335, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5699687241815690193, guid: 7bf16ca5767fd504ca65ecae8c5d73d6, type: 3}
       propertyPath: m_Pivot.x

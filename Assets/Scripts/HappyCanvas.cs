@@ -123,5 +123,11 @@ namespace ToyTown {
 			}
 			oneJobsSection.SetActive(true);
 		}
+
+		public void SelectLearningJob(string jobString)
+		{
+			UnitJob job = (UnitJob)Enum.Parse(typeof(UnitJob), jobString);
+			GrabManager.Instance.lastGrabed.SelectLearningJob(job);
+		}
 	}
 }
