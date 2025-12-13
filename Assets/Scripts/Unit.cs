@@ -146,18 +146,30 @@ namespace ToyTown
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[0].material };
 				} },
 				{ UnitJob.FARMER, unit => {
+					Gradient gradient = new();
+					gradient.SetColorKeys(
+						new GradientColorKey[]
+						{
+							new(new(.5f, .1f, 0), 0f),
+							new(new(.1f, .5f, 0), 1f)
+						}
+					);
+					unit.miningParticulesColor = new ParticleSystem.MinMaxGradient(gradient);
 					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[1].mesh;
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[1].material };
 				} },
 				{ UnitJob.LUMBERJACK, unit => {
+					unit.miningParticulesColor = new Color(.2f, .1f, .1f);
 					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[2].mesh;
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[2].material };
 				} },
 				{ UnitJob.MINER, unit => {
+					unit.miningParticulesColor = new Color(.5f, .5f, .5f);
 					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[3].mesh;
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[3].material };
 				} },
 				{ UnitJob.BUILDER, unit => {
+					unit.miningParticulesColor = new Color(.5f, .5f, .0f);
 					unit.toolMeshFilterComponent.mesh = unit.RenderOfTools[4].mesh;
 					unit.toolMeshRenderComponent.materials = new Material[] { unit.RenderOfTools[4].material };
 				} }
@@ -728,7 +740,6 @@ namespace ToyTown
 				if (miningAnimationProgress > 1)
 				{
 					miningAnimationProgress %= 1;
-					miningParticulesColor = new Color(.5f, .5f, .5f);
 					miningParticules.Play();
 				}
 				toolTransform.localRotation = Quaternion.Euler((float)(-90 + 90 * miningAnimationProgress), 0f, -90f);
