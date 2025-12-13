@@ -113,7 +113,11 @@ namespace ToyTown {
 				throw new Exception($"PlaceDictionary list for {place} is empty but GetNearestPlace is called.");
 			}
 			GameObject nearestObject = PlaceDictionary[place][0];
-			float nearestDistance = Vector3.Distance(PlaceDictionary[place][0].transform.position, pos);
+			if (nearestObject == null || nearestObject?.transform == null)
+			{
+				throw new Exception($"nearest first object is null or dont have transform nearestObject={nearestObject}");
+			}
+			float nearestDistance = Vector3.Distance(nearestObject.transform.position, pos);
 			foreach (GameObject placeObject in PlaceDictionary[place])
 			{
 				Vector3 placePos = placeObject.transform.position;

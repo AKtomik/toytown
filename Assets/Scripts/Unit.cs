@@ -130,7 +130,7 @@ namespace ToyTown
 				if (!PlaceManager.Instance.ExistPlace(place, unit.transform.position))
 				{
 					unit.hasPlaceToGo = false;
-					Debug.Log($"{unit} there is no {place} to work!");
+					if (place != Place.POINT) Debug.Log($"{unit} there is no {place} to work!");
 					return;
 				}
 				unit.hasPlaceToGo = true;
@@ -320,7 +320,6 @@ namespace ToyTown
  					if (unit.walkingToObject.TryGetComponent<BuildingComponent>(out var buildingReference))
 					{
 						buildingReference.timeConstructRemain -= (float)(delta / Settings.DayLengthInSecond);
-						Debug.Log($"{buildingReference.buildingData} building... {buildingReference.timeConstructRemain}");
 						if (buildingReference.timeConstructRemain < 0)
 						{
 							Debug.Log($"{buildingReference.buildingData} building is finish! {buildingReference.timeConstructRemain}");
