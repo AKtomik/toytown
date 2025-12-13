@@ -274,6 +274,7 @@ namespace ToyTown
 					{
 						unit.miningProgress -= 1;
 						RessourcesGestion.AddFood();
+						if (Settings.IsChangingPlaceAfterMining) unit.walkingObjective = PlaceManager.Instance.RandomWorkPlace(Place.BUSH);
 					}
 					return ActionUpdateReturn.CONTINUE;
 				} },
@@ -284,6 +285,7 @@ namespace ToyTown
 					{
 						unit.miningProgress -= 1;
 						RessourcesGestion.AddWood();
+						if (Settings.IsChangingPlaceAfterMining) unit.walkingObjective = PlaceManager.Instance.RandomWorkPlace(Place.WOOD);
 					}
 					return ActionUpdateReturn.CONTINUE;
 				} },
@@ -294,6 +296,7 @@ namespace ToyTown
 					{
 						unit.miningProgress -= 1;
 						RessourcesGestion.AddRock();
+						if (Settings.IsChangingPlaceAfterMining) unit.walkingObjective = PlaceManager.Instance.RandomWorkPlace(Place.MINE);
 					}
 					return ActionUpdateReturn.CONTINUE;
 				} },
@@ -435,6 +438,7 @@ namespace ToyTown
 		public UnitJob startingJob = UnitJob.NOTHING;
 		private UnitJob actualJob = UnitJob.NOTHING;
 		private double miningProgress = 0;
+		private double miningAnimationProgress = 0;
 		public bool isDying { get; private set; }
 		public bool isGrabed { get; private set; }
 		
@@ -705,13 +709,13 @@ namespace ToyTown
 			// mining animation
 			if (isMining)
 			{
-				miningProgress += speed * Time.deltaTime;
-				miningProgress %= 1;
-				toolTransform.localRotation = Quaternion.Euler((float)(-90 + 90 * miningProgress), 0f, -90f);
+				miningAnimationProgress += speed * Time.deltaTime;
+				miningAnimationProgress %= 1;
+				toolTransform.localRotation = Quaternion.Euler((float)(-90 + 90 * miningAnimationProgress), 0f, -90f);
 			}
 			else
 			{
-				miningProgress = 0;
+				miningAnimationProgress = 0;
 			}
 
 			NeedState sleepNeed = CalculateNeedState(energyScore);

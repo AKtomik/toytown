@@ -126,6 +126,18 @@ namespace ToyTown {
 			}
 			return nearestPos;
 		}
+		
+		public Vector3 RandomWorkPlace(Place place)
+		{
+			if (PlaceDictionary[place].Count == 0)
+			{
+				throw new Exception($"PlaceDictionary list for {place} is empty but GetNearestPlace is called.");
+			}
+			List<GameObject> placeList = new();
+			foreach (GameObject placeObject in PlaceDictionary[place])
+				placeList.Add(placeObject);
+			return placeList[UnityEngine.Random.Range(0, placeList.Count)].transform.position;
+		}
 
 		public Place? GetTilePlace(Vector3 pos)
 		{
