@@ -280,7 +280,7 @@ namespace ToyTown
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.FARMER, (unit, delta) => {
-					unit.isMining = true;
+					unit.isMiningAnimationThisTick = true;
 					unit.miningProgress += Settings.MiningFoodByDay * delta / Settings.DayLengthInSecond;
 					if (unit.miningProgress > 1)
 					{
@@ -291,7 +291,7 @@ namespace ToyTown
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.LUMBERJACK, (unit, delta) => {
-					unit.isMining = true;
+					unit.isMiningAnimationThisTick = true;
 					unit.miningProgress += Settings.MiningWoodByDay * delta / Settings.DayLengthInSecond;
 					if (unit.miningProgress > 1)
 					{
@@ -302,7 +302,7 @@ namespace ToyTown
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.MINER, (unit, delta) => {
-					unit.isMining = true;
+					unit.isMiningAnimationThisTick = true;
 					unit.miningProgress += Settings.MiningStoneByDay * delta / Settings.DayLengthInSecond;
 					if (unit.miningProgress > 1)
 					{
@@ -313,6 +313,8 @@ namespace ToyTown
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.BUILDER, (unit, delta) => {
+					// is mining but no resource
+					unit.isMiningAnimationThisTick = true;
 					return ActionUpdateReturn.CONTINUE;
 				} }
 			};
@@ -597,7 +599,7 @@ namespace ToyTown
 			}
 		}
 		
-		public bool isMining
+		public bool isMiningAnimationThisTick
 		{
 			get;
 			private set;
@@ -677,7 +679,7 @@ namespace ToyTown
 			}
 
 			if (isGrabed) return;
-			isMining = false;
+			isMiningAnimationThisTick = false;
 
 			// if wandering
 			if (!hasPlaceToGo)
@@ -734,7 +736,7 @@ namespace ToyTown
 			}
 
 			// mining animation
-			if (isMining)
+			if (isMiningAnimationThisTick)
 			{
 				miningAnimationProgress += speed * Time.deltaTime;
 				if (miningAnimationProgress > 1)
