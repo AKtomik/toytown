@@ -106,13 +106,13 @@ namespace ToyTown {
 
 		}
 
-		public Vector3 GetNearestPlace(Place place, Vector3 pos)
+		public GameObject GetNearestPlaceObject(Place place, Vector3 pos)
 		{
 			if (PlaceDictionary[place].Count == 0)
 			{
 				throw new Exception($"PlaceDictionary list for {place} is empty but GetNearestPlace is called.");
 			}
-			Vector3 nearestPos = PlaceDictionary[place][0].transform.position;
+			GameObject nearestObject = PlaceDictionary[place][0];
 			float nearestDistance = Vector3.Distance(PlaceDictionary[place][0].transform.position, pos);
 			foreach (GameObject placeObject in PlaceDictionary[place])
 			{
@@ -121,17 +121,17 @@ namespace ToyTown {
 				if (distance < nearestDistance)
 				{
 					nearestDistance = distance;
-					nearestPos = placePos;
+					nearestObject = placeObject;
 				}
 			}
-			return nearestPos;
+			return nearestObject;
 		}
 		
 		public Vector3 RandomWorkPlace(Place place)
 		{
 			if (PlaceDictionary[place].Count == 0)
 			{
-				throw new Exception($"PlaceDictionary list for {place} is empty but GetNearestPlace is called.");
+				throw new Exception($"PlaceDictionary list for {place} is empty but RandomWorkPlace is called.");
 			}
 			List<GameObject> placeList = new();
 			foreach (GameObject placeObject in PlaceDictionary[place])

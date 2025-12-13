@@ -135,7 +135,8 @@ namespace ToyTown
 				}
 				unit.hasPlaceToGo = true;
 				Debug.Log($"{unit} is going to work {place} ({PlaceManager.Instance})");
-				unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
+				unit.walkingToObject = PlaceManager.Instance.GetNearestPlaceObject(place, unit.transform.position);
+				unit.walkingObjective = unit.walkingToObject.transform.position;
 			}
 
 			// jobs functions
@@ -235,7 +236,8 @@ namespace ToyTown
 					}
 					unit.hasPlaceToGo = true;
 					Debug.Log($"{unit} is going to place {place} ({PlaceManager.Instance})");
-					unit.walkingObjective = PlaceManager.Instance.GetNearestPlace(place, unit.transform.position);
+					unit.walkingToObject = PlaceManager.Instance.GetNearestPlaceObject(place, unit.transform.position);
+					unit.walkingObjective = unit.walkingToObject.transform.position;
 				};
 			}
 		};
@@ -315,6 +317,13 @@ namespace ToyTown
 				{ UnitJob.BUILDER, (unit, delta) => {
 					// is mining but no resource
 					unit.isMiningAnimationThisTick = true;
+					if (unit.walkingToObject.TryGetComponent<BuildingData>(out var building))
+					{
+						Debug.Log($"TOIMPLEMENT BUILDING {building}");
+					} else
+					{
+						Debug.LogError($"builder cant find scriptableObject BuildingData if its walking objective! {unit.walkingToObject}\nAre you sure the object added in placemanager is right?");
+					}
 					return ActionUpdateReturn.CONTINUE;
 				} }
 			};
@@ -448,6 +457,7 @@ namespace ToyTown
 		private double noPlaceRethinking = 0;
 		private bool walkingWondering;
 		private Vector3? walkingObjective = null;
+		private GameObject walkingToObject;
 
 		public UnitJob startingJob = UnitJob.NOTHING;
 		private UnitJob actualJob = UnitJob.NOTHING;
