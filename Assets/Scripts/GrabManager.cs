@@ -31,8 +31,13 @@ namespace ToyTown {
 			return MouseHitedPoint()?.collider.gameObject;
 		}
 
+		int lastClick = 0;
 		void OnClick(InputAction.CallbackContext callbackContext)
 		{
+			if (!callbackContext.control.IsPressed()) return;
+			int actualClick = Environment.TickCount;
+			if (actualClick - lastClick < 100) return;
+			lastClick = actualClick;
 			//Debug.Log("click");
 			if (IsDrag() && !canTakeMultiples) return;
 			GameObject hitedObject = MouseHitedObject();
@@ -44,6 +49,10 @@ namespace ToyTown {
 
 		void OnRelease(InputAction.CallbackContext callbackContext)
 		{
+			if (!callbackContext.control.IsPressed()) return;
+			int actualClick = Environment.TickCount;
+			if (actualClick - lastClick < 100) return;
+			lastClick = actualClick;
 			//Debug.Log("release");
 			if (IsDrag())
 			{

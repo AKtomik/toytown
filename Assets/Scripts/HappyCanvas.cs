@@ -95,11 +95,25 @@ namespace ToyTown {
 			oneFullSection.SetActive(true);
 			
 			if (unit.isAdult)
-				oneText.text = $"is a {Capitalize(unit.GetActualJob().ToString())} and is {Capitalize(unit.GetActualAction().ToString())}";
+			{
+				string actionText = unit.GetActualAction().ToString().ToLower();
+				if (unit.IsWalking())
+				{
+					actionText = $"going to {actionText[..(actionText.Length - 3)]}";
+				}
+				oneText.text = $"is a {Capitalize(unit.GetActualJob().ToString())} and is {actionText}";
+			}
 			else
+			{
 				oneText.text = $"is a child";
+			}
 			int dayAge = (int)Math.Floor(unit.age);
-			oneText.text += $"\nis born since {dayAge} {(dayAge > 1 ? "days" : "day")}";
+			if (dayAge == 0)
+				oneText.text += $"\nis born today";
+			else if (dayAge == 1)
+				oneText.text += $"\nis born since {dayAge} day";
+			else
+				oneText.text += $"\nis born since {dayAge} days";
 
 			
 			if (!unit.IsWaitingLearningJob())

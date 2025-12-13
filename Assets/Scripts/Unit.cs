@@ -526,9 +526,12 @@ namespace ToyTown
 			return needStateSleep < NeedState.FINE;
 		}
 
+		public bool wasWalking = false;
 		public bool IsWalking()
 		{
-			return walkingObjective != null && Vector3.Distance((Vector3)walkingObjective, transform.position) > Settings.WalkingNearObjectiveDistance;
+			if (isGrabed) return wasWalking;
+			wasWalking = walkingObjective != null && Vector3.Distance((Vector3)walkingObjective, transform.position) > Settings.WalkingNearObjectiveDistance;
+			return wasWalking;
 		}
 		
 		static public NeedState CalculateNeedState(double score)
@@ -622,6 +625,8 @@ namespace ToyTown
 			{
 				Kill();
 			}
+
+			if (isGrabed) return;
 
 			// if walking
 			if (!hasPlaceToGo)
