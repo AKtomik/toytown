@@ -19,8 +19,12 @@ public static class Settings
 	static public double UnitAverageSpawnByDay = 1;
 	static public double UnitVariationSpawn = 5;
 	static public double RethinkingTimeDay = .5;
+
 	static public bool ChildLabour = false;
 	static public bool ChildLearnable = false;
+	static public double MiningStoneByDay = 2;
+	static public double MiningFoodByDay = 2;
+	static public double MiningWoodByDay = 2;
 	
 	static public double WalkingNearObjectiveDistance = 0.5;
 	static public double WalkingSpeed = 1;

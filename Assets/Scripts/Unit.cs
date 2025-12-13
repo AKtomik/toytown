@@ -3,6 +3,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Collections.Generic;
 using System.Linq;
+using System.Resources;
 //using System.;
 
 namespace ToyTown
@@ -257,12 +258,30 @@ namespace ToyTown
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.FARMER, (unit, delta) => {
+					unit.miningProgress += Settings.MiningFoodByDay * delta / Settings.DayLengthInSecond;
+					if (unit.miningProgress > 1)
+					{
+						unit.miningProgress -= 1;
+						RessourcesGestion.AddFood();
+					}
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.LUMBERJACK, (unit, delta) => {
+					unit.miningProgress += Settings.MiningWoodByDay * delta / Settings.DayLengthInSecond;
+					if (unit.miningProgress > 1)
+					{
+						unit.miningProgress -= 1;
+						RessourcesGestion.AddWood();
+					}
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.MINER, (unit, delta) => {
+					unit.miningProgress += Settings.MiningStoneByDay * delta / Settings.DayLengthInSecond;
+					if (unit.miningProgress > 1)
+					{
+						unit.miningProgress -= 1;
+						RessourcesGestion.AddRock();
+					}
 					return ActionUpdateReturn.CONTINUE;
 				} },
 				{ UnitJob.BUILDER, (unit, delta) => {
@@ -399,6 +418,7 @@ namespace ToyTown
 
 		public UnitJob startingJob = UnitJob.NOTHING;
 		private UnitJob actualJob = UnitJob.NOTHING;
+		private double miningProgress = 0;
 		public bool isDying { get; private set; }
 		public bool isGrabed { get; private set; }
 		
