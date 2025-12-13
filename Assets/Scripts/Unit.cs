@@ -484,7 +484,7 @@ namespace ToyTown
 		private double actionSystemDaysRemain = .0;
 		private bool hasPlaceToGo;
 		private double noPlaceRethinking = 0;
-		private bool walkingWondering;
+		private bool walkingWondering = false;
 		private Vector3? walkingObjective = null;
 		private GameObject walkingToObject;
 
@@ -516,11 +516,10 @@ namespace ToyTown
 			}
 
 		// Switching actual action
-
 		public void SwtichSystemAction(UnitActionSystem action)
 		{
-			walkingWondering = false;
-			Action.Dictionnary[(UnitAction)action].Start(this);
+			ActionReturn actionFeedback = Action.Dictionnary[(UnitAction)action].Start(this);
+			if (actionFeedback == ActionReturn.DONE) return;
 			actionSystem = action;
 		}
 		
@@ -531,9 +530,9 @@ namespace ToyTown
 		
 		public void SwtichPlayerAction(UnitActionPlayer action)
 		{
+			ActionReturn actionFeedback = Action.Dictionnary[(UnitAction)action].Start(this);
+			if (actionFeedback == ActionReturn.DONE) return;
 			EndSystemAction();//!
-			walkingWondering = false;
-			Action.Dictionnary[(UnitAction)action].Start(this);
 			actionPlayer = action;
 		}
 
@@ -543,6 +542,18 @@ namespace ToyTown
 				SwtichSystemAction(actionSystem.Value);
 			else
 				SwtichPlayerAction(actionPlayer);
+		}
+
+		public void NextAction()
+		{
+			if (actionSystem != null)
+			{
+				actionSystem = null;
+				SwtichPlayerAction(actionPlayer);//!
+			} else
+			{
+				SwtichPlayerAction(UnitActionPlayer.WANDERING);
+			}
 		}
 		
 		public void StartLearning(UnitJob job)
@@ -746,19 +757,7 @@ namespace ToyTown
 			else
 			{
 				ActionReturn actionFeedback = Action.Dictionnary[GetActualAction()].Update(this, Time.deltaTime * (float)speed);
-
-				// if action done
-				if (actionFeedback == ActionReturn.DONE)
-				{
-					if (actionSystem != null)
-					{
-						actionSystem = null;
-						SwtichPlayerAction(actionPlayer);//!
-					} else
-					{
-						SwtichPlayerAction(UnitActionPlayer.WANDERING);
-					}
-				}
+				if (actionFeedback == ActionReturn.DONE) NextAction();
 			}
 
 			// rotating
