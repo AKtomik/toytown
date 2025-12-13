@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: HouseData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   buildingName: House
-  prefab: {fileID: 7213148078788775080, guid: b89cdfd1b30a3f34cadea2b91b57c862, type: 3}
+  prefab: {fileID: 3023607045559476806, guid: 3ad8d4e44088d114fbbab60d09672002, type: 3}
   woodCost: 2
   rockCost: 2
   previewMaterial: {fileID: 2100000, guid: a4cb773729cb20d4890fba039af8d075, type: 2}
   finalMaterial: {fileID: 2100000, guid: 5588ac5587485e9449f57026eddea044, type: 2}
   associatedPlace: 12
   TimeToConstruct: 0.5
+  isFull: 0
