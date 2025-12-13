@@ -68,11 +68,11 @@ namespace ToyTown
 		{
 			// action order
 			{UnitAction.WANDERING, new Action(
-				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Wander, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.2, energyByDay: -.1, happynessByDay: -.1))
+				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Wander, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.2, happynessByDay: -.1))
 				)},
 			{UnitAction.WORKING, new Action(
 				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.JobStart, Unit.ActionStartBuilder.GoingToWork),
-				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Job, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.3, happynessByDay: 0))
+				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Job, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -1, energyByDay: -1, happynessByDay: 0))
 				)},
 			{UnitAction.LEARNING, new Action(
 				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.Learn, Unit.ActionStartBuilder.GoingToPlace(Place.SCHOOL)),
@@ -80,11 +80,11 @@ namespace ToyTown
 				)},
 			// action system
 			{UnitAction.EATING, new Action(
-				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .05), Unit.ActionStartBuilder.GoingToSelf()),
+				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .025), Unit.ActionStartBuilder.GoingToSelf()),
 				update: Unit.ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5, happynessByAction: .1)
 				)},
 			{UnitAction.SLEEPING, new Action(
-				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .5), Unit.ActionStartBuilder.GoingToPlace(Place.HOUSE)),
+				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .25), Unit.ActionStartBuilder.GoingToPlace(Place.HOUSE)),
 				update: Unit.ActionUpdateBuilder.ScoreAddByAction(energyByAction: .5, happynessByAction: .2)
 				)},
 			// between action
@@ -604,6 +604,8 @@ namespace ToyTown
 			if (!adultRender.TryGetComponent<MeshRenderer>(out var adultMesh)) Debug.LogError($"no adultMesh! {adultMesh}");
 			adultMesh.materials = new Material[] { colorMaterial };
 
+			happynessScore = 0;
+
 			// random age and death
 			float randomLater = Random.value;
 			deathAge = Math.Round(Settings.UnitDeathAgeMin + randomLater * (Settings.UnitDeathAgeMax - Settings.UnitDeathAgeMin));
@@ -701,9 +703,12 @@ namespace ToyTown
 			{
 				Vector3 direction = walkingObjective.Value - transform.position;
 				direction.y = 0f;
-				Quaternion WantedRotation = Quaternion.LookRotation(direction);
-				//transform.rotation = WantedRotation;
-				transform.rotation = Quaternion.Slerp(transform.rotation, WantedRotation, (float)(speed * Time.deltaTime * 1));
+				if (direction != Vector3.zero)
+				{
+					Quaternion WantedRotation = Quaternion.LookRotation(direction);
+					//transform.rotation = WantedRotation;
+					transform.rotation = Quaternion.Slerp(transform.rotation, WantedRotation, (float)(speed * Time.deltaTime * 1));
+				}
 			}
 
 			// mining animation
