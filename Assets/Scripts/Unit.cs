@@ -319,13 +319,13 @@ namespace ToyTown
 					unit.isMiningAnimationThisTick = true;
  					if (unit.walkingToObject.TryGetComponent<BuildingComponent>(out var buildingReference))
 					{
-						buildingReference.buildingData.TimeToConstruct -= (float)(delta / Settings.DayLengthInSecond);
-						Debug.Log($"{buildingReference.buildingData} building... {buildingReference.buildingData.TimeToConstruct}");
-						if (buildingReference.buildingData.TimeToConstruct < 0)
+						buildingReference.timeConstructRemain -= (float)(delta / Settings.DayLengthInSecond);
+						Debug.Log($"{buildingReference.buildingData} building... {buildingReference.timeConstructRemain}");
+						if (buildingReference.timeConstructRemain < 0)
 						{
-							Debug.Log($"{buildingReference.buildingData} building is finish! {buildingReference.buildingData.TimeToConstruct}");
-							buildingReference.buildingData.TimeToConstruct = 0;
-							BuildingGeneration.Instance.FinalizeConstruction(buildingReference.floorTile, unit.walkingToObject, buildingReference.buildingData);
+							Debug.Log($"{buildingReference.buildingData} building is finish! {buildingReference.timeConstructRemain}");
+							buildingReference.timeConstructRemain = 0;
+							BuildingGeneration.Instance.FinalizeConstruction(unit.walkingToObject);
 							return ActionUpdateReturn.DONE;
 						}
 					} else
