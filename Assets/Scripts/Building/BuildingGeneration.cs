@@ -197,11 +197,16 @@ public class BuildingGeneration : MonoBehaviour
 
         targetTile.tag = data.buildingName;
 
-        Renderer buildingRenderer = buildingInstance.GetComponentInChildren<Renderer>();
-        if (buildingRenderer != null)
+        Renderer[] allRenderers = buildingInstance.GetComponentsInChildren<Renderer>();
+        if (allRenderers != null && allRenderers.Length > 0)
         {
-            buildingRenderer.material = data.finalMaterial;
+            // On boucle sur TOUS les Renderers pour appliquer le matriau final
+            foreach (Renderer renderer in allRenderers)
+            {
+                renderer.material = data.finalMaterial;
+            }
         }
+        // *******************************************************************
 
         if (placeManager != null && placeManager.PlaceDictionary.ContainsKey(data.associatedPlace))
         {
