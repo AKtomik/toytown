@@ -68,23 +68,23 @@ namespace ToyTown
 		{
 			// action order
 			{UnitAction.WANDERING, new Action(
-				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Wander, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.2, happynessByDay: -.1))
+				update: Unit.ActionUpdateBuilder.Merge(new ActionUpdateFunction[] {Unit.ActionUpdateBuilder.Wander, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.5, energyByDay: -.2, happynessByDay: -.1)})
 				)},
 			{UnitAction.WORKING, new Action(
-				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.JobStart, Unit.ActionStartBuilder.GoingToWork),
-				update: Unit.ActionUpdateBuilder.Merge(Unit.ActionUpdateBuilder.Job, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -1, energyByDay: -1, happynessByDay: 0))
+				start: Unit.ActionStartBuilder.Merge(new ActionStartFunction[] {Unit.ActionStartBuilder.JobStart, Unit.ActionStartBuilder.GoingToWork}),
+				update: Unit.ActionUpdateBuilder.Merge(new ActionUpdateFunction[] {Unit.ActionUpdateBuilder.Job, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -1, energyByDay: -1, happynessByDay: 0)})
 				)},
 			{UnitAction.LEARNING, new Action(
-				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.Learn, Unit.ActionStartBuilder.GoingToPlace(Place.SCHOOL)),
+				start: Unit.ActionStartBuilder.Merge(new ActionStartFunction[] {Unit.ActionStartBuilder.Learn, Unit.ActionStartBuilder.GoingToPlace(Place.SCHOOL)}),
 				update: Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)
 				)},
 			// action system
 			{UnitAction.EATING, new Action(
-				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .025), Unit.ActionStartBuilder.GoingToSelf()),
+				start: Unit.ActionStartBuilder.Merge(new ActionStartFunction[] {Unit.ActionStartBuilder.StartTimer(timerDayAmount: .025), Unit.ActionStartBuilder.GoingToSelf()}),
 				update: Unit.ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5, happynessByAction: .1)
 				)},
 			{UnitAction.SLEEPING, new Action(
-				start: Unit.ActionStartBuilder.Merge(Unit.ActionStartBuilder.StartTimer(timerDayAmount: .25), Unit.ActionStartBuilder.GoingToPlace(Place.HOUSE)),
+				start: Unit.ActionStartBuilder.Merge(new ActionStartFunction[] {Unit.ActionStartBuilder.StartTimer(timerDayAmount: .25), Unit.ActionStartBuilder.GoingToPlace(Place.HOUSE)}),
 				update: Unit.ActionUpdateBuilder.ScoreAddByAction(energyByAction: .5, happynessByAction: .2)
 				)},
 			// between action
@@ -214,13 +214,16 @@ namespace ToyTown
 			};
 
 			// functions builder
-			public static ActionStartFunction Merge(ActionStartFunction Action1, ActionStartFunction Action2)
+			public static ActionStartFunction Merge(ActionStartFunction[] Actions)
 			{
 				return (unit) =>
 				{
-					ActionReturn r1 = Action1(unit);
-					ActionReturn r2 = Action2(unit);
-					return (r1 > r2) ? r1 : r2;
+					foreach (ActionStartFunction action in Actions)
+					{
+						ActionReturn r = action(unit);
+						if (r == ActionReturn.DONE) return ActionReturn.DONE;
+					}
+					return ActionReturn.DONE;
 				};
 			}
 
@@ -358,13 +361,16 @@ namespace ToyTown
 			};
 
 			// functions builder
-			public static ActionUpdateFunction Merge(ActionUpdateFunction Action1, ActionUpdateFunction Action2)
+			public static ActionUpdateFunction Merge(ActionUpdateFunction[] Actions)
 			{
 				return (unit, delta) =>
 				{
-					ActionReturn r1 = Action1(unit, delta);
-					ActionReturn r2 = Action2(unit, delta);
-					return (r1 > r2) ? r1 : r2;
+					foreach (ActionUpdateFunction action in Actions)
+					{
+						ActionReturn r = action(unit, delta);
+						if (r == ActionReturn.DONE) return ActionReturn.DONE;
+					}
+					return ActionReturn.DONE;
 				};
 			}
 
