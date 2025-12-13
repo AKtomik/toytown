@@ -2,16 +2,19 @@ using UnityEngine;
 
 public static class Settings
 {
-	static public double DayLengthInSecond = 120;
-	static public double UnitBaseSpeed = 2;
-	static public double UnitLearningTimeDay = 2;
 	static public double SpeedUp = 1;
-	
+	static public double DayLengthInSecond = 120;
+
+	static public double UnitBaseSpeed = 2;
+	static public double UnitWalkingSpeed = .5;
+	static public double UnitWalkingNearObjectiveDistance = 0.25;
+	static public double UnitLearningTimeDay = 2;
 
 	static public double UnitNeedPointMortal = 0;
 	static public double UnitNeedPointDesperation = .1;
 	static public double UnitNeedPointNeeded = .5;
 	static public double UnitMaxNeedPoint = 1;
+
 	static public double UnitAdultAgeMin = 3;
 	static public double UnitAdultAgeMax = 6;
 	static public double UnitDeathAgeMin = 15;
@@ -26,9 +29,6 @@ public static class Settings
 	static public double MiningStoneByDay = 2;
 	static public double MiningFoodByDay = 2;
 	static public double MiningWoodByDay = 2;
-	
-	static public double WalkingNearObjectiveDistance = 0.5;
-	static public double WalkingSpeed = 1;
 
 	static public double RequireHappyness = 20;
 

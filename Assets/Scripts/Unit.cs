@@ -143,7 +143,7 @@ namespace ToyTown
 				{
 					unit.hasPlaceToGo = false;
 					if (place != Place.POINT) Debug.Log($"{unit} there is no {place} to work!");
-					return ActionReturn.DONE;
+					return ActionReturn.DONE;// ! 
 				}
 				unit.hasPlaceToGo = true;
 				Debug.Log($"{unit} is going to work {place} ({PlaceManager.Instance})");
@@ -253,7 +253,7 @@ namespace ToyTown
 					{
 						Debug.Log($"{unit} there is no {place} to go!");
 						unit.hasPlaceToGo = false;
-						return ActionReturn.DONE;
+						return ActionReturn.CONTINUE;// ! 
 					}
 					unit.hasPlaceToGo = true;
 					Debug.Log($"{unit} is going to place {place} ({PlaceManager.Instance})");
@@ -614,17 +614,27 @@ namespace ToyTown
 		{
 			return needStateHunger < NeedState.FINE;
 		}
+
+		public bool IsReallyHungry()
+		{
+			return needStateHunger < NeedState.NEEDED;
+		}
 		
 		public bool IsTired()
 		{
 			return needStateSleep < NeedState.FINE;
+		}
+		
+		public bool IsReallyTired()
+		{
+			return needStateSleep < NeedState.NEEDED;
 		}
 
 		public bool wasWalking = false;
 		public bool IsWalking()
 		{
 			if (isGrabed) return wasWalking;
-			wasWalking = walkingObjective != null && Vector3.Distance((Vector3)walkingObjective, transform.position) > Settings.WalkingNearObjectiveDistance;
+			wasWalking = walkingObjective != null && Vector3.Distance((Vector3)walkingObjective, transform.position) > Settings.UnitWalkingNearObjectiveDistance;
 			return wasWalking;
 		}
 		
@@ -751,7 +761,7 @@ namespace ToyTown
 			// if walking
 			if (IsWalking())
 			{
-				RigidBodyComponent.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.WalkingSpeed)));
+				RigidBodyComponent.MovePosition(Vector3.MoveTowards(transform.position, (Vector3)walkingObjective, (float)(Time.deltaTime * speed * Settings.UnitWalkingSpeed)));
 				Action.Dictionnary[UnitAction.WALKING].Update(this, Time.deltaTime * (float)speed);
 			}
 			else
@@ -809,14 +819,14 @@ namespace ToyTown
 			// if need something
 			if (actionSystem == null)
 			{
-				if (IsHungry())
+				if (IsReallyHungry())
 				{
-					Debug.Log($"{this} is hungry and go eating");
+					Debug.Log($"{this} is really hungry and go eating");
 					SwtichSystemAction(UnitActionSystem.EATING);
 				}
-				else if (IsTired())
+				else if (IsReallyTired())
 				{
-					Debug.Log($"{this} is tired and go sleeping");
+					Debug.Log($"{this} is really tired and go sleeping");
 					SwtichSystemAction(UnitActionSystem.SLEEPING);
 				}
 			}
