@@ -80,7 +80,7 @@ namespace ToyTown
 				)},
 			// action system
 			{UnitAction.EATING, new Action(
-				start: Unit.ActionStartBuilder.Merge(new ActionStartFunction[] {Unit.ActionStartBuilder.StartTimer(timerDayAmount: .025), Unit.ActionStartBuilder.GoingToSelf()}),
+				start: Unit.ActionStartBuilder.Merge(new ActionStartFunction[] {Unit.ActionStartBuilder.Eat, Unit.ActionStartBuilder.StartTimer(timerDayAmount: .025), Unit.ActionStartBuilder.GoingToSelf()}),
 				update: Unit.ActionUpdateBuilder.ScoreAddByAction(saturationByAction: .5, happynessByAction: .1)
 				)},
 			{UnitAction.SLEEPING, new Action(
