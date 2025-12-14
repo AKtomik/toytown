@@ -18,6 +18,7 @@ public class BuildingGeneration : MonoBehaviour
 
     [SerializeField]
     private GameObject navButton;
+    [SerializeField]
     private GameObject cantButton;
 
     private PlaceManager placeManager;
