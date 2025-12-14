@@ -275,16 +275,14 @@ namespace ToyTown
 
         public void UnregisterPlace(Place place, GameObject placeObject)
         {
-            // Utiliser TryGetValue pour s'assurer que la Place est connue
             if (PlaceDictionary.TryGetValue(place, out List<GameObject> list))
             {
                 bool removed = list.Remove(placeObject);
                 if (!removed)
                 {
-                    Debug.LogWarning($"[PlaceManager] Failed to unregister {placeObject?.name ?? "null object"} from {place}. Was it already removed?");
+                    Debug.LogWarning($"[PlaceManager] Failed to unregister {placeObject?.name ?? "null object"} from {place}.");
                 }
             }
-            // Si la clé n'existe pas, nous n'avons rien à faire (pas d'erreur critique).
         }
     }
 }

@@ -92,7 +92,6 @@ public class BuildingGeneration : MonoBehaviour
                 Quaternion randomRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
                 previewInstance = Instantiate(currentBuilding.prefab, spawnPos, randomRotation);
 
-                Renderer newBuildingRenderer = previewInstance.GetComponentInChildren<Renderer>();
 
                 Renderer[] allRenderers = previewInstance.GetComponentsInChildren<Renderer>();
 
