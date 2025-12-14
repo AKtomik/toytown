@@ -46,6 +46,14 @@ public class BuildingGeneration : MonoBehaviour
 
     public void SetBuilding(BuildingData building)
     {
+
+        if (previewInstance != null)
+        {
+            Destroy(previewInstance);
+            previewInstance = null; 
+        }
+
+        // 2. Initialiser et lancer la nouvelle prévisualisation
         currentBuilding = building;
         SpawnBuilding();
     }
