@@ -31,6 +31,8 @@ namespace ToyTown
 			}
 		}
 
+		private int LastDayAmount = 0;
+
 		public bool IsDay
 		{
 			get
@@ -55,6 +57,17 @@ namespace ToyTown
 			float sunX = (float)Today * 360;
 			//Debug.Log($"1today {Today} sunX {sunX} {transform.rotation.x},{transform.rotation.y},{transform.rotation.z}");
 			directionalLight.transform.eulerAngles = new Vector3(sunX, ConstSunYdegree, ConstSunZdegree);
+
+			int nowDayAmount = DayAmount;
+			if (LastDayAmount < nowDayAmount)
+			{
+				LastDayAmount = nowDayAmount;
+				foreach (Unit unit in UnitManager.Instance.UnitArray())
+				{
+					unit.happynessScore += Settings.BuildingHappyEveryoneByLibraryByDay * BuildManager.Instance.GetBuildAmount(Place.LIBRARY);
+					unit.happynessScore += Settings.BuildingHappyEveryoneByMuseumByDay * BuildManager.Instance.GetBuildAmount(Place.MUSEUM);
+				}
+			}
 		}
 	}
 }
