@@ -20,11 +20,41 @@ namespace ToyTown {
 			if (notifPrefab == null) throw new Exception($"notifPrefab is not defined, assign it in the unity editor in UnitManager!");
 		}
 
-		public void SpawnNotif(string content)
+
+		public NotifOne SpawnNotif()
 		{
 			GameObject notifObject = Instantiate(notifPrefab, notifParent);
 			NotifOne notifComponent = notifObject.GetComponent<NotifOne>();
+			return notifComponent;
+		}
+		public NotifOne SpawnNotif(string content)
+		{
+			NotifOne notifComponent = SpawnNotif();
 			notifComponent.notifText = content;
+			return notifComponent;
+		}
+		public NotifOne SpawnNotif(string content, Color color)
+		{
+			NotifOne notifComponent = SpawnNotif(content);
+			notifComponent.notifColor = color;
+			return notifComponent;
+		}
+		
+		public NotifOne SpawnGoodNews(string content)
+		{
+			return SpawnNotif(content, new Color(0, 200, 0, 200));
+		}
+		public NotifOne SpawnBadNews(string content)
+		{
+			return SpawnNotif(content, new Color(200, 0, 0, 200));
+		}
+		public NotifOne SpawnMidNews(string content)
+		{
+			return SpawnNotif(content, new Color(0, 200, 0, 200));
+		}
+		public NotifOne SpawnInfo(string content)
+		{
+			return SpawnNotif(content, new Color(0, 0, 100, 200));
 		}
 	}
 }

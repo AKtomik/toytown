@@ -20,6 +20,7 @@ namespace ToyTown {
 			Debug.Log($"mono unitManager started");
 			if (unitPrefab == null) throw new Exception($"unitPrefab is not defined, assign it in the unity editor in UnitManager!");
 			Instantiate(unitPrefab, transform.position, transform.rotation);
+			NotifManager.Instance.SpawnNotif("hi");
 		}
 
 		// Update is called once per frame
