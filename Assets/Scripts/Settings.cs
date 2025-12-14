@@ -12,7 +12,7 @@ public static class Settings
 
 	static public double UnitNeedPointMortal = 0;
 	static public double UnitNeedPointDesperation = .1;
-	static public double UnitNeedPointNeededHour = .9;
+	static public double UnitNeedPointNeededHour = .75;
 	static public double UnitNeedPointNeeded = .3;
 	static public double UnitMaxNeedPoint = 1;
 
