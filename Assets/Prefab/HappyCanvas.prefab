@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 8508610520588179824}
   - component: {fileID: 3615525273114023711}
   - component: {fileID: 3453950348573224414}
-  - component: {fileID: 1952940828598108485}
+  - component: {fileID: 6602206377465677865}
+  - component: {fileID: 4416730921161459688}
   m_Layer: 5
   m_Name: x5Speed
   m_TagString: Untagged
@@ -76,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1952940828598108485
+--- !u!114 &6602206377465677865
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,9 +86,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 479068074767525544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -117,21 +118,41 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3453950348573224414}
-  m_OnClick:
+  toggleTransition: 1
+  graphic: {fileID: 0}
+  m_Group: {fileID: 4110388421967859944}
+  onValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3159425591392227247}
         m_TargetAssemblyTypeName: SetSpeed, Assembly-CSharp
-        m_MethodName: FiveSpeed
-        m_Mode: 1
+        m_MethodName: Speed
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_IsOn: 0
+--- !u!114 &4416730921161459688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479068074767525544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa168895ccb6ea4f85a5a9d99a60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectRadio
+  toggle: {fileID: 6602206377465677865}
+  target: {fileID: 3453950348573224414}
+  onColor: {r: 1, g: 1, b: 1, a: 1}
+  offColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.49803922}
 --- !u!1 &1195074940402688811
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +345,8 @@ GameObject:
   - component: {fileID: 7410335752295381948}
   - component: {fileID: 558079776863911635}
   - component: {fileID: 8693012559799869678}
-  - component: {fileID: 7257870556194759539}
+  - component: {fileID: 7796271377957058203}
+  - component: {fileID: 1036770761950719962}
   m_Layer: 5
   m_Name: x1Speed
   m_TagString: Untagged
@@ -389,7 +411,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7257870556194759539
+--- !u!114 &7796271377957058203
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -398,9 +420,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1526404043299743933}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -430,21 +452,41 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 8693012559799869678}
-  m_OnClick:
+  toggleTransition: 1
+  graphic: {fileID: 0}
+  m_Group: {fileID: 4110388421967859944}
+  onValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3159425591392227247}
         m_TargetAssemblyTypeName: SetSpeed, Assembly-CSharp
-        m_MethodName: NormaleSpeed
-        m_Mode: 1
+        m_MethodName: Speed
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_IsOn: 1
+--- !u!114 &1036770761950719962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1526404043299743933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa168895ccb6ea4f85a5a9d99a60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectRadio
+  toggle: {fileID: 7796271377957058203}
+  target: {fileID: 8693012559799869678}
+  onColor: {r: 1, g: 1, b: 1, a: 1}
+  offColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.49803922}
 --- !u!1 &1587777696379087607
 GameObject:
   m_ObjectHideFlags: 0
@@ -2704,7 +2746,8 @@ GameObject:
   - component: {fileID: 8159188114389954035}
   - component: {fileID: 704994959199216747}
   - component: {fileID: 3747043704466337251}
-  - component: {fileID: 5672645788968295690}
+  - component: {fileID: 2111651108269137749}
+  - component: {fileID: 5360057546430310385}
   m_Layer: 5
   m_Name: x2Speed
   m_TagString: Untagged
@@ -2769,7 +2812,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5672645788968295690
+--- !u!114 &2111651108269137749
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2778,9 +2821,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4738528387192671408}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -2810,21 +2853,41 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3747043704466337251}
-  m_OnClick:
+  toggleTransition: 1
+  graphic: {fileID: 0}
+  m_Group: {fileID: 4110388421967859944}
+  onValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3159425591392227247}
         m_TargetAssemblyTypeName: SetSpeed, Assembly-CSharp
-        m_MethodName: DoubleSpeed
-        m_Mode: 1
+        m_MethodName: Speed
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_IsOn: 0
+--- !u!114 &5360057546430310385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4738528387192671408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa168895ccb6ea4f85a5a9d99a60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectRadio
+  toggle: {fileID: 2111651108269137749}
+  target: {fileID: 3747043704466337251}
+  onColor: {r: 1, g: 1, b: 1, a: 1}
+  offColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.49803922}
 --- !u!1 &5078191692075914955
 GameObject:
   m_ObjectHideFlags: 0
@@ -3798,9 +3861,10 @@ GameObject:
   - component: {fileID: 7249247448007630894}
   - component: {fileID: 7921636623096943125}
   - component: {fileID: 1134966986191917107}
-  - component: {fileID: 8993495786240286450}
+  - component: {fileID: 7913490640501266960}
+  - component: {fileID: 8632772101829762571}
   m_Layer: 5
-  m_Name: StopPlayButton
+  m_Name: StopPlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3813,7 +3877,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6101624707779078070}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3863,7 +3927,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8993495786240286450
+--- !u!114 &7913490640501266960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3872,9 +3936,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6101624707779078070}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -3904,13 +3968,16 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1134966986191917107}
-  m_OnClick:
+  toggleTransition: 1
+  graphic: {fileID: 0}
+  m_Group: {fileID: 4110388421967859944}
+  onValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3159425591392227247}
         m_TargetAssemblyTypeName: SetSpeed, Assembly-CSharp
-        m_MethodName: StopSpeed
-        m_Mode: 1
+        m_MethodName: Speed
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3919,6 +3986,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_IsOn: 0
+--- !u!114 &8632772101829762571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6101624707779078070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa168895ccb6ea4f85a5a9d99a60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectRadio
+  toggle: {fileID: 7913490640501266960}
+  target: {fileID: 1134966986191917107}
+  onColor: {r: 1, g: 1, b: 1, a: 1}
+  offColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.49803922}
 --- !u!1 &6317670121142535139
 GameObject:
   m_ObjectHideFlags: 0
@@ -5483,7 +5567,8 @@ GameObject:
   - component: {fileID: 6082412663886295005}
   - component: {fileID: 5964690079735417539}
   - component: {fileID: 7568395672392311928}
-  - component: {fileID: 3503428916724896203}
+  - component: {fileID: 6268895901361093617}
+  - component: {fileID: 1917012710949244881}
   m_Layer: 5
   m_Name: x3Speed
   m_TagString: Untagged
@@ -5548,7 +5633,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3503428916724896203
+--- !u!114 &6268895901361093617
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5557,9 +5642,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8197803570265776711}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -5589,21 +5674,41 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 7568395672392311928}
-  m_OnClick:
+  toggleTransition: 1
+  graphic: {fileID: 0}
+  m_Group: {fileID: 4110388421967859944}
+  onValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3159425591392227247}
         m_TargetAssemblyTypeName: SetSpeed, Assembly-CSharp
-        m_MethodName: TripleSpeed
-        m_Mode: 1
+        m_MethodName: Speed
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_IsOn: 0
+--- !u!114 &1917012710949244881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8197803570265776711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa168895ccb6ea4f85a5a9d99a60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectRadio
+  toggle: {fileID: 6268895901361093617}
+  target: {fileID: 7568395672392311928}
+  onColor: {r: 1, g: 1, b: 1, a: 1}
+  offColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.49803922}
 --- !u!1 &8451314065939659734
 GameObject:
   m_ObjectHideFlags: 0
@@ -5693,6 +5798,7 @@ GameObject:
   - component: {fileID: 8612558257855136256}
   - component: {fileID: 160561717148227468}
   - component: {fileID: 3159425591392227247}
+  - component: {fileID: 4110388421967859944}
   m_Layer: 5
   m_Name: SpeedControler
   m_TagString: Untagged
@@ -5801,6 +5907,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d2c21df179eb9740987b86b19f40f25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SetSpeed
+--- !u!114 &4110388421967859944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8738163225851666377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ToggleGroup
+  m_AllowSwitchOff: 0
 --- !u!1 &8758579176637284820
 GameObject:
   m_ObjectHideFlags: 0
@@ -5989,7 +6108,8 @@ GameObject:
   - component: {fileID: 2783406204182847498}
   - component: {fileID: 3254775287306545467}
   - component: {fileID: 3786075694409948899}
-  - component: {fileID: 3283309959666594875}
+  - component: {fileID: 5530429313642621554}
+  - component: {fileID: 8557962605712954347}
   m_Layer: 5
   m_Name: x10Speed
   m_TagString: Untagged
@@ -6054,7 +6174,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3283309959666594875
+--- !u!114 &5530429313642621554
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6063,9 +6183,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8928652362077885818}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -6095,21 +6215,41 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3786075694409948899}
-  m_OnClick:
+  toggleTransition: 1
+  graphic: {fileID: 0}
+  m_Group: {fileID: 4110388421967859944}
+  onValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3159425591392227247}
         m_TargetAssemblyTypeName: SetSpeed, Assembly-CSharp
-        m_MethodName: TenSpeed
-        m_Mode: 1
+        m_MethodName: Speed
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 10
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  m_IsOn: 0
+--- !u!114 &8557962605712954347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8928652362077885818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa168895ccb6ea4f85a5a9d99a60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectRadio
+  toggle: {fileID: 5530429313642621554}
+  target: {fileID: 3786075694409948899}
+  onColor: {r: 1, g: 1, b: 1, a: 1}
+  offColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 0.49803922}
 --- !u!1 &8950888562103970077
 GameObject:
   m_ObjectHideFlags: 0
