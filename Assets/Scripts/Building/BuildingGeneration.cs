@@ -18,6 +18,7 @@ public class BuildingGeneration : MonoBehaviour
 
     [SerializeField]
     private GameObject navButton;
+    private GameObject cantButton;
 
     private PlaceManager placeManager;
 
@@ -50,12 +51,15 @@ public class BuildingGeneration : MonoBehaviour
     public void SpawnBuilding()
     {
         navButton.gameObject.SetActive(true);
+        cantButton.gameObject.SetActive(false);
 
         // On r�cup�re la liste � jour (les tuiles en attente de construction n'y sont plus)
         List<Tile> tiles = TileManager.Instance.freeTiles;
 
         if (!VerifyResources())
         {
+            navButton.gameObject.SetActive(false);
+            cantButton.gameObject.SetActive(true);
             Debug.Log("Pas assez de ressources");
             return;
         }
@@ -154,6 +158,7 @@ public class BuildingGeneration : MonoBehaviour
         if (previewInstance == null) return;
 
         navButton.gameObject.SetActive(false);
+        cantButton.gameObject.SetActive(false);
         Maincam.gameObject.SetActive(true);
         Secondcam.gameObject.SetActive(false);
 

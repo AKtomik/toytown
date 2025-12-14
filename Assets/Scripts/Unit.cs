@@ -143,7 +143,7 @@ namespace ToyTown
 				{
 					unit.hasPlaceToGo = false;
 					if (place != Place.POINT) Debug.Log($"{unit} there is no {place} to work!");
-					return ActionReturn.DONE;// ! 
+					return ActionReturn.CONTINUE;// ! 
 				}
 				unit.hasPlaceToGo = true;
 				Debug.Log($"{unit} is going to work {place} ({PlaceManager.Instance})");
