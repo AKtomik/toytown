@@ -30,6 +30,7 @@ public class BuildingGeneration : MonoBehaviour
     {
         Secondcam.gameObject.SetActive(false);
         navButton.gameObject.SetActive(false);
+        cantButton.gameObject.SetActive(false);
     }
 
     public void Start()
@@ -146,12 +147,23 @@ public class BuildingGeneration : MonoBehaviour
         if (RessourcesGestion.RockQuantity >= currentBuilding.rockCost &&
             RessourcesGestion.WoodQuantity >= currentBuilding.woodCost)
         {
-            RessourcesGestion.RemoveRock(currentBuilding.rockCost);
-            RessourcesGestion.RemoveWood(currentBuilding.woodCost);
             return true;
         }
 
         return false;
+    }
+
+    public void CloseUi()
+    {
+        navButton.gameObject.SetActive(false);
+        cantButton.gameObject.SetActive(false);
+        Maincam.gameObject.SetActive(true);
+        Secondcam.gameObject.SetActive(false);
+        if (previewInstance != null)
+        {
+            Destroy(previewInstance);
+            previewInstance = null;
+        }
     }
 
     public void StartBuild()
@@ -181,6 +193,18 @@ public class BuildingGeneration : MonoBehaviour
 
     public void LaunchConstruct(Tile targetTile, GameObject buildingInstance, BuildingData data)
     {
+        //if (!VerifyResources())
+        //{
+        //    navButton.gameObject.SetActive(false);
+        //    cantButton.gameObject.SetActive(true);
+        //    Debug.Log("Pas assez de ressources");
+        //    return;
+        //}
+
+        // here, this is better and will not remove resources for nothing
+        RessourcesGestion.RemoveRock(currentBuilding.rockCost);
+        RessourcesGestion.RemoveWood(currentBuilding.woodCost);
+
         targetTile.tag = "ToBuild";
         var buildingReference = buildingInstance.AddComponent<BuildingComponent>();
         buildingReference.buildingData = data;

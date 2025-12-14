@@ -3241,6 +3241,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2661189239798717454}
+        m_TargetAssemblyTypeName: UiBuilding, Assembly-CSharp
+        m_MethodName: displayOption
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5464666295385615476
 GameObject:
   m_ObjectHideFlags: 0
@@ -3757,7 +3769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UiBuilding
   panelOption: {fileID: 7624930039635138756}
-  duration: 0.5
+  duration: 0.3
   targetPosition: {x: -657, y: -30}
 --- !u!114 &8353023769325006643
 MonoBehaviour:
@@ -3773,6 +3785,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingGeneration
   Maincam: {fileID: 0}
   navButton: {fileID: 1850474419438492226}
+  cantButton: {fileID: 2399003613925342533}
   Secondcam: {fileID: 0}
 --- !u!1 &6101624707779078070
 GameObject:
@@ -5030,7 +5043,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a11a5782c460f134fa642c8c81aafecd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 99d198fa96597cb4495c3cdce7b03d35, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
