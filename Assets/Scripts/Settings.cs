@@ -30,8 +30,8 @@ public static class Settings
 	static public double RethinkingTimeDay = .25;
 
 	static public double BuildingFoodBuffByFarm = 1.1;
-	static public double BuildingHappyEveryoneByLibraryByDay = .025;
-	static public double BuildingHappyEveryoneByMuseumByDay = .05;
+	static public double BuildingHappyEveryoneByLibraryByDay = .03;
+	static public double BuildingHappyEveryoneByMuseumByDay = .1;
 
 	static public bool ChildLabour = false;
 	static public bool ChildLearnable = true;

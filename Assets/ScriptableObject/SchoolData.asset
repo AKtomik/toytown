@@ -15,7 +15,7 @@ MonoBehaviour:
   buildingName: School
   prefab: {fileID: 2809074488507673928, guid: ca4cc0077114fcb4fb3699d228bae6a0, type: 3}
   woodCost: 2
-  rockCost: 2
+  rockCost: 1
   previewMaterial: {fileID: 2100000, guid: 085054c1c17a4624891be69bdbe82ecc, type: 2}
   finalMaterial: {fileID: 2100000, guid: a3f4fa0c94fb944429b2a95243614a67, type: 2}
   associatedPlace: 13

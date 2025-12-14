@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   buildingName: Farm
   prefab: {fileID: 4163839607173056758, guid: 668679a64f616ca479a447b7cb0609ea, type: 3}
-  woodCost: 2
-  rockCost: 2
+  woodCost: 3
+  rockCost: 3
   previewMaterial: {fileID: 2100000, guid: aac6bf827c9e19945906b793f6ea6c2a, type: 2}
   finalMaterial: {fileID: 2100000, guid: 9c73dc5a48c4a9646a04496a6b78b46a, type: 2}
   associatedPlace: 21
