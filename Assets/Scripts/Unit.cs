@@ -277,7 +277,8 @@ namespace ToyTown
 
 			public static ActionReturn Wander(Unit unit, float delta)
 			{
-				// TODO : implement
+				unit.walkingToObject = null;
+				unit.walkingObjective = PlaceManager.Instance.RandomPlace();
 				return ActionReturn.CONTINUE;
 			}
 			
@@ -661,7 +662,7 @@ namespace ToyTown
 		public double speed
 		{
 			get {
-				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1) * (walkingWondering ? .5 : 1) * (!isAdult ? 2 : 1);
+				return Settings.UnitBaseSpeed * Settings.SpeedUp * (IsHungry() ? .5 : 1) * (IsTired() ? .5 : 1) * ((walkingWondering || GetActualAction() == UnitAction.WANDERING) ? .5 : 1) * (!isAdult ? 2 : 1);
 			}
 		}
 		
