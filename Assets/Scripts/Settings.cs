@@ -16,27 +16,31 @@ public static class Settings
 	static public double UnitNeedPointNeeded = .3;
 	static public double UnitMaxNeedPoint = 1;
 
-	static public double UnitNeedSleepHourMin = .5;
-	static public double UnitNeedSleepHourMax = 0;
-	static public double UnitNeedEatHourMin = .4;
+	static public double UnitNeedSleepHourMin = .4;
+	static public double UnitNeedSleepHourMax = 1;
+	static public double UnitNeedEatHourMin = .3;
 	static public double UnitNeedEatHourMax = .5;
 
 	static public double UnitAdultAgeMin = 3;
 	static public double UnitAdultAgeMax = 6;
-	static public double UnitDeathAgeMin = 15;
-	static public double UnitDeathAgeMax = 30;
+	static public double UnitDeathAgeMin = 20;
+	static public double UnitDeathAgeMax = 40;
 	static public double UnitAverageSpawnByDay = 1;
 	static public double UnitVariationSpawn = 5;
 	static public double RethinkingTimeDay = .25;
 
-	static public bool ChildLabour = false;
-	static public bool ChildLearnable = false;
-	static public bool IsChangingPlaceAfterMining = true;
-	static public double MiningStoneByDay = 3;
-	static public double MiningFoodByDay = 8;
-	static public double MiningWoodByDay = 4;
+	static public double BuildingFoodBuffByFarm = 1.1;
+	static public double BuildingHappyEveryoneByLibraryByDay = .025;
+	static public double BuildingHappyEveryoneByMuseumByDay = .05;
 
-	static public double RequireHappyness = 20;
+	static public bool ChildLabour = false;
+	static public bool ChildLearnable = true;
+	static public bool IsChangingPlaceAfterMining = true;
+	static public double MiningStoneByDay = 1;
+	static public double MiningFoodByDay = 5;
+	static public double MiningWoodByDay = 2;
+
+	static public double RequireHappyness = 16;
 
 
 

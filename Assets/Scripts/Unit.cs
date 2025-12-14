@@ -286,6 +286,7 @@ namespace ToyTown
 			{
 				if (unit.learningJob == UnitJob.NOTHING) return ActionReturn.CONTINUE;
 				unit.learningRemainDay -= delta / Settings.DayLengthInSecond;
+				// * Math.Pow(Settings.BuildingLearningBuffByLibrary, BuildManager.Instance.GetBuildAmount(Place.FARM));
 				if (unit.learningRemainDay <= 0)
 				{
 					unit.SwtichJob((UnitJob)unit.learningJob);
@@ -309,7 +310,7 @@ namespace ToyTown
 				} },
 				{ UnitJob.FARMER, (unit, delta) => {
 					unit.isMiningAnimationThisTick = true;
-					unit.miningProgress += Settings.MiningFoodByDay * delta / Settings.DayLengthInSecond;
+					unit.miningProgress += Settings.MiningFoodByDay * delta / Settings.DayLengthInSecond * Math.Pow(Settings.BuildingFoodBuffByFarm, BuildManager.Instance.GetBuildAmount(Place.FARM));
 					if (unit.miningProgress > 1)
 					{
 						unit.miningProgress -= 1;
@@ -414,6 +415,7 @@ namespace ToyTown
 			}},
 			{NeedState.NEEDED, (unit) =>
 			{
+				if (unit.actionSystem == null)
 				unit.SwtichSystemAction(UnitActionSystem.SLEEPING);
 			}
 			},
@@ -439,7 +441,9 @@ namespace ToyTown
 			{NeedState.FINE, (unit) => {
 
 			}},
-			{NeedState.NEEDED, (unit) => {
+			{NeedState.NEEDED, (unit) => 
+			{
+				if (unit.actionSystem == null)
 				unit.SwtichSystemAction(UnitActionSystem.EATING);
 			}},
 			{NeedState.DESPERATION, (unit) => {
@@ -567,7 +571,7 @@ namespace ToyTown
 		
 		public void StartLearning(UnitJob job)
 		{
-			if (!isAdult && !Settings.ChildLearnable && job != UnitJob.NOTHING)
+			if (!isAdult && !Settings.ChildLearnable)// && job != UnitJob.NOTHING
 			{
 				Debug.Log($"{this} cant learn");	
 				return;
@@ -578,7 +582,7 @@ namespace ToyTown
 		
 		public void SwtichJob(UnitJob job)
 		{
-			if (!isAdult && !Settings.ChildLabour && job != UnitJob.NOTHING)
+			if (!isAdult && !Settings.ChildLabour)// && job != UnitJob.NOTHING
 			{
 				Debug.Log($"{this} cant work bcs is a child");	
 				return;
@@ -808,7 +812,7 @@ namespace ToyTown
 				miningAnimationProgress = 0;
 			}
 
-			bool isSleepHour = Settings.UnitNeedSleepHourMin > SunManager.Instance.Today && Settings.UnitNeedSleepHourMax < SunManager.Instance.Today;
+			bool isSleepHour = Settings.UnitNeedSleepHourMin < SunManager.Instance.Today && Settings.UnitNeedSleepHourMax > SunManager.Instance.Today;
 			NeedState sleepNeed = CalculateNeedState(energyScore, isSleepHour);
 			if (sleepNeed != needStateSleep)
 			{
@@ -816,7 +820,7 @@ namespace ToyTown
 				needStateSleep = sleepNeed;
 			}
 
-			bool isEatHour = Settings.UnitNeedEatHourMin > SunManager.Instance.Today && Settings.UnitNeedEatHourMax < SunManager.Instance.Today;
+			bool isEatHour = Settings.UnitNeedEatHourMin < SunManager.Instance.Today && Settings.UnitNeedEatHourMax > SunManager.Instance.Today;
 			NeedState hungerNeed = CalculateNeedState(saturationScore, isEatHour);
 			if (hungerNeed != needStateHunger)
 			{
