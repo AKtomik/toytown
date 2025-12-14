@@ -8,7 +8,7 @@ public static class Settings
 	static public double UnitBaseSpeed = 2;
 	static public double UnitWalkingSpeed = .5;
 	static public double UnitWalkingNearObjectiveDistance = 0.25;
-	static public double UnitLearningTimeDay = 2;
+	static public double UnitLearningTimeDay = .5;
 
 	static public double UnitNeedPointMortal = 0;
 	static public double UnitNeedPointDesperation = .1;
@@ -32,9 +32,9 @@ public static class Settings
 	static public bool ChildLabour = false;
 	static public bool ChildLearnable = false;
 	static public bool IsChangingPlaceAfterMining = true;
-	static public double MiningStoneByDay = 2;
-	static public double MiningFoodByDay = 2;
-	static public double MiningWoodByDay = 2;
+	static public double MiningStoneByDay = 3;
+	static public double MiningFoodByDay = 8;
+	static public double MiningWoodByDay = 4;
 
 	static public double RequireHappyness = 20;
 

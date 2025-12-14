@@ -76,7 +76,7 @@ namespace ToyTown
 				)},
 			{UnitAction.LEARNING, new Action(
 				start: Unit.ActionStartBuilder.Merge(new ActionStartFunction[] {Unit.ActionStartBuilder.Learn, Unit.ActionStartBuilder.GoingToPlace(Place.SCHOOL)}),
-				update: Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)
+				update: Unit.ActionUpdateBuilder.Merge(new ActionUpdateFunction[] {Unit.ActionUpdateBuilder.Learn, Unit.ActionUpdateBuilder.ScoreAddByDay(saturationByDay: -.3, energyByDay: -.5, happynessByDay: 0)})
 				)},
 			// action system
 			{UnitAction.EATING, new Action(
@@ -412,9 +412,11 @@ namespace ToyTown
 			{NeedState.FINE, (unit) => {
 
 			}},
-			{NeedState.NEEDED, (unit) => {
-
-			}},
+			{NeedState.NEEDED, (unit) =>
+			{
+				unit.SwtichSystemAction(UnitActionSystem.SLEEPING);
+			}
+			},
 			{NeedState.DESPERATION, (unit) => {
 				Debug.Log($"{unit} have to sleep");
 				unit.happynessScore -= 2.5;
@@ -438,7 +440,7 @@ namespace ToyTown
 
 			}},
 			{NeedState.NEEDED, (unit) => {
-
+				unit.SwtichSystemAction(UnitActionSystem.EATING);
 			}},
 			{NeedState.DESPERATION, (unit) => {
 				Debug.Log($"{unit} have to eat");
