@@ -3,7 +3,7 @@ using UnityEngine;
 public class UiBuilding : MonoBehaviour
 {
     [SerializeField] private GameObject panelOption;
-    [SerializeField] private float duration = 0.5f; // Durée de l'animation en secondes
+    [SerializeField] private float duration = 0.5f; // Durï¿½e de l'animation en secondes
     [SerializeField] private Vector2 targetPosition;
 
     private RectTransform rect;
@@ -43,6 +43,7 @@ public class UiBuilding : MonoBehaviour
     public void displayOption()
     {
         isOpen = !isOpen;
+        if (!isOpen) BuildingGeneration.Instance.CloseUi();
         isMoving = true;
         elapsed = 0f;
     }

@@ -51,7 +51,7 @@ namespace ToyTown {
 		void Update()
 		{
 			// day count
-			if (dayCounterMesh != null) dayCounterMesh.text = $"{(SunManager.Instance.IsDay ? "Day" : "Night")} {Math.Round(SunManager.Instance.DayAmount)}";
+			if (dayCounterMesh != null) dayCounterMesh.text = $"{(SunManager.Instance.IsDay ? "Day" : "Night")} {SunManager.Instance.DayAmount + 1}";
 			
 			// happy count
 			RefreshHappyness();
