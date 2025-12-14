@@ -1,195 +1,290 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Search;
 using UnityEngine;
 
-namespace ToyTown {
-	public enum Place
-	{
-		POINT = UnitJob.NOTHING,
-		BUSH = UnitJob.FARMER,
-		WOOD = UnitJob.LUMBERJACK,
-		MINE = UnitJob.MINER,
-		CONSTRUCTION = UnitJob.BUILDER,
-		
-		CANTINE = 11,
-		HOUSE = 12,
-		SCHOOL = 13,
+namespace ToyTown
+{
+    // Assurez-vous que cette énumération correspond à vos valeurs réelles
+    // (UnitJob n'est pas inclus ici, mais est supposé exister ailleurs).
+    public enum Place
+    {
+        POINT = 0, // Assumer UnitJob.NOTHING = 0
+        BUSH = 1, // Assumer UnitJob.FARMER = 1
+        WOOD = 2, // Assumer UnitJob.LUMBERJACK = 2
+        MINE = 3, // Assumer UnitJob.MINER = 3
+        CONSTRUCTION = 4, // Assumer UnitJob.BUILDER = 4
 
-		FARM = 21,
-		LIBRARY = 22,
-		MUSEUM = 23,
-	}
+        CANTINE = 11,
+        HOUSE = 12,
+        SCHOOL = 13,
 
-	public class PlaceManager : MonoBehaviour
-	{
-		public static PlaceManager Instance { get; private set; }
+        FARM = 21,
+        LIBRARY = 22,
+        MUSEUM = 23,
+    }
 
-		// this is here only for adding places with editor
-		// ! do NOT add places here with code
-		// use PlaceDictionary instead
-		[System.Serializable]
-		public struct PlacePositionList
-		{
-			public Place place;
-			public GameObject gameObject;
-		}
-		public List<PlacePositionList> PlaceEditor = new();
-		
-		public Dictionary<Place, List<GameObject>> PlaceDictionary = new()
-		{
-			{Place.BUSH, new()},
-			{Place.WOOD, new()},
-			{Place.MINE, new()},
-			{Place.CONSTRUCTION, new()},
+    public class PlaceManager : MonoBehaviour
+    {
+        public static PlaceManager Instance { get; private set; }
 
-			{Place.CANTINE, new()},
-			{Place.HOUSE, new()},
-			{Place.SCHOOL, new()},
-			
-			{Place.FARM, new()},
-			{Place.LIBRARY, new()},
-			{Place.MUSEUM, new()},
-		};
-		
-		Dictionary<string, Place> GroundTagPlaceDictionary = new()
-		{
-			{"Plain", Place.POINT},
+        // --- Configuration Editor (pour l'initialisation depuis l'inspecteur) ---
 
-			{"Bush", Place.BUSH},
-			{"Tree", Place.WOOD},
-			{"Rock", Place.MINE},
-			{"ToBuild", Place.CONSTRUCTION},
+        [System.Serializable]
+        public struct PlacePositionList
+        {
+            public Place place;
+            // Utiliser 'GameObject' sans le '?' pour obliger l'utilisateur à assigner un objet
+            // dans l'éditeur (ou laisser l'entrée dans la liste vide).
+            public GameObject gameObject;
+        }
+        public List<PlacePositionList> PlaceEditor = new();
 
-			{"NO2", Place.CANTINE},
-			{"House", Place.HOUSE},
-			{"School", Place.SCHOOL},
-			
-			{"Farm", Place.FARM},
-			{"NO3", Place.LIBRARY},
-			{"NO4", Place.MUSEUM},
-		};
+        // --- Dictionnaires Internes ---
 
-		void Awake()
-		{
-			Debug.Log($"mono placeManager awaked");
-			if (Instance != null && Instance != this)
-			{
-				Destroy(gameObject);
-				return;
-			}
-			Instance = this;
+        // Initialisation complète du dictionnaire pour garantir que toutes les Places existent
+        // et éviter les KeyNotFoundException lors de l'ajout.
+        public Dictionary<Place, List<GameObject>> PlaceDictionary = Enum.GetValues(typeof(Place))
+            .Cast<Place>()
+            .ToDictionary(place => place, place => new List<GameObject>());
 
-			// Vous pouvez laisser l'ajout PlaceEditor dans Awake ou Start, 
-			// mais si des PlaceInstance en Start ont besoin des données Editor, laissez-le ici.
-			foreach (var item in PlaceEditor)
-			{
-				PlaceDictionary[item.place].Add(item.gameObject);
-			}
-		}
+        // Dictionnaire pour la correspondance Tag -> Place
+        Dictionary<string, Place> GroundTagPlaceDictionary = new()
+        {
+            {"Plain", Place.POINT},
 
-		public float RayGroundRange = 1000f;
-		public string GroundLayerName = "Tiles";
-		LayerMask RayGroundMask;
-		
-		// Start is called once before the first execution of Update after the MonoBehaviour is created
-		void Start()
-		{
-			Debug.Log($"mono placeManager started");
-			RayGroundMask = LayerMask.GetMask(GroundLayerName);
-		}
+            {"Bush", Place.BUSH},
+            {"Tree", Place.WOOD},
+            {"Rock", Place.MINE},
+            {"ToBuild", Place.CONSTRUCTION},
 
-		// Update is called once per frame
-		void Update()
-		{
+            {"NO2", Place.CANTINE},
+            {"House", Place.HOUSE},
+            {"School", Place.SCHOOL},
 
-		}
+            {"Farm", Place.FARM},
+            {"NO3", Place.LIBRARY},
+            {"NO4", Place.MUSEUM},
+        };
 
-		public GameObject GetNearestPlaceObject(Place place, Vector3 pos)
-		{
-			if (PlaceDictionary[place].Count == 0)
-			{
-				throw new Exception($"PlaceDictionary list for {place} is empty but GetNearestPlace is called.");
-			}
-			GameObject nearestObject = PlaceDictionary[place][0];
-			if (nearestObject == null || nearestObject?.transform == null)
-			{
-				throw new Exception($"nearest first object is null or dont have transform nearestObject={nearestObject}");
-			}
-			float nearestDistance = Vector3.Distance(nearestObject.transform.position, pos);
-			foreach (GameObject placeObject in PlaceDictionary[place])
-			{
-				Vector3 placePos = placeObject.transform.position;
-				float distance = Vector3.Distance(placePos, pos);
-				if (distance < nearestDistance)
-				{
-					nearestDistance = distance;
-					nearestObject = placeObject;
-				}
-			}
-			return nearestObject;
-		}
-		
-		public Vector3 RandomWorkPlace(Place place)
-		{
-			if (PlaceDictionary[place].Count == 0)
-			{
-				throw new Exception($"PlaceDictionary list for {place} is empty but RandomWorkPlace is called.");
-			}
-			List<GameObject> placeList = new();
-			foreach (GameObject placeObject in PlaceDictionary[place])
-				placeList.Add(placeObject);
-			return placeList[UnityEngine.Random.Range(0, placeList.Count)].transform.position;
-		}
+        // --- Propriétés Raycast ---
 
-		public Place? GetTilePlace(Vector3 pos)
-		{
-			Vector3 origin = pos + Vector3.up * 10f;
-			Vector3 direction = Vector3.down;
+        public float RayGroundRange = 1000f;
+        public string GroundLayerName = "Tiles";
+        LayerMask RayGroundMask;
 
-			Physics.Raycast(origin, direction, out RaycastHit hit, RayGroundRange + 10f, RayGroundMask);
-			if (hit.collider == null) {
-				Debug.LogError($"there is no collided ground (mask {RayGroundMask.value}={GroundLayerName})");
-				return Place.POINT;
-			}
-			GameObject groundObject = hit.collider.gameObject;
-			if (groundObject == null) {
-				Debug.LogError($"there is no game ground (mask {RayGroundMask}={GroundLayerName})");
-				return Place.POINT;
-			}
-			Debug.Log($"FALL ON tag [{groundObject.tag}]");
-			string groundTag = groundObject.tag;
-			if (!GroundTagPlaceDictionary.Keys.Contains(groundTag)) {
-				Debug.LogError($"there is no place corresponding to the tag [{groundTag}] (object {groundObject})");
-				return Place.POINT;
-			}
-			return GroundTagPlaceDictionary[groundTag];
-		}
+        // --- Méthodes MonoBehaviour ---
 
-		public bool ExistPlace(Place place, Vector3 pos)
-		{
-			return PlaceDictionary.ContainsKey(place) && PlaceDictionary[place].Count > 0;
-		}
+        void Awake()
+        {
+            // Initialisation du Singleton
+            if (Instance != null && Instance != this)
+            {
+                // Détruire cet objet pour assurer qu'il n'y ait qu'une seule instance
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
 
-		public Vector3 RandomPlace()
-		{
-			List<GameObject> placeList = new();
-			foreach (Place place in PlaceDictionary.Keys)
-				foreach (GameObject placeObject in PlaceDictionary[place])
-					placeList.Add(placeObject);
-			return placeList[UnityEngine.Random.Range(0, placeList.Count)].transform.position;
-		}
+            // Initialisation des places définies dans l'éditeur
+            foreach (var item in PlaceEditor)
+            {
+                // ⚠️ Vérification ajoutée pour s'assurer que l'objet n'est pas null
+                if (item.gameObject != null)
+                {
+                    // La clé 'item.place' est garantie d'exister grâce à l'initialisation ci-dessus
+                    PlaceDictionary[item.place].Add(item.gameObject);
+                }
+                else
+                {
+                    Debug.LogWarning($"[PlaceManager] Le GameObject pour la Place {item.place} est null dans PlaceEditor. Ignoré.");
+                }
+            }
+        }
 
-		public void RegisterPlace(Place place, GameObject placeObject)
-		{
-			PlaceDictionary[place].Add(placeObject);
-			Debug.Log($"[PlaceManager] Enregistr� : {placeObject.name} comme {place}. Total: {PlaceDictionary[place].Count}");
-		}
+        void Start()
+        {
+            // Initialisation du LayerMask
+            RayGroundMask = LayerMask.GetMask(GroundLayerName);
+        }
 
-		public void UnregisterPlace(Place place, GameObject placeObject)
-		{
-			bool removed = PlaceDictionary[place].Remove(placeObject);
-		}
-	}
+        // --- Méthodes Publiques Utilitaires ---
+
+        /// <summary>
+        /// Retourne l'objet de lieu le plus proche de la position donnée.
+        /// </summary>
+        /// <param name="place">Le type de lieu à chercher.</param>
+        /// <param name="pos">La position de référence.</param>
+        /// <returns>Le GameObject le plus proche, ou null si aucun lieu n'est trouvé.</returns>
+        public GameObject GetNearestPlaceObject(Place place, Vector3 pos)
+        {
+            if (!PlaceDictionary.ContainsKey(place) || PlaceDictionary[place].Count == 0)
+            {
+                Debug.LogWarning($"PlaceDictionary list for {place} is empty or does not exist. Returning null.");
+                return null;
+            }
+
+            GameObject nearestObject = null;
+            float nearestDistance = float.MaxValue;
+
+            // Utiliser ToList() pour itérer sur une copie (plus sûr si la liste était modifiée ailleurs)
+            // Itérer sur la liste spécifique à la Place.
+            foreach (GameObject placeObject in PlaceDictionary[place].ToList())
+            {
+                // 💥 Vérification essentielle : Gère les objets qui ont été détruits (Destroy()) 
+                // mais qui sont restés dans la liste.
+                if (placeObject == null)
+                {
+                    // L'objet détruit n'est pas supprimé de la liste ici pour ne pas modifier la collection 
+                    // pendant l'itération, mais il est ignoré. Un nettoyage doit être fait ailleurs (UnregisterPlace).
+                    continue;
+                }
+
+                Vector3 placePos = placeObject.transform.position;
+                float distance = Vector3.Distance(placePos, pos);
+
+                if (nearestObject == null || distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                    nearestObject = placeObject;
+                }
+            }
+
+            // Si la boucle s'est exécutée mais tous les objets étaient null, nearestObject reste null.
+            return nearestObject;
+        }
+
+        /// <summary>
+        /// Retourne la position d'un lieu aléatoire du type spécifié.
+        /// </summary>
+        /// <param name="place">Le type de lieu à chercher.</param>
+        /// <returns>La position aléatoire, ou Vector3.zero si aucun lieu valide n'est trouvé.</returns>
+        public Vector3 RandomWorkPlace(Place place)
+        {
+            if (!PlaceDictionary.ContainsKey(place))
+            {
+                Debug.LogError($"Place {place} is not initialized in PlaceDictionary.");
+                return Vector3.zero;
+            }
+
+            // Filtrer les objets nuls pour éviter de retourner la position d'un objet détruit
+            List<GameObject> validPlaces = PlaceDictionary[place].Where(go => go != null).ToList();
+
+            if (validPlaces.Count == 0)
+            {
+                Debug.LogWarning($"PlaceDictionary list for {place} is empty or only contains destroyed objects. Returning Vector3.zero.");
+                return Vector3.zero;
+            }
+
+            return validPlaces[UnityEngine.Random.Range(0, validPlaces.Count)].transform.position;
+        }
+
+        /// <summary>
+        /// Détermine le type de Place de la tuile (Tile) à la position donnée via Raycast.
+        /// </summary>
+        /// <param name="pos">La position au-dessus de la tuile.</param>
+        /// <returns>Le type de Place de la tuile, ou Place.POINT si non trouvé ou erreur.</returns>
+        public Place? GetTilePlace(Vector3 pos)
+        {
+            Vector3 origin = pos + Vector3.up * 10f;
+            Vector3 direction = Vector3.down;
+
+            // La vérification de RayGroundMask.value > 0 garantit que le layer a été trouvé
+            if (RayGroundMask.value == 0)
+            {
+                Debug.LogError($"RayGroundMask value is 0. Layer '{GroundLayerName}' might not exist or is not configured.");
+                return Place.POINT;
+            }
+
+            if (!Physics.Raycast(origin, direction, out RaycastHit hit, RayGroundRange + 10f, RayGroundMask))
+            {
+                // Le Raycast n'a rien touché sur le layer spécifié
+                return Place.POINT;
+            }
+
+            // hit.collider est garanti de ne pas être null si Raycast retourne true
+            GameObject groundObject = hit.collider.gameObject;
+
+            // Vérification de sécurité supplémentaire bien que moins probable ici
+            if (groundObject == null)
+            {
+                Debug.LogError($"Raycast hit a collider that belongs to a null GameObject.");
+                return Place.POINT;
+            }
+
+            string groundTag = groundObject.tag;
+
+            // Utiliser TryGetValue pour éviter une KeyNotFoundException
+            if (GroundTagPlaceDictionary.TryGetValue(groundTag, out Place place))
+            {
+                return place;
+            }
+            else
+            {
+                Debug.LogWarning($"Tag [{groundTag}] on object {groundObject.name} does not correspond to any Place.");
+                return Place.POINT;
+            }
+        }
+
+        public bool ExistPlace(Place place, Vector3 pos)
+        {
+            // Vérifie si la clé existe ET si au moins un objet valide (non null) y est associé.
+            return PlaceDictionary.ContainsKey(place) && PlaceDictionary[place].Any(go => go != null);
+        }
+
+        /// <summary>
+        /// Retourne la position d'un lieu aléatoire de TOUS les types.
+        /// </summary>
+        /// <returns>Une position aléatoire, ou Vector3.zero si aucune place valide n'est enregistrée.</returns>
+        public Vector3 RandomPlace()
+        {
+            // Concaténer toutes les listes de GameObject, filtrer les objets null, et les mettre dans une liste unique.
+            List<GameObject> validPlaces = PlaceDictionary.Values.SelectMany(list => list)
+                                                               .Where(go => go != null)
+                                                               .ToList();
+
+            if (validPlaces.Count == 0)
+            {
+                Debug.LogWarning("No valid places are registered in PlaceDictionary.");
+                return Vector3.zero;
+            }
+
+            return validPlaces[UnityEngine.Random.Range(0, validPlaces.Count)].transform.position;
+        }
+
+        public void RegisterPlace(Place place, GameObject placeObject)
+        {
+            // 💥 Vérification essentielle : S'assurer que l'objet est non-null avant d'ajouter
+            if (placeObject == null)
+            {
+                Debug.LogError($"Attempted to register a null GameObject for place {place}. Registration cancelled.");
+                return;
+            }
+
+            // Utiliser TryGetValue pour s'assurer que la Place est connue et éviter la KeyNotFoundException
+            if (PlaceDictionary.TryGetValue(place, out List<GameObject> list))
+            {
+                list.Add(placeObject);
+                Debug.Log($"[PlaceManager] Enregistré : {placeObject.name} comme {place}. Total: {list.Count}");
+            }
+            else
+            {
+                Debug.LogError($"Attempted to register place {placeObject.name} for an unknown Place enum value: {place}.");
+            }
+        }
+
+        public void UnregisterPlace(Place place, GameObject placeObject)
+        {
+            // Utiliser TryGetValue pour s'assurer que la Place est connue
+            if (PlaceDictionary.TryGetValue(place, out List<GameObject> list))
+            {
+                bool removed = list.Remove(placeObject);
+                if (!removed)
+                {
+                    Debug.LogWarning($"[PlaceManager] Failed to unregister {placeObject?.name ?? "null object"} from {place}. Was it already removed?");
+                }
+            }
+            // Si la clé n'existe pas, nous n'avons rien à faire (pas d'erreur critique).
+        }
+    }
 }
