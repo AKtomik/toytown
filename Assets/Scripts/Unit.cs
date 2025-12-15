@@ -482,7 +482,15 @@ namespace ToyTown
 
 		public double saturationScore = 1;
 		public double energyScore = 1;
-		public double happynessScore = 0;
+		private double _happynessScore = 0;
+		public double happynessScore {
+			get {return _happynessScore; }
+			set {
+				_happynessScore = value; 
+				if (_happynessScore < 0) _happynessScore = 0;
+				if (_happynessScore > 1) _happynessScore = 1;
+			}
+		}
 		public NeedState needStateHunger;
 		public NeedState needStateSleep;
 
@@ -830,9 +838,6 @@ namespace ToyTown
 				EnterHungerState[hungerNeed](this);
 				needStateHunger = hungerNeed;
 			}
-
-			if (happynessScore > 1) happynessScore = 1;
-			else if (happynessScore < 0) happynessScore = 0;
 
 			// if need something
 			if (actionSystem == null)
