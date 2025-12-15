@@ -42,19 +42,19 @@ namespace ToyTown {
 		
 		public NotifOne SpawnGoodNews(string content)
 		{
-			return SpawnNotif(content, new Color(0, .8f, 0, .8f));
+			return SpawnNotif(content, new Color(0, .8f, 0, .6f));
 		}
 		public NotifOne SpawnBadNews(string content)
 		{
-			return SpawnNotif(content, new Color(.8f, 0, 0, .8f));
+			return SpawnNotif(content, new Color(.8f, 0, 0, .6f));
 		}
 		public NotifOne SpawnMidNews(string content)
 		{
-			return SpawnNotif(content, new Color(0, .8f, 0, .8f));
+			return SpawnNotif(content, new Color(0, .8f, 0, .6f));
 		}
 		public NotifOne SpawnInfo(string content)
 		{
-			return SpawnNotif(content, new Color(0, 0, .3f, .8f));
+			return SpawnNotif(content, new Color(0, 0, .3f, .6f));
 		}
 	}
 }
