@@ -42,6 +42,8 @@ namespace ToyTown
 			private set {}
 		}
 
+		public bool finish = false;
+
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
 		{
@@ -66,6 +68,12 @@ namespace ToyTown
 				  Settings.BuildingHappyEveryoneByLibraryByDay * BuildManager.Instance.GetBuildAmount(Place.LIBRARY)
 				+ Settings.BuildingHappyEveryoneByMuseumByDay * BuildManager.Instance.GetBuildAmount(Place.MUSEUM);
 				UnitManager.Instance.AddGlobalHappyness(addedHappyness);
+			}
+
+			if (!finish && UnitManager.Instance.ComputeTotalHappyness() >= Settings.RequireHappyness)
+			{
+				finish = true;
+				NotifManager.Instance.SpawnNotif($"CONGRATULATION !\nyou've finish objective happyness in {Math.Round(DayTime * 100) / 100} days", new Color(.6f, 0f, .8f, .8f));
 			}
 		}
 	}
