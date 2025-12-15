@@ -41,7 +41,7 @@ public static class Settings
 	static public double MiningFoodByDay = 5;
 	static public double MiningWoodByDay = 2;
 
-	static public double RequireHappyness = 16;
+	static public double RequireHappyness = 20;
 
 
 
