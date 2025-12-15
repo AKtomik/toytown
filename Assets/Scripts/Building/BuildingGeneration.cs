@@ -233,6 +233,7 @@ public class BuildingGeneration : MonoBehaviour
         buildingReference.timeConstructRemain = data.TimeToConstruct;
 
         targetTile.tag = data.buildingName;
+		NotifManager.Instance.SpawnGoodNews($"a {data.buildingName} is finish");
 
         Renderer[] allRenderers = buildingInstance.GetComponentsInChildren<Renderer>();
         if (allRenderers != null && allRenderers.Length > 0)

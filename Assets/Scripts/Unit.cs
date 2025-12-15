@@ -256,7 +256,7 @@ namespace ToyTown
 					{
 						Debug.Log($"{unit} there is no {place} to go!");
 						unit.hasPlaceToGo = false;
-						return ActionReturn.CONTINUE;// ! 
+						return ActionReturn.DONE;// ! 
 					}
 					unit.hasPlaceToGo = true;
 					Debug.Log($"{unit} is going to place {place} ({PlaceManager.Instance})");
@@ -426,6 +426,7 @@ namespace ToyTown
 			{NeedState.MORTAL, (unit) =>
 			{
 				Debug.Log($"{unit} die of lack of sleep");
+				NotifManager.Instance.SpawnBadNews("pawn died of lack of sleep");
 				unit.Kill();
 			}
 			},
@@ -453,6 +454,7 @@ namespace ToyTown
 			{NeedState.MORTAL, (unit) =>
 			{
 				Debug.Log($"{unit} die of lack of food");
+				NotifManager.Instance.SpawnBadNews("pawn died of lack of food");
 				unit.Kill();
 			}
 			},
@@ -748,6 +750,7 @@ namespace ToyTown
 			}
 			if (!isDying && isTooOld)
 			{
+				NotifManager.Instance.SpawnBadNews("pawn died of old age");
 				Kill();
 			}
 
