@@ -72,5 +72,13 @@ namespace ToyTown {
 			}
 			return happnessProgress;
 		}
+
+		public void AddGlobalHappyness(double addedScore)
+		{
+			foreach (Unit unit in UnitArray())
+			{
+				unit.happynessScore += addedScore;
+			}
+		}
 	}
 }

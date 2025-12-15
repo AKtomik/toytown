@@ -853,6 +853,7 @@ namespace ToyTown
 		void Kill()
 		{
 			isDying = true;
+			UnitManager.Instance.AddGlobalHappyness(-1 * Settings.UnitDeathGriefWoe);
 			Destroy(gameObject);
 		}
 		

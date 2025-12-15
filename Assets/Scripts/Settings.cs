@@ -25,6 +25,7 @@ public static class Settings
 	static public double UnitAdultAgeMax = 6;
 	static public double UnitDeathAgeMin = 20;
 	static public double UnitDeathAgeMax = 40;
+	static public double UnitDeathGriefWoe = .1;
 	static public double UnitAverageSpawnByDay = 1;
 	static public double UnitVariationSpawn = 5;
 	static public double RethinkingTimeDay = .25;

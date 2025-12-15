@@ -11,7 +11,7 @@ namespace ToyTown
 
 		public Light directionalLight;
 
-		public double StartingDayTime = .25;
+		public double StartingDayTime = .05;
 		double DayTime;
 		public float ConstSunYdegree = 30;
 		public float ConstSunZdegree = 0;
@@ -62,11 +62,10 @@ namespace ToyTown
 			if (LastDayAmount < nowDayAmount)
 			{
 				LastDayAmount = nowDayAmount;
-				foreach (Unit unit in UnitManager.Instance.UnitArray())
-				{
-					unit.happynessScore += Settings.BuildingHappyEveryoneByLibraryByDay * BuildManager.Instance.GetBuildAmount(Place.LIBRARY);
-					unit.happynessScore += Settings.BuildingHappyEveryoneByMuseumByDay * BuildManager.Instance.GetBuildAmount(Place.MUSEUM);
-				}
+				double addedHappyness = 
+				  Settings.BuildingHappyEveryoneByLibraryByDay * BuildManager.Instance.GetBuildAmount(Place.LIBRARY)
+				+ Settings.BuildingHappyEveryoneByMuseumByDay * BuildManager.Instance.GetBuildAmount(Place.MUSEUM);
+				UnitManager.Instance.AddGlobalHappyness(addedHappyness);
 			}
 		}
 	}
