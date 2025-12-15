@@ -197,9 +197,14 @@ public class BuildingGeneration : MonoBehaviour
         LaunchConstruct(selectedTile, buildingToConstruct, buildingData);
     }
 
-
+    bool firstConstruct = true;
     public void LaunchConstruct(Tile targetTile, GameObject buildingInstance, BuildingData data)
     {
+        if (firstConstruct)
+        {
+            firstConstruct = false;
+		    NotifManager.Instance.SpawnInfo("drop a builder to build it");
+        }
         //if (!VerifyResources())
         //{
         //    navButton.gameObject.SetActive(false);
@@ -223,9 +228,11 @@ public class BuildingGeneration : MonoBehaviour
 
 
 
+    bool firstSchool = true;
+    bool firstMuseum = true;
+    bool firstFarm = true;
     public void FinalizeConstruction(GameObject buildingInstance)
     {
-
         var buildingReference = buildingInstance.GetComponent<BuildingComponent>();
         buildingReference.isFinish = false;
         Tile targetTile = buildingReference.floorTile;
@@ -234,6 +241,21 @@ public class BuildingGeneration : MonoBehaviour
 
         targetTile.tag = data.buildingName;
 		NotifManager.Instance.SpawnGoodNews($"a {data.buildingName} is finish");
+        if (firstSchool && data.buildingName == "School")
+        {
+            firstSchool = false;
+		    NotifManager.Instance.SpawnInfo("drop a pawn on it to learn a job");
+        }
+        if (firstMuseum && (data.buildingName == "Library" || data.buildingName == "Museum"))
+        {
+            firstMuseum = false;
+		    NotifManager.Instance.SpawnInfo("this will add some happyness every day");
+        }
+        if (firstFarm && data.buildingName == "Farm")
+        {
+            firstFarm = false;
+		    NotifManager.Instance.SpawnInfo("this will buff food harvest");
+        }
 
         Renderer[] allRenderers = buildingInstance.GetComponentsInChildren<Renderer>();
         if (allRenderers != null && allRenderers.Length > 0)

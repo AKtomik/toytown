@@ -77,8 +77,14 @@ namespace ToyTown {
 			return DragedUnit;
 		}
 
+		bool firstGrab = true;
 		void EnableDrag(Unit[] units)
 		{
+			if (firstGrab)
+			{
+				firstGrab = false;
+				NotifManager.Instance.SpawnInfo("right click to release it and asign task");
+			}
 			DragedUnit = units;
 			lastGrabed = units[0];
 			foreach (Unit unit in units)
@@ -88,8 +94,14 @@ namespace ToyTown {
 			Draging = true;
 		}
 
+		bool firstDrop = true;
 		void DisableDrag()
 		{
+			if (firstDrop)
+			{
+				firstDrop = false;
+				NotifManager.Instance.SpawnInfo("now build a house and a school");
+			}
 			foreach (Unit unit in Draged())
 			{
 				unit.Release();
@@ -108,6 +120,7 @@ namespace ToyTown {
 			inputMouseClickRelease.action.Enable();
 			inputMouseClickPick.action.performed += OnClick;
 			inputMouseClickRelease.action.performed += OnRelease;
+			NotifManager.Instance.SpawnInfo("left click on a pawn to take it");
 		}
 
 		// Update is called once per frame
