@@ -4,6 +4,7 @@ using ToyTown;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Linq;
 
 public class BuildingGeneration : MonoBehaviour
 {
@@ -28,9 +29,14 @@ public class BuildingGeneration : MonoBehaviour
 
     public void Awake()
     {
-        Secondcam.gameObject.SetActive(false);
-        navButton.gameObject.SetActive(false);
-        cantButton.gameObject.SetActive(false);
+        if (Secondcam != null) Secondcam.gameObject.SetActive(false);
+        else Debug.LogError("BuildingGeneration: Secondcam is NULL");
+
+        if (navButton != null) navButton.gameObject.SetActive(false);
+        else Debug.LogError("BuildingGeneration: navButton is NULL");
+
+        if (cantButton != null) cantButton.gameObject.SetActive(false);
+        else Debug.LogError("BuildingGeneration: cantButton is NULL");
     }
 
     public void Start()
@@ -46,6 +52,11 @@ public class BuildingGeneration : MonoBehaviour
 
     public void SetBuilding(BuildingData building)
     {
+        if (building == null)
+        {
+            Debug.LogError("BuildingGeneration.SetBuilding called with NULL building");
+            return;
+        }
 
         if (previewInstance != null)
         {
@@ -60,11 +71,21 @@ public class BuildingGeneration : MonoBehaviour
 
     public void SpawnBuilding()
     {
-        navButton.gameObject.SetActive(true);
-        cantButton.gameObject.SetActive(false);
+        if (navButton != null) navButton.gameObject.SetActive(true);
+        if (cantButton != null) cantButton.gameObject.SetActive(false);
 
         // On r�cup�re la liste � jour (les tuiles en attente de construction n'y sont plus)
-        List<Tile> tiles = TileManager.Instance.freeTiles;
+        // Defensive: ensure TileManager exists and remove null entries which sometimes
+        // appear only in builds (destroyed objects still referenced in lists)
+        List<Tile> tiles = new List<Tile>();
+        if (TileManager.Instance != null && TileManager.Instance.freeTiles != null)
+        {
+            tiles = TileManager.Instance.freeTiles.Where(t => t != null).ToList();
+        }
+        else
+        {
+            Debug.LogError("TileManager or its freeTiles list is NULL in SpawnBuilding");
+        }
 
         if (!VerifyResources())
         {
@@ -87,14 +108,21 @@ public class BuildingGeneration : MonoBehaviour
         // Cr�ation d'une nouvelle preview si aucune n'existe
         if (previewInstance == null)
         {
-            Maincam.gameObject.SetActive(false);
-            Secondcam.gameObject.SetActive(true);
+            if (Maincam != null) Maincam.gameObject.SetActive(false);
+            if (Secondcam != null) Secondcam.gameObject.SetActive(true);
 
             // On s'assure que l'index i est valide
             if (tiles.Count > 0)
             {
                 // Si l'index i d�passe la nouvelle taille de liste, on le remet � 0
                 if (i >= tiles.Count) i = 0;
+
+                if (tiles[i] == null)
+                {
+                    Debug.LogError("Selected tile is NULL aborting preview spawn");
+                    if (navButton != null) navButton.gameObject.SetActive(false);
+                    return;
+                }
 
                 Vector3 spawnPos = tiles[i].transform.position;
                 Quaternion randomRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
@@ -123,17 +151,22 @@ public class BuildingGeneration : MonoBehaviour
 
     public void NextPos()
     {
-        List<Tile> tiles = TileManager.Instance.freeTiles;
+        List<Tile> tiles = new List<Tile>();
+        if (TileManager.Instance != null && TileManager.Instance.freeTiles != null)
+            tiles = TileManager.Instance.freeTiles.Where(t => t != null).ToList();
         if (tiles.Count == 0 || previewInstance == null) return;
 
         // On prend une nouvelle position al�atoire
         i = Random.Range(0, tiles.Count);
+        if (tiles[i] == null) return;
         previewInstance.transform.position = tiles[i].transform.position;
     }
 
     public void PrevPos()
     {
-        List<Tile> tiles = TileManager.Instance.freeTiles;
+        List<Tile> tiles = new List<Tile>();
+        if (TileManager.Instance != null && TileManager.Instance.freeTiles != null)
+            tiles = TileManager.Instance.freeTiles.Where(t => t != null).ToList();
         if (tiles.Count == 0 || previewInstance == null) return;
 
         int newIndex;
@@ -146,11 +179,17 @@ public class BuildingGeneration : MonoBehaviour
         } while (tiles.Count > 1 && newIndex == i && attempts < 10);
 
         i = newIndex;
+        if (tiles[i] == null) return;
         previewInstance.transform.position = tiles[i].transform.position;
     }
 
     private bool VerifyResources()
     {
+        if (currentBuilding == null)
+        {
+            Debug.LogError("VerifyResources called with NULL currentBuilding");
+            return false;
+        }
         if (RessourcesGestion.RockQuantity >= currentBuilding.rockCost &&
             RessourcesGestion.WoodQuantity >= currentBuilding.woodCost)
         {
@@ -162,10 +201,10 @@ public class BuildingGeneration : MonoBehaviour
 
     public void CloseUi()
     {
-        navButton.gameObject.SetActive(false);
-        cantButton.gameObject.SetActive(false);
-        Maincam.gameObject.SetActive(true);
-        Secondcam.gameObject.SetActive(false);
+        if (navButton != null) navButton.gameObject.SetActive(false);
+        if (cantButton != null) cantButton.gameObject.SetActive(false);
+        if (Maincam != null) Maincam.gameObject.SetActive(true);
+        if (Secondcam != null) Secondcam.gameObject.SetActive(false);
         if (previewInstance != null)
         {
             Destroy(previewInstance);
@@ -177,18 +216,22 @@ public class BuildingGeneration : MonoBehaviour
     {
         if (previewInstance == null) return;
 
-        navButton.gameObject.SetActive(false);
-        cantButton.gameObject.SetActive(false);
-        Maincam.gameObject.SetActive(true);
-        Secondcam.gameObject.SetActive(false);
+        if (navButton != null) navButton.gameObject.SetActive(false);
+        if (cantButton != null) cantButton.gameObject.SetActive(false);
+        if (Maincam != null) Maincam.gameObject.SetActive(true);
+        if (Secondcam != null) Secondcam.gameObject.SetActive(false);
 
         List<Tile> tiles = TileManager.Instance.freeTiles;
 
         // V�rification de s�curit�
+        // Defensive: remove null entries and validate TileManager
+        if (TileManager.Instance == null || TileManager.Instance.freeTiles == null) return;
+        tiles = TileManager.Instance.freeTiles.Where(t => t != null).ToList();
         if (tiles.Count == 0) return;
         if (i >= tiles.Count) i = 0; // S�curit� si l'index est hors limite
 
         Tile selectedTile = tiles[i];
+        if (selectedTile == null) return;
         GameObject buildingToConstruct = previewInstance;
         BuildingData buildingData = currentBuilding;
         TileManager.Instance.RemoveTile(selectedTile);
@@ -203,7 +246,7 @@ public class BuildingGeneration : MonoBehaviour
         if (firstConstruct)
         {
             firstConstruct = false;
-		    NotifManager.Instance.SpawnInfo("drop a builder to build it");
+			if (NotifManager.Instance != null) NotifManager.Instance.SpawnInfo("drop a builder to build it");
         }
         //if (!VerifyResources())
         //{
@@ -223,7 +266,7 @@ public class BuildingGeneration : MonoBehaviour
         buildingReference.floorTile = targetTile;
         buildingReference.timeConstructRemain = data.TimeToConstruct;
         buildingReference.isFinish = false;
-        PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Add(buildingInstance);
+        if (PlaceManager.Instance != null) PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Add(buildingInstance);
     }
 
 
@@ -240,21 +283,20 @@ public class BuildingGeneration : MonoBehaviour
         buildingReference.timeConstructRemain = data.TimeToConstruct;
 
         targetTile.tag = data.buildingName;
-		NotifManager.Instance.SpawnGoodNews($"a {data.buildingName} is finish");
         if (firstSchool && data.buildingName == "School")
         {
             firstSchool = false;
-		    NotifManager.Instance.SpawnInfo("drop a pawn on it to learn a job");
+            if (NotifManager.Instance != null) NotifManager.Instance.SpawnInfo("drop a pawn on it to learn a job");
         }
         if (firstMuseum && (data.buildingName == "Library" || data.buildingName == "Museum"))
         {
             firstMuseum = false;
-		    NotifManager.Instance.SpawnInfo("this will add some happyness every day");
+            if (NotifManager.Instance != null) NotifManager.Instance.SpawnInfo("this will add some happyness every day");
         }
         if (firstFarm && data.buildingName == "Farm")
         {
             firstFarm = false;
-		    NotifManager.Instance.SpawnInfo("this will buff food harvest");
+            if (NotifManager.Instance != null) NotifManager.Instance.SpawnInfo("this will buff food harvest");
         }
 
         Renderer[] allRenderers = buildingInstance.GetComponentsInChildren<Renderer>();
@@ -268,10 +310,13 @@ public class BuildingGeneration : MonoBehaviour
         }
         // *******************************************************************
 
+        if (NotifManager.Instance != null) NotifManager.Instance.SpawnGoodNews($"a {data.buildingName} is finish");
+
         if (placeManager != null && placeManager.PlaceDictionary.ContainsKey(data.associatedPlace))
         {
-            PlaceManager.Instance.PlaceDictionary[data.associatedPlace].Add(buildingInstance);
-            PlaceManager.Instance.PlaceDictionary[Place.CONSTRUCTION].Remove(buildingInstance);
+            placeManager.PlaceDictionary[data.associatedPlace].Add(buildingInstance);
+            if (placeManager.PlaceDictionary.ContainsKey(Place.CONSTRUCTION))
+                placeManager.PlaceDictionary[Place.CONSTRUCTION].Remove(buildingInstance);
         }
 
     }
